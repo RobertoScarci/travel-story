@@ -18,7 +18,7 @@ export const environment = {
   // APIs that require keys
   apiKeys: {
     unsplash: 'NIzWTuESE-e_mJM9X5QxyOAOTSmnaZ2w99gFu7USZwQ',
-    openTripMap: '', // Get from https://opentripmap.io/product
+    openTripMap: '5ae2e3f221c38a28845f05b63d6d8a9a51588cfc90a375982bed06cd',
     geoapify: '', // Get from https://www.geoapify.com/
   }
 };
