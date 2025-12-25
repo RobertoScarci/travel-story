@@ -72,7 +72,28 @@ import { City } from '../../core/models/city.model';
                   class="filter-chip"
                   [class.active]="activeFilter() === filter.id"
                   (click)="setFilter(filter.id)">
-                  <span class="filter-icon">{{ filter.icon }}</span>
+                  <span class="filter-icon">
+                    @switch (filter.icon) {
+                      @case ('mountain') {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3l4 8 5-5 5 5V3H8z"/><path d="M2 21l6-6 4 4 4-4 6 6H2z"/></svg>
+                      }
+                      @case ('sun') {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                      }
+                      @case ('landmark') {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V8l9-6 9 6v14H3z"/><path d="M9 22V12h6v10"/><path d="M9 8h6"/></svg>
+                      }
+                      @case ('utensils') {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/><path d="M18 22V15"/></svg>
+                      }
+                      @case ('wallet') {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"/></svg>
+                      }
+                      @case ('heart') {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                      }
+                    }
+                  </span>
                   <span class="filter-label">{{ filter.label }}</span>
                 </button>
               }
@@ -117,7 +138,12 @@ import { City } from '../../core/models/city.model';
           <div class="container">
             <div class="section-header">
               <div class="section-title-group">
-                <span class="section-badge">✨ Consigliato per te</span>
+                <span class="section-badge">
+                  <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  Consigliato per te
+                </span>
                 <h2>Destinazioni su misura</h2>
                 <p class="section-subtitle">Basato sui tuoi interessi e le tue esplorazioni</p>
               </div>
@@ -142,7 +168,13 @@ import { City } from '../../core/models/city.model';
           <div class="container">
             <div class="section-header">
               <div class="section-title-group">
-                <span class="section-badge">📍 Continua l'esplorazione</span>
+                <span class="section-badge">
+                  <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  Continua l'esplorazione
+                </span>
                 <h2>Hai visitato di recente</h2>
               </div>
               <a routerLink="/history" class="section-link">
@@ -167,7 +199,12 @@ import { City } from '../../core/models/city.model';
           <div class="container">
             <div class="section-header">
               <div class="section-title-group">
-                <span class="section-badge">🔥 Tendenze</span>
+                <span class="section-badge">
+                  <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                  Tendenze
+                </span>
                 <h2>Le mete del momento</h2>
                 <p class="section-subtitle">Le destinazioni più amate dai viaggiatori</p>
               </div>
@@ -193,7 +230,14 @@ import { City } from '../../core/models/city.model';
           <div class="container">
             <div class="section-header">
               <div class="section-title-group">
-                <span class="section-badge">💎 Gemme nascoste</span>
+                <span class="section-badge">
+                  <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/>
+                    <path d="M5 19l.5 1.5L7 21l-1.5.5L5 23l-.5-1.5L3 21l1.5-.5L5 19z"/>
+                    <path d="M19 5l.5 1.5L21 7l-1.5.5L19 9l-.5-1.5L17 7l1.5-.5L19 5z"/>
+                  </svg>
+                  Gemme nascoste
+                </span>
                 <h2>Mete emergenti</h2>
                 <p class="section-subtitle">Scopri prima degli altri</p>
               </div>
@@ -216,7 +260,13 @@ import { City } from '../../core/models/city.model';
           <div class="container">
             <div class="budget-wrapper">
               <div class="budget-content">
-                <span class="section-badge light">💸 Viaggia di più, spendi meno</span>
+                <span class="section-badge light">
+                  <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                  Viaggia di più, spendi meno
+                </span>
                 <h2>Viaggi low-cost</h2>
                 <p>Destinazioni incredibili che non svuotano il portafoglio. Esperienze autentiche, prezzi accessibili.</p>
                 <a routerLink="/budget" class="btn btn-primary btn-lg">
@@ -256,10 +306,22 @@ import { City } from '../../core/models/city.model';
               </div>
               <div class="cta-visual">
                 <div class="floating-cards">
-                  <div class="float-card card-1">🗼 Parigi</div>
-                  <div class="float-card card-2">🗻 Tokyo</div>
-                  <div class="float-card card-3">🏖️ Bali</div>
-                  <div class="float-card card-4">🌴 Lisbona</div>
+                  <div class="float-card card-1">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Parigi
+                  </div>
+                  <div class="float-card card-2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Tokyo
+                  </div>
+                  <div class="float-card card-3">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Bali
+                  </div>
+                  <div class="float-card card-4">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Lisbona
+                  </div>
                 </div>
               </div>
             </div>
@@ -272,7 +334,17 @@ import { City } from '../../core/models/city.model';
         <section class="section compare-section">
           <div class="container">
             <div class="compare-card">
-              <div class="compare-icon">⚖️</div>
+              <div class="compare-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <path d="M10 6.5h4"/>
+                  <path d="M7.5 14v7"/>
+                  <path d="M16.5 14v7"/>
+                  <path d="M5 17.5h5"/>
+                  <path d="M14 17.5h5"/>
+                </svg>
+              </div>
               <h3>Indeciso tra due città?</h3>
               <p>Confronta destinazioni fianco a fianco: costi, clima, attrazioni e molto altro.</p>
               <a routerLink="/compare" class="btn btn-secondary">
@@ -445,7 +517,14 @@ import { City } from '../../core/models/city.model';
     }
 
     .filter-icon {
-      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      svg {
+        width: 16px;
+        height: 16px;
+      }
     }
 
     // Scroll Indicator
@@ -506,15 +585,31 @@ import { City } from '../../core/models/city.model';
     }
 
     .section-badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
       font-size: var(--text-sm);
       font-weight: 500;
       color: var(--color-accent);
       letter-spacing: 0.02em;
 
+      .badge-icon {
+        display: flex;
+        align-items: center;
+        
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
       &.light {
         color: var(--color-white);
         opacity: 0.9;
+        
+        svg {
+          stroke: var(--color-white);
+        }
       }
     }
 
@@ -712,12 +807,19 @@ import { City } from '../../core/models/city.model';
 
     .float-card {
       position: absolute;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
       background: var(--color-white);
       padding: var(--space-3) var(--space-4);
       border-radius: var(--border-radius-md);
       font-weight: 500;
       box-shadow: var(--shadow-lg);
       animation: float 6s ease-in-out infinite;
+      
+      svg {
+        stroke: var(--color-accent);
+      }
 
       &.card-1 {
         top: 10%;
@@ -762,8 +864,18 @@ import { City } from '../../core/models/city.model';
     }
 
     .compare-icon {
-      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+      border-radius: var(--border-radius-lg);
       margin-bottom: var(--space-4);
+      
+      svg {
+        stroke: white;
+      }
     }
 
     .compare-card h3 {
@@ -795,12 +907,12 @@ export class HomeComponent implements OnInit {
   showPersonalized = signal(false);
 
   quickFilters = [
-    { id: 'adventure', icon: '🏔️', label: 'Avventura' },
-    { id: 'relaxation', icon: '🏖️', label: 'Relax' },
-    { id: 'cultural', icon: '🏛️', label: 'Cultura' },
-    { id: 'foodie', icon: '🍝', label: 'Gastronomia' },
-    { id: 'budget', icon: '💰', label: 'Low-cost' },
-    { id: 'romantic', icon: '💕', label: 'Romantico' }
+    { id: 'adventure', icon: 'mountain', label: 'Avventura' },
+    { id: 'relaxation', icon: 'sun', label: 'Relax' },
+    { id: 'cultural', icon: 'landmark', label: 'Cultura' },
+    { id: 'foodie', icon: 'utensils', label: 'Gastronomia' },
+    { id: 'budget', icon: 'wallet', label: 'Low-cost' },
+    { id: 'romantic', icon: 'heart', label: 'Romantico' }
   ];
 
   constructor(
