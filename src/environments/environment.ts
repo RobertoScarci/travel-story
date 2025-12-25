@@ -15,9 +15,9 @@ export const environment = {
     wikipediaIt: 'https://it.wikipedia.org/api/rest_v1',
   },
 
-  // APIs that require keys (add your keys here)
+  // APIs that require keys
   apiKeys: {
-    unsplash: '', // Get from https://unsplash.com/developers
+    unsplash: 'NIzWTuESE-e_mJM9X5QxyOAOTSmnaZ2w99gFu7USZwQ',
     openTripMap: '', // Get from https://opentripmap.io/product
     geoapify: '', // Get from https://www.geoapify.com/
   }
