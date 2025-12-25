@@ -10,6 +10,7 @@ import { WeatherService, WeatherData, WeatherForecast } from '../../core/service
 import { WikipediaService, WikipediaSummary } from '../../core/services/api/wikipedia.service';
 import { CountryService, CountryInfo } from '../../core/services/api/country.service';
 import { UnsplashService, UnsplashPhoto } from '../../core/services/api/unsplash.service';
+import { OpenTripMapService, CategorizedPlace } from '../../core/services/api/opentripmap.service';
 import { forkJoin } from 'rxjs';
 
 /**
@@ -405,6 +406,71 @@ import { forkJoin } from 'rxjs';
             </div>
           </section>
         </div>
+
+        <!-- Live Attractions from OpenTripMap -->
+        @if (attractions().length > 0) {
+          <section class="live-section attractions-section">
+            <div class="container">
+              <div class="section-header">
+                <span class="section-icon">🎯</span>
+                <div>
+                  <h2>Attrazioni da non perdere</h2>
+                  <span class="live-badge">📍 Dati in tempo reale</span>
+                </div>
+              </div>
+              <div class="places-grid">
+                @for (place of attractions().slice(0, 8); track place.id; let i = $index) {
+                  <div class="place-card" [style.animation-delay.ms]="i * 50">
+                    <div class="place-icon">{{ getCategoryIcon(place.category) }}</div>
+                    <div class="place-info">
+                      <h4>{{ place.name }}</h4>
+                      <div class="place-meta">
+                        <span class="place-category">{{ getCategoryLabel(place.category) }}</span>
+                        <span class="place-rating">
+                          @for (star of [1,2,3,4,5]; track star) {
+                            <span [class.filled]="star <= place.rating">★</span>
+                          }
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </section>
+        }
+
+        <!-- Live Restaurants from OpenTripMap -->
+        @if (restaurants().length > 0) {
+          <section class="live-section restaurants-section">
+            <div class="container">
+              <div class="section-header">
+                <span class="section-icon">🍽️</span>
+                <div>
+                  <h2>Dove mangiare</h2>
+                  <span class="live-badge">📍 Dati in tempo reale</span>
+                </div>
+              </div>
+              <div class="places-grid restaurants-grid">
+                @for (place of restaurants().slice(0, 6); track place.id; let i = $index) {
+                  <div class="place-card restaurant-card" [style.animation-delay.ms]="i * 50">
+                    <div class="place-icon">🍴</div>
+                    <div class="place-info">
+                      <h4>{{ place.name }}</h4>
+                      <div class="place-meta">
+                        <span class="place-rating">
+                          @for (star of [1,2,3,4,5]; track star) {
+                            <span [class.filled]="star <= place.rating">★</span>
+                          }
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </section>
+        }
 
         <!-- Viral Content -->
         @if (details()!.viralContent.length > 0) {
@@ -1433,6 +1499,131 @@ import { forkJoin } from 'rxjs';
       }
     }
 
+    // ===== LIVE SECTIONS (OpenTripMap) =====
+    .live-section {
+      padding: var(--space-16) 0;
+
+      .section-header {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-3);
+        margin-bottom: var(--space-8);
+
+        > div {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-1);
+        }
+
+        h2 {
+          margin: 0;
+        }
+      }
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--text-xs);
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+
+    .attractions-section {
+      background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-off-white) 100%);
+    }
+
+    .restaurants-section {
+      background: var(--color-white);
+    }
+
+    .places-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .restaurants-grid {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+
+    .place-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: var(--color-white);
+      border: 1px solid var(--color-gray-100);
+      border-radius: var(--border-radius-lg);
+      animation: fadeInUp 0.4s ease both;
+      transition: all var(--transition-fast);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--color-accent);
+      }
+    }
+
+    .restaurant-card {
+      background: linear-gradient(135deg, #fff5f5 0%, white 100%);
+    }
+
+    .place-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--color-cream);
+      border-radius: var(--border-radius-md);
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .place-info {
+      flex: 1;
+      min-width: 0;
+
+      h4 {
+        font-size: var(--text-base);
+        font-weight: 500;
+        margin: 0 0 var(--space-1) 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .place-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .place-category {
+      font-size: var(--text-xs);
+      color: var(--color-gray-400);
+      background: var(--color-gray-100);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--border-radius-sm);
+    }
+
+    .place-rating {
+      display: flex;
+      gap: 1px;
+      font-size: var(--text-xs);
+
+      span {
+        color: var(--color-gray-200);
+        
+        &.filled {
+          color: #f39c12;
+        }
+      }
+    }
+
     // ===== SIMILAR SECTION =====
     .similar-section {
       padding: var(--space-16) 0;
@@ -1457,6 +1648,7 @@ export class CityComponent implements OnInit, OnDestroy {
   private wikipediaService = inject(WikipediaService);
   private countryService = inject(CountryService);
   private unsplashService = inject(UnsplashService);
+  private openTripMapService = inject(OpenTripMapService);
 
   // State
   loading = signal(true);
@@ -1472,6 +1664,8 @@ export class CityComponent implements OnInit, OnDestroy {
   wikiLoading = signal(true);
   countryLoading = signal(true);
   photosLoading = signal(true);
+  attractionsLoading = signal(true);
+  restaurantsLoading = signal(true);
 
   // Computed
   isSaved = computed(() => {
@@ -1485,6 +1679,8 @@ export class CityComponent implements OnInit, OnDestroy {
   countryInfo = computed(() => this.liveData().country);
   photos = computed(() => this.liveData().photos || []);
   heroPhoto = computed(() => this.photos().length > 0 ? this.photos()[0] : null);
+  attractions = computed(() => this.liveData().attractions || []);
+  restaurants = computed(() => this.liveData().restaurants || []);
 
   private scrollListener: (() => void) | null = null;
   private trackingInterval: ReturnType<typeof setInterval> | null = null;
@@ -1592,6 +1788,28 @@ export class CityComponent implements OnInit, OnDestroy {
       },
       error: () => this.photosLoading.set(false)
     });
+
+    // Load attractions from OpenTripMap
+    this.openTripMapService.getAttractions(lat, lng, 5000, 12).subscribe({
+      next: (attractions) => {
+        if (attractions.length > 0) {
+          this.liveData.update(data => ({ ...data, attractions }));
+        }
+        this.attractionsLoading.set(false);
+      },
+      error: () => this.attractionsLoading.set(false)
+    });
+
+    // Load restaurants from OpenTripMap
+    this.openTripMapService.getRestaurants(lat, lng, 3000, 8).subscribe({
+      next: (restaurants) => {
+        if (restaurants.length > 0) {
+          this.liveData.update(data => ({ ...data, restaurants }));
+        }
+        this.restaurantsLoading.set(false);
+      },
+      error: () => this.restaurantsLoading.set(false)
+    });
   }
 
   private startTimeTracking(cityId: string): void {
@@ -1694,6 +1912,14 @@ export class CityComponent implements OnInit, OnDestroy {
 
   getOptimizedPhotoUrl(photo: UnsplashPhoto, width: number): string {
     return this.unsplashService.getOptimizedUrl(photo, width);
+  }
+
+  getCategoryIcon(category: string): string {
+    return this.openTripMapService.getCategoryIcon(category as any);
+  }
+
+  getCategoryLabel(category: string): string {
+    return this.openTripMapService.getCategoryLabel(category as any);
   }
 }
 

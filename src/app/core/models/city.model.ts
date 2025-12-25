@@ -7,6 +7,7 @@ import { WeatherData, WeatherForecast } from '../services/api/weather.service';
 import { WikipediaSummary } from '../services/api/wikipedia.service';
 import { CountryInfo } from '../services/api/country.service';
 import { UnsplashPhoto } from '../services/api/unsplash.service';
+import { CategorizedPlace } from '../services/api/opentripmap.service';
 
 export interface City {
   id: string;
@@ -42,6 +43,8 @@ export interface CityLiveData {
   country?: CountryInfo;
   photos?: UnsplashPhoto[];
   foodPhotos?: UnsplashPhoto[];
+  attractions?: CategorizedPlace[];
+  restaurants?: CategorizedPlace[];
 }
 
 export interface CityDetails extends City {
