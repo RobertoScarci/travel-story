@@ -74,7 +74,9 @@ import { UserService } from '../../../core/services/user.service';
       <!-- Recommendation Badge (if provided) -->
       @if (recommendation) {
         <div class="recommendation-badge">
-          <span class="badge-icon">✨</span>
+          <svg class="badge-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
           <span class="badge-text">{{ recommendation }}</span>
         </div>
       }
@@ -284,7 +286,9 @@ import { UserService } from '../../../core/services/user.service';
     }
 
     .badge-icon {
-      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
     }
   `]
 })
@@ -312,7 +316,19 @@ export class CityCardComponent {
     wine: 'Vino',
     wildlife: 'Wildlife',
     exotic: 'Esotico',
-    technology: 'Tech'
+    technology: 'Tech',
+    historic: 'Storico',
+    family: 'Famiglia',
+    shopping: 'Shopping',
+    music: 'Musica',
+    art: 'Arte',
+    trekking: 'Trekking',
+    diving: 'Diving',
+    skiing: 'Sci',
+    extreme: 'Estremo',
+    entertainment: 'Intrattenimento',
+    sports: 'Sport',
+    cycling: 'Ciclismo'
   };
 
   constructor(public userService: UserService) {}
