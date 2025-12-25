@@ -1,11 +1,15 @@
-import { Component, OnInit, signal, computed, OnDestroy } from '@angular/core';
+import { Component, OnInit, signal, computed, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { CityService } from '../../core/services/city.service';
 import { UserService } from '../../core/services/user.service';
 import { PersonalizationService } from '../../core/services/personalization.service';
-import { CityDetails, CitySection, City } from '../../core/models/city.model';
+import { CityDetails, CitySection, City, CityLiveData } from '../../core/models/city.model';
 import { CityCardComponent } from '../../shared/components/city-card/city-card.component';
+import { WeatherService, WeatherData, WeatherForecast } from '../../core/services/api/weather.service';
+import { WikipediaService, WikipediaSummary } from '../../core/services/api/wikipedia.service';
+import { CountryService, CountryInfo } from '../../core/services/api/country.service';
+import { forkJoin } from 'rxjs';
 
 /**
  * CityComponent - The storytelling city experience
@@ -55,6 +59,21 @@ import { CityCardComponent } from '../../shared/components/city-card/city-card.c
             </div>
 
             <div class="hero-meta animate-fade-in-up animate-delay-1">
+              <!-- Live Weather -->
+              @if (weather()) {
+                <div class="meta-item weather-live">
+                  <span class="meta-value">
+                    <span class="weather-icon">{{ weather()!.icon }}</span>
+                    {{ weather()!.temperature }}°C
+                  </span>
+                  <span class="meta-label">{{ weather()!.description }}</span>
+                </div>
+              } @else if (weatherLoading()) {
+                <div class="meta-item">
+                  <span class="meta-value skeleton-text">--°C</span>
+                  <span class="meta-label">Meteo in caricamento...</span>
+                </div>
+              }
               <div class="meta-item">
                 <span class="meta-value">★ {{ city()!.rating }}</span>
                 <span class="meta-label">Valutazione</span>
@@ -103,12 +122,38 @@ import { CityCardComponent } from '../../shared/components/city-card/city-card.c
               <div class="story-content animate-fade-in-up">
                 <span class="story-label">La Storia</span>
                 <h2>{{ details()!.story.intro }}</h2>
-                <p class="story-atmosphere">{{ details()!.story.atmosphere }}</p>
+                
+                <!-- Wikipedia Summary (live) -->
+                @if (wikipedia()) {
+                  <p class="story-wiki">{{ wikipedia()!.extract | slice:0:400 }}...</p>
+                  <a [href]="wikipedia()!.contentUrls.desktop" target="_blank" rel="noopener" class="wiki-link">
+                    Leggi di più su Wikipedia →
+                  </a>
+                } @else {
+                  <p class="story-atmosphere">{{ details()!.story.atmosphere }}</p>
+                }
+                
                 <p class="story-unique">
                   <strong>Cosa la rende unica:</strong> {{ details()!.story.uniqueAspect }}
                 </p>
               </div>
               <div class="story-side animate-fade-in-up animate-delay-1">
+                <!-- Weather Forecast Card -->
+                @if (forecast() && forecast()!.daily.length > 0) {
+                  <div class="weather-card">
+                    <h4>🌤️ Previsioni Meteo</h4>
+                    <div class="forecast-grid">
+                      @for (day of forecast()!.daily.slice(0, 5); track day.date) {
+                        <div class="forecast-day">
+                          <span class="day-name">{{ getDayName(day.date) }}</span>
+                          <span class="day-icon">{{ day.icon }}</span>
+                          <span class="day-temp">{{ day.tempMax }}°/{{ day.tempMin }}°</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+
                 <div class="traveller-types">
                   <h4>Perfetta per</h4>
                   <div class="type-tags">
@@ -117,19 +162,52 @@ import { CityCardComponent } from '../../shared/components/city-card/city-card.c
                     }
                   </div>
                 </div>
+
+                <!-- Country Info (live) -->
                 <div class="quick-info">
-                  <div class="info-item">
-                    <span class="info-icon">🗣️</span>
-                    <span class="info-text">{{ city()!.language.join(', ') }}</span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-icon">💱</span>
-                    <span class="info-text">{{ city()!.currency }}</span>
-                  </div>
+                  @if (countryInfo()) {
+                    <div class="info-item">
+                      <span class="info-icon">{{ countryInfo()!.flag }}</span>
+                      <span class="info-text">{{ countryInfo()!.name }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-icon">👥</span>
+                      <span class="info-text">{{ formatPopulation(countryInfo()!.population) }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-icon">💰</span>
+                      <span class="info-text">
+                        @if (countryInfo()!.currencies.length > 0) {
+                          {{ countryInfo()!.currencies[0].name }} ({{ countryInfo()!.currencies[0].symbol }})
+                        } @else {
+                          {{ city()!.currency }}
+                        }
+                      </span>
+                    </div>
+                  } @else {
+                    <div class="info-item">
+                      <span class="info-icon">🗣️</span>
+                      <span class="info-text">{{ city()!.language.join(', ') }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-icon">💱</span>
+                      <span class="info-text">{{ city()!.currency }}</span>
+                    </div>
+                  }
                   <div class="info-item">
                     <span class="info-icon">🕐</span>
                     <span class="info-text">{{ city()!.timezone }}</span>
                   </div>
+                  @if (countryInfo()) {
+                    <div class="info-item">
+                      <span class="info-icon">🚗</span>
+                      <span class="info-text">Guida a {{ countryInfo()!.drivingSide === 'right' ? 'destra' : 'sinistra' }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-icon">📞</span>
+                      <span class="info-text">{{ countryInfo()!.callingCode }}</span>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -672,6 +750,93 @@ import { CityCardComponent } from '../../shared/components/city-card/city-card.c
       }
     }
 
+    // Weather in hero
+    .weather-live {
+      .weather-icon {
+        font-size: 1.4em;
+        margin-right: var(--space-1);
+      }
+    }
+
+    .skeleton-text {
+      background: linear-gradient(90deg, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    // Wikipedia Link
+    .story-wiki {
+      font-size: var(--text-base);
+      color: var(--color-gray-500);
+      line-height: 1.7;
+      margin-bottom: var(--space-3);
+    }
+
+    .wiki-link {
+      display: inline-flex;
+      align-items: center;
+      font-size: var(--text-sm);
+      color: var(--color-accent);
+      font-weight: 500;
+      margin-bottom: var(--space-4);
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    // Weather Forecast Card
+    .weather-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: var(--space-5);
+      border-radius: var(--border-radius-lg);
+      color: white;
+      margin-bottom: var(--space-4);
+
+      h4 {
+        font-size: var(--text-sm);
+        color: rgba(255,255,255,0.9);
+        margin-bottom: var(--space-4);
+      }
+    }
+
+    .forecast-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-2);
+    }
+
+    .forecast-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      flex: 1;
+      padding: var(--space-2);
+      background: rgba(255,255,255,0.1);
+      border-radius: var(--border-radius-sm);
+
+      .day-name {
+        font-size: var(--text-xs);
+        opacity: 0.8;
+      }
+
+      .day-icon {
+        font-size: 1.3rem;
+      }
+
+      .day-temp {
+        font-size: var(--text-xs);
+        font-weight: 500;
+      }
+    }
+
     // ===== SECTION NAV =====
     .section-nav {
       position: sticky;
@@ -1131,6 +1296,11 @@ import { CityCardComponent } from '../../shared/components/city-card/city-card.c
   `]
 })
 export class CityComponent implements OnInit, OnDestroy {
+  // Services
+  private weatherService = inject(WeatherService);
+  private wikipediaService = inject(WikipediaService);
+  private countryService = inject(CountryService);
+
   // State
   loading = signal(true);
   city = signal<CityDetails | null>(null);
@@ -1139,11 +1309,22 @@ export class CityComponent implements OnInit, OnDestroy {
   navStuck = signal(false);
   similarCities = signal<City[]>([]);
 
+  // Live API Data
+  liveData = signal<CityLiveData>({});
+  weatherLoading = signal(true);
+  wikiLoading = signal(true);
+  countryLoading = signal(true);
+
   // Computed
   isSaved = computed(() => {
     const cityId = this.city()?.id;
     return cityId ? this.userService.isCitySaved(cityId) : false;
   });
+
+  weather = computed(() => this.liveData().weather);
+  forecast = computed(() => this.liveData().forecast);
+  wikipedia = computed(() => this.liveData().wikipedia);
+  countryInfo = computed(() => this.liveData().country);
 
   private scrollListener: (() => void) | null = null;
   private trackingInterval: ReturnType<typeof setInterval> | null = null;
@@ -1181,22 +1362,65 @@ export class CityComponent implements OnInit, OnDestroy {
 
   private loadCity(cityId: string): void {
     this.loading.set(true);
+    this.weatherLoading.set(true);
+    this.wikiLoading.set(true);
+    this.countryLoading.set(true);
     
-    // Simulate API delay for realistic UX
-    setTimeout(() => {
-      const details = this.cityService.getCityDetails(cityId);
+    // Load static city data
+    const details = this.cityService.getCityDetails(cityId);
+    
+    if (details) {
+      this.city.set(details);
+      this.userService.trackCityVisit(cityId);
+      this.similarCities.set(this.personalization.getSimilarCities(cityId, 4));
       
-      if (details) {
-        this.city.set(details);
-        this.userService.trackCityVisit(cityId);
-        this.similarCities.set(this.personalization.getSimilarCities(cityId, 4));
-        
-        // Start tracking time spent
-        this.startTimeTracking(cityId);
-      }
+      // Start tracking time spent
+      this.startTimeTracking(cityId);
       
-      this.loading.set(false);
-    }, 300);
+      // Load live API data in parallel
+      this.loadLiveData(details);
+    }
+    
+    this.loading.set(false);
+  }
+
+  private loadLiveData(details: CityDetails): void {
+    const { lat, lng } = details.coordinates;
+    
+    // Load weather data
+    this.weatherService.getWeatherForecast(lat, lng).subscribe({
+      next: (forecast) => {
+        this.liveData.update(data => ({
+          ...data,
+          weather: forecast.current,
+          forecast: forecast
+        }));
+        this.weatherLoading.set(false);
+      },
+      error: () => this.weatherLoading.set(false)
+    });
+
+    // Load Wikipedia summary
+    this.wikipediaService.getCitySummary(details.name, details.country).subscribe({
+      next: (wiki) => {
+        if (wiki) {
+          this.liveData.update(data => ({ ...data, wikipedia: wiki }));
+        }
+        this.wikiLoading.set(false);
+      },
+      error: () => this.wikiLoading.set(false)
+    });
+
+    // Load country info
+    this.countryService.getCountryByName(details.country).subscribe({
+      next: (country) => {
+        if (country) {
+          this.liveData.update(data => ({ ...data, country: country }));
+        }
+        this.countryLoading.set(false);
+      },
+      error: () => this.countryLoading.set(false)
+    });
   }
 
   private startTimeTracking(cityId: string): void {
@@ -1273,6 +1497,24 @@ export class CityComponent implements OnInit, OnDestroy {
         target: `${type}:${target}`
       });
     }
+  }
+
+  getDayName(date: Date): string {
+    const days = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+    return days[new Date(date).getDay()];
+  }
+
+  formatPopulation(population: number): string {
+    if (population >= 1_000_000_000) {
+      return `${(population / 1_000_000_000).toFixed(1)} miliardi`;
+    }
+    if (population >= 1_000_000) {
+      return `${(population / 1_000_000).toFixed(1)} milioni`;
+    }
+    if (population >= 1_000) {
+      return `${Math.round(population / 1_000)} mila`;
+    }
+    return population.toString();
   }
 }
 

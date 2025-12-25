@@ -3,6 +3,10 @@
  * Backend-ready: these interfaces mirror expected API responses
  */
 
+import { WeatherData, WeatherForecast } from '../services/api/weather.service';
+import { WikipediaSummary } from '../services/api/wikipedia.service';
+import { CountryInfo } from '../services/api/country.service';
+
 export interface City {
   id: string;
   name: string;
@@ -25,6 +29,16 @@ export interface City {
   language: string[];
   currency: string;
   emergencyNumber: string;
+}
+
+/**
+ * Extended city data with live API information
+ */
+export interface CityLiveData {
+  weather?: WeatherData;
+  forecast?: WeatherForecast;
+  wikipedia?: WikipediaSummary;
+  country?: CountryInfo;
 }
 
 export interface CityDetails extends City {
