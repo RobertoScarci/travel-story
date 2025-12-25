@@ -6,6 +6,7 @@
 import { WeatherData, WeatherForecast } from '../services/api/weather.service';
 import { WikipediaSummary } from '../services/api/wikipedia.service';
 import { CountryInfo } from '../services/api/country.service';
+import { UnsplashPhoto } from '../services/api/unsplash.service';
 
 export interface City {
   id: string;
@@ -39,6 +40,8 @@ export interface CityLiveData {
   forecast?: WeatherForecast;
   wikipedia?: WikipediaSummary;
   country?: CountryInfo;
+  photos?: UnsplashPhoto[];
+  foodPhotos?: UnsplashPhoto[];
 }
 
 export interface CityDetails extends City {

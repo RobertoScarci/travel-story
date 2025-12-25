@@ -9,6 +9,7 @@ import { CityCardComponent } from '../../shared/components/city-card/city-card.c
 import { WeatherService, WeatherData, WeatherForecast } from '../../core/services/api/weather.service';
 import { WikipediaService, WikipediaSummary } from '../../core/services/api/wikipedia.service';
 import { CountryService, CountryInfo } from '../../core/services/api/country.service';
+import { UnsplashService, UnsplashPhoto } from '../../core/services/api/unsplash.service';
 import { forkJoin } from 'rxjs';
 
 /**
@@ -36,8 +37,20 @@ import { forkJoin } from 'rxjs';
         <!-- Hero Section - Emotional Introduction -->
         <section class="hero">
           <div class="hero-image">
-            <img [src]="city()!.heroImage" [alt]="city()!.name">
+            <img 
+              [src]="heroPhoto() ? heroPhoto()!.urls.regular : city()!.heroImage" 
+              [alt]="heroPhoto()?.altDescription || city()!.name"
+              [style.background-color]="heroPhoto()?.color || '#1a1a2e'">
             <div class="hero-overlay"></div>
+            @if (heroPhoto()) {
+              <a 
+                class="photo-credit" 
+                [href]="getPhotoAttributionLink(heroPhoto()!)" 
+                target="_blank" 
+                rel="noopener">
+                📸 {{ heroPhoto()!.user.name }} / Unsplash
+              </a>
+            }
           </div>
           
           <div class="hero-content">
@@ -453,6 +466,43 @@ import { forkJoin } from 'rxjs';
           </section>
         }
 
+        <!-- Photo Gallery from Unsplash -->
+        @if (photos().length > 1) {
+          <section class="gallery-section">
+            <div class="container">
+              <div class="section-header">
+                <span class="section-icon">📸</span>
+                <h2>Galleria Fotografica</h2>
+              </div>
+              <div class="gallery-grid">
+                @for (photo of photos().slice(1, 7); track photo.id; let i = $index) {
+                  <a 
+                    class="gallery-item"
+                    [class.large]="i === 0"
+                    [href]="photo.links.html"
+                    target="_blank"
+                    rel="noopener"
+                    [style.animation-delay.ms]="i * 100">
+                    <img 
+                      [src]="getOptimizedPhotoUrl(photo, i === 0 ? 800 : 400)" 
+                      [alt]="photo.altDescription || city()!.name"
+                      loading="lazy">
+                    <div class="gallery-overlay">
+                      <span class="gallery-credit">📷 {{ photo.user.name }}</span>
+                    </div>
+                  </a>
+                }
+              </div>
+              <p class="gallery-attribution">
+                Foto di alta qualità fornite da 
+                <a href="https://unsplash.com/?utm_source=travelstory&utm_medium=referral" target="_blank" rel="noopener">
+                  Unsplash
+                </a>
+              </p>
+            </div>
+          </section>
+        }
+
         <!-- Similar Cities -->
         @if (similarCities().length > 0) {
           <section class="similar-section">
@@ -537,6 +587,29 @@ import { forkJoin } from 'rxjs';
         rgba(0, 0, 0, 0.3) 50%,
         rgba(0, 0, 0, 0.2) 100%
       );
+    }
+
+    .photo-credit {
+      position: absolute;
+      bottom: var(--space-3);
+      right: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-2) var(--space-3);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      border-radius: var(--border-radius-full);
+      font-size: var(--text-xs);
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      z-index: 10;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+      }
     }
 
     .hero-content {
@@ -1277,6 +1350,89 @@ import { forkJoin } from 'rxjs';
       border-radius: var(--border-radius-sm);
     }
 
+    // ===== PHOTO GALLERY =====
+    .gallery-section {
+      padding: var(--space-16) 0;
+      background: var(--color-off-white);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 200px);
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 150px);
+      }
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--border-radius-lg);
+      cursor: pointer;
+      animation: fadeInUp 0.5s ease both;
+
+      &.large {
+        grid-column: span 2;
+        grid-row: span 2;
+
+        @media (max-width: 768px) {
+          grid-column: span 2;
+          grid-row: span 1;
+        }
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-base);
+      }
+
+      &:hover img {
+        transform: scale(1.05);
+      }
+
+      &:hover .gallery-overlay {
+        opacity: 1;
+      }
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-3);
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+    }
+
+    .gallery-credit {
+      font-size: var(--text-xs);
+      color: white;
+    }
+
+    .gallery-attribution {
+      text-align: center;
+      font-size: var(--text-sm);
+      color: var(--color-gray-400);
+
+      a {
+        color: var(--color-accent);
+        font-weight: 500;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
     // ===== SIMILAR SECTION =====
     .similar-section {
       padding: var(--space-16) 0;
@@ -1300,6 +1456,7 @@ export class CityComponent implements OnInit, OnDestroy {
   private weatherService = inject(WeatherService);
   private wikipediaService = inject(WikipediaService);
   private countryService = inject(CountryService);
+  private unsplashService = inject(UnsplashService);
 
   // State
   loading = signal(true);
@@ -1314,6 +1471,7 @@ export class CityComponent implements OnInit, OnDestroy {
   weatherLoading = signal(true);
   wikiLoading = signal(true);
   countryLoading = signal(true);
+  photosLoading = signal(true);
 
   // Computed
   isSaved = computed(() => {
@@ -1325,6 +1483,8 @@ export class CityComponent implements OnInit, OnDestroy {
   forecast = computed(() => this.liveData().forecast);
   wikipedia = computed(() => this.liveData().wikipedia);
   countryInfo = computed(() => this.liveData().country);
+  photos = computed(() => this.liveData().photos || []);
+  heroPhoto = computed(() => this.photos().length > 0 ? this.photos()[0] : null);
 
   private scrollListener: (() => void) | null = null;
   private trackingInterval: ReturnType<typeof setInterval> | null = null;
@@ -1421,6 +1581,17 @@ export class CityComponent implements OnInit, OnDestroy {
       },
       error: () => this.countryLoading.set(false)
     });
+
+    // Load Unsplash photos
+    this.unsplashService.getCityPhotos(details.name, details.country, 6).subscribe({
+      next: (photos) => {
+        if (photos.length > 0) {
+          this.liveData.update(data => ({ ...data, photos }));
+        }
+        this.photosLoading.set(false);
+      },
+      error: () => this.photosLoading.set(false)
+    });
   }
 
   private startTimeTracking(cityId: string): void {
@@ -1515,6 +1686,14 @@ export class CityComponent implements OnInit, OnDestroy {
       return `${Math.round(population / 1_000)} mila`;
     }
     return population.toString();
+  }
+
+  getPhotoAttributionLink(photo: UnsplashPhoto): string {
+    return this.unsplashService.getAttributionLink(photo);
+  }
+
+  getOptimizedPhotoUrl(photo: UnsplashPhoto, width: number): string {
+    return this.unsplashService.getOptimizedUrl(photo, width);
   }
 }
 
