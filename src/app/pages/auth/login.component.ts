@@ -31,12 +31,12 @@ import { UserService } from '../../core/services/user.service';
 
       <div class="auth-form-container">
         <div class="auth-form">
-          <a routerLink="/" class="back-link">
+          <button type="button" class="back-link" (click)="goHome()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
             Torna alla Home
-          </a>
+          </button>
 
           <div class="form-header">
             <h1>Accedi</h1>
@@ -204,12 +204,21 @@ import { UserService } from '../../core/services/user.service';
       display: inline-flex;
       align-items: center;
       gap: var(--space-2);
+      font-family: var(--font-body);
       font-size: var(--text-sm);
       color: var(--color-gray-500);
-      margin-bottom: var(--space-8);
+      background: none;
+      border: none;
+      padding: var(--space-2) var(--space-3);
+      margin-left: calc(-1 * var(--space-3));
+      margin-bottom: var(--space-6);
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
 
       &:hover {
         color: var(--color-primary);
+        background: var(--color-cream);
       }
     }
 
@@ -376,6 +385,10 @@ export class LoginComponent {
     private userService: UserService,
     private router: Router
   ) {}
+
+  goHome(): void {
+    this.router.navigate(['/']);
+  }
 
   togglePassword(): void {
     this.showPassword.update(v => !v);

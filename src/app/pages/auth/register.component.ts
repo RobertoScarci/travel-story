@@ -37,12 +37,12 @@ import { TravelStyle } from '../../core/models/user.model';
 
       <div class="auth-form-container">
         <div class="auth-form">
-          <a routerLink="/" class="back-link">
+          <button type="button" class="back-link" (click)="goHome()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
             Torna alla Home
-          </a>
+          </button>
 
           <!-- Step 1: Basic Info -->
           @if (currentStep() === 1) {
@@ -304,12 +304,21 @@ import { TravelStyle } from '../../core/models/user.model';
       display: inline-flex;
       align-items: center;
       gap: var(--space-2);
+      font-family: var(--font-body);
       font-size: var(--text-sm);
       color: var(--color-gray-500);
+      background: none;
+      border: none;
+      padding: var(--space-2) var(--space-3);
+      margin-left: calc(-1 * var(--space-3));
       margin-bottom: var(--space-6);
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
 
       &:hover {
         color: var(--color-primary);
+        background: var(--color-cream);
       }
     }
 
@@ -554,6 +563,10 @@ export class RegisterComponent {
     private userService: UserService,
     private router: Router
   ) {}
+
+  goHome(): void {
+    this.router.navigate(['/']);
+  }
 
   nextStep(): void {
     if (this.currentStep() === 1) {
