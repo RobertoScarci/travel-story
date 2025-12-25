@@ -1,7 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 
 /**
@@ -43,19 +43,32 @@ import { UserService } from '../../core/services/user.service';
             <p>Accedi per ritrovare i tuoi viaggi e le tue preferenze</p>
           </div>
 
-          <form (ngSubmit)="onSubmit()">
-            <div class="form-group">
+          <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+            <div class="form-group" [class.has-error]="emailField.invalid && emailField.touched">
               <label for="email">Email</label>
               <input 
                 type="email" 
                 id="email"
                 [(ngModel)]="email"
                 name="email"
+                #emailField="ngModel"
                 placeholder="la-tua-email@esempio.com"
-                required>
+                required
+                email
+                [class.invalid]="emailField.invalid && emailField.touched"
+                [class.valid]="emailField.valid && emailField.touched">
+              @if (emailField.invalid && emailField.touched) {
+                <span class="field-error">
+                  @if (emailField.errors?.['required']) {
+                    L'email è obbligatoria
+                  } @else if (emailField.errors?.['email']) {
+                    Inserisci un'email valida
+                  }
+                </span>
+              }
             </div>
 
-            <div class="form-group">
+            <div class="form-group" [class.has-error]="passwordField.invalid && passwordField.touched">
               <label for="password">Password</label>
               <div class="password-input">
                 <input 
@@ -63,8 +76,12 @@ import { UserService } from '../../core/services/user.service';
                   id="password"
                   [(ngModel)]="password"
                   name="password"
+                  #passwordField="ngModel"
                   placeholder="La tua password"
-                  required>
+                  required
+                  minlength="6"
+                  [class.invalid]="passwordField.invalid && passwordField.touched"
+                  [class.valid]="passwordField.valid && passwordField.touched">
                 <button 
                   type="button" 
                   class="toggle-password"
@@ -72,6 +89,15 @@ import { UserService } from '../../core/services/user.service';
                   {{ showPassword() ? '🙈' : '👁️' }}
                 </button>
               </div>
+              @if (passwordField.invalid && passwordField.touched) {
+                <span class="field-error">
+                  @if (passwordField.errors?.['required']) {
+                    La password è obbligatoria
+                  } @else if (passwordField.errors?.['minlength']) {
+                    La password deve avere almeno 6 caratteri
+                  }
+                </span>
+              }
             </div>
 
             <div class="form-options">
@@ -84,6 +110,10 @@ import { UserService } from '../../core/services/user.service';
 
             @if (error()) {
               <div class="error-message">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 8v4M12 16h.01"/>
+                </svg>
                 {{ error() }}
               </div>
             }
@@ -91,8 +121,13 @@ import { UserService } from '../../core/services/user.service';
             <button 
               type="submit" 
               class="btn btn-primary btn-lg full-width"
-              [disabled]="loading()">
-              {{ loading() ? 'Accesso in corso...' : 'Accedi' }}
+              [disabled]="loading() || loginForm.invalid">
+              @if (loading()) {
+                <span class="spinner"></span>
+                Accesso in corso...
+              } @else {
+                Accedi
+              }
             </button>
           </form>
 
@@ -246,7 +281,7 @@ import { UserService } from '../../core/services/user.service';
         margin-bottom: var(--space-2);
       }
 
-      input {
+      input:not([type="checkbox"]) {
         width: 100%;
         padding: var(--space-4);
         font-family: var(--font-body);
@@ -254,17 +289,45 @@ import { UserService } from '../../core/services/user.service';
         border: 1.5px solid var(--color-gray-200);
         border-radius: var(--border-radius-md);
         background: var(--color-white);
-        transition: border-color var(--transition-fast);
+        transition: all var(--transition-fast);
 
         &:focus {
           outline: none;
           border-color: var(--color-accent);
+          box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
         }
 
         &::placeholder {
           color: var(--color-gray-300);
         }
+
+        &.invalid {
+          border-color: #e74c3c;
+          background: rgba(231, 76, 60, 0.02);
+        }
+
+        &.valid {
+          border-color: #27ae60;
+        }
       }
+
+      &.has-error label {
+        color: #c0392b;
+      }
+    }
+
+    .field-error {
+      display: block;
+      margin-top: var(--space-2);
+      font-size: var(--text-xs);
+      color: #c0392b;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
     }
 
     .password-input {
@@ -283,6 +346,12 @@ import { UserService } from '../../core/services/user.service';
         border: none;
         cursor: pointer;
         font-size: 1.2em;
+        opacity: 0.7;
+        transition: opacity var(--transition-fast);
+
+        &:hover {
+          opacity: 1;
+        }
       }
     }
 
@@ -303,6 +372,8 @@ import { UserService } from '../../core/services/user.service';
 
       input {
         accent-color: var(--color-accent);
+        width: 16px;
+        height: 16px;
       }
     }
 
@@ -316,16 +387,35 @@ import { UserService } from '../../core/services/user.service';
     }
 
     .error-message {
-      padding: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
       background: rgba(231, 76, 60, 0.1);
       color: #c0392b;
-      border-radius: var(--border-radius-sm);
+      border-radius: var(--border-radius-md);
       font-size: var(--text-sm);
       margin-bottom: var(--space-4);
+      border-left: 3px solid #e74c3c;
     }
 
     .full-width {
       width: 100%;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: var(--space-2);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .divider {
@@ -371,9 +461,17 @@ import { UserService } from '../../core/services/user.service';
         }
       }
     }
+
+    // Button disabled state
+    button[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   `]
 })
 export class LoginComponent {
+  @ViewChild('loginForm') loginForm!: NgForm;
+  
   email = '';
   password = '';
   rememberMe = false;
@@ -394,9 +492,12 @@ export class LoginComponent {
     this.showPassword.update(v => !v);
   }
 
-  async onSubmit(): Promise<void> {
-    if (!this.email || !this.password) {
-      this.error.set('Compila tutti i campi');
+  async onSubmit(form: NgForm): Promise<void> {
+    if (form.invalid) {
+      // Mark all fields as touched to show errors
+      Object.keys(form.controls).forEach(key => {
+        form.controls[key].markAsTouched();
+      });
       return;
     }
 
@@ -408,13 +509,12 @@ export class LoginComponent {
       if (success) {
         this.router.navigate(['/']);
       } else {
-        this.error.set('Credenziali non valide');
+        this.error.set('Email o password non corretti. Riprova.');
       }
     } catch {
-      this.error.set('Si è verificato un errore. Riprova.');
+      this.error.set('Si è verificato un errore. Riprova più tardi.');
     } finally {
       this.loading.set(false);
     }
   }
 }
-

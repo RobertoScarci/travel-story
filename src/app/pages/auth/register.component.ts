@@ -1,7 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { TravelStyle } from '../../core/models/user.model';
 
@@ -26,8 +26,17 @@ import { TravelStyle } from '../../core/models/user.model';
               <div 
                 class="step-item"
                 [class.active]="currentStep() >= i + 1"
-                [class.current]="currentStep() === i + 1">
-                <span class="step-number">{{ i + 1 }}</span>
+                [class.current]="currentStep() === i + 1"
+                [class.completed]="currentStep() > i + 1">
+                <span class="step-number">
+                  @if (currentStep() > i + 1) {
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                  } @else {
+                    {{ i + 1 }}
+                  }
+                </span>
                 <span class="step-label">{{ step.label }}</span>
               </div>
             }
@@ -44,6 +53,14 @@ import { TravelStyle } from '../../core/models/user.model';
             Torna alla Home
           </button>
 
+          <!-- Step indicator mobile -->
+          <div class="mobile-steps">
+            <div class="step-progress">
+              <div class="step-progress-bar" [style.width.%]="(currentStep() / 3) * 100"></div>
+            </div>
+            <span class="step-text">Passo {{ currentStep() }} di 3</span>
+          </div>
+
           <!-- Step 1: Basic Info -->
           @if (currentStep() === 1) {
             <div class="form-step animate-fade-in-up">
@@ -52,46 +69,136 @@ import { TravelStyle } from '../../core/models/user.model';
                 <p>Pochi secondi per iniziare a esplorare</p>
               </div>
 
-              <form (ngSubmit)="nextStep()">
-                <div class="form-group">
+              <form #registerForm="ngForm" (ngSubmit)="validateAndNext(registerForm)">
+                <div class="form-group" [class.has-error]="nameField.invalid && nameField.touched">
                   <label for="name">Come ti chiami?</label>
                   <input 
                     type="text" 
                     id="name"
                     [(ngModel)]="name"
                     name="name"
+                    #nameField="ngModel"
                     placeholder="Il tuo nome"
-                    required>
+                    required
+                    minlength="2"
+                    maxlength="50"
+                    [class.invalid]="nameField.invalid && nameField.touched"
+                    [class.valid]="nameField.valid && nameField.touched">
+                  @if (nameField.invalid && nameField.touched) {
+                    <span class="field-error">
+                      @if (nameField.errors?.['required']) {
+                        Il nome è obbligatorio
+                      } @else if (nameField.errors?.['minlength']) {
+                        Il nome deve avere almeno 2 caratteri
+                      }
+                    </span>
+                  }
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" [class.has-error]="emailField.invalid && emailField.touched">
                   <label for="email">La tua email</label>
                   <input 
                     type="email" 
                     id="email"
                     [(ngModel)]="email"
                     name="email"
+                    #emailField="ngModel"
                     placeholder="nome@esempio.com"
-                    required>
+                    required
+                    email
+                    [class.invalid]="emailField.invalid && emailField.touched"
+                    [class.valid]="emailField.valid && emailField.touched">
+                  @if (emailField.invalid && emailField.touched) {
+                    <span class="field-error">
+                      @if (emailField.errors?.['required']) {
+                        L'email è obbligatoria
+                      } @else if (emailField.errors?.['email']) {
+                        Inserisci un'email valida
+                      }
+                    </span>
+                  }
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" [class.has-error]="passwordField.invalid && passwordField.touched">
                   <label for="password">Crea una password</label>
+                  <div class="password-input">
+                    <input 
+                      [type]="showPassword() ? 'text' : 'password'"
+                      id="password"
+                      [(ngModel)]="password"
+                      name="password"
+                      #passwordField="ngModel"
+                      placeholder="Almeno 8 caratteri"
+                      required
+                      minlength="8"
+                      [class.invalid]="passwordField.invalid && passwordField.touched"
+                      [class.valid]="passwordField.valid && passwordField.touched">
+                    <button 
+                      type="button" 
+                      class="toggle-password"
+                      (click)="togglePassword()">
+                      {{ showPassword() ? '🙈' : '👁️' }}
+                    </button>
+                  </div>
+                  @if (passwordField.touched) {
+                    <div class="password-strength">
+                      <div class="strength-bars">
+                        <span class="bar" [class.active]="password.length >= 1" [class.weak]="password.length >= 1 && password.length < 8"></span>
+                        <span class="bar" [class.active]="password.length >= 8" [class.medium]="password.length >= 8 && password.length < 12"></span>
+                        <span class="bar" [class.active]="password.length >= 12" [class.strong]="password.length >= 12"></span>
+                      </div>
+                      <span class="strength-text">
+                        @if (password.length === 0) {
+                          
+                        } @else if (password.length < 8) {
+                          Troppo corta
+                        } @else if (password.length < 12) {
+                          Buona
+                        } @else {
+                          Ottima!
+                        }
+                      </span>
+                    </div>
+                  }
+                  @if (passwordField.invalid && passwordField.touched && passwordField.errors?.['required']) {
+                    <span class="field-error">La password è obbligatoria</span>
+                  }
+                </div>
+
+                <div class="form-group" [class.has-error]="confirmPasswordField.invalid && confirmPasswordField.touched">
+                  <label for="confirmPassword">Conferma password</label>
                   <input 
                     type="password"
-                    id="password"
-                    [(ngModel)]="password"
-                    name="password"
-                    placeholder="Almeno 8 caratteri"
+                    id="confirmPassword"
+                    [(ngModel)]="confirmPassword"
+                    name="confirmPassword"
+                    #confirmPasswordField="ngModel"
+                    placeholder="Ripeti la password"
                     required
-                    minlength="8">
+                    [class.invalid]="(confirmPasswordField.touched && confirmPassword !== password) || (confirmPasswordField.invalid && confirmPasswordField.touched)"
+                    [class.valid]="confirmPasswordField.valid && confirmPasswordField.touched && confirmPassword === password">
+                  @if (confirmPasswordField.touched && confirmPassword !== password && confirmPassword.length > 0) {
+                    <span class="field-error">Le password non corrispondono</span>
+                  }
+                  @if (confirmPasswordField.invalid && confirmPasswordField.touched && confirmPasswordField.errors?.['required']) {
+                    <span class="field-error">Conferma la password</span>
+                  }
                 </div>
 
                 @if (error()) {
-                  <div class="error-message">{{ error() }}</div>
+                  <div class="error-message">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 8v4M12 16h.01"/>
+                    </svg>
+                    {{ error() }}
+                  </div>
                 }
 
-                <button type="submit" class="btn btn-primary btn-lg full-width">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary btn-lg full-width"
+                  [disabled]="registerForm.invalid || confirmPassword !== password">
                   Continua
                 </button>
               </form>
@@ -119,7 +226,11 @@ import { TravelStyle } from '../../core/models/user.model';
             <div class="form-step animate-fade-in-up">
               <div class="form-header">
                 <h1>Che tipo di viaggiatore sei?</h1>
-                <p>Seleziona i tuoi stili di viaggio preferiti</p>
+                <p>Seleziona fino a 4 stili di viaggio preferiti</p>
+              </div>
+
+              <div class="selection-hint">
+                <span class="hint-count">{{ selectedStyles.length }}/4</span> selezionati
               </div>
 
               <div class="preference-grid">
@@ -128,9 +239,13 @@ import { TravelStyle } from '../../core/models/user.model';
                     type="button"
                     class="preference-card"
                     [class.selected]="selectedStyles.includes(style.id)"
+                    [class.disabled]="selectedStyles.length >= 4 && !selectedStyles.includes(style.id)"
                     (click)="toggleStyle(style.id)">
                     <span class="preference-icon">{{ style.icon }}</span>
                     <span class="preference-label">{{ style.label }}</span>
+                    @if (selectedStyles.includes(style.id)) {
+                      <span class="check-badge">✓</span>
+                    }
                   </button>
                 }
               </div>
@@ -140,6 +255,9 @@ import { TravelStyle } from '../../core/models/user.model';
                   type="button" 
                   class="btn btn-ghost"
                   (click)="prevStep()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                  </svg>
                   Indietro
                 </button>
                 <button 
@@ -154,7 +272,7 @@ import { TravelStyle } from '../../core/models/user.model';
                 type="button" 
                 class="skip-link"
                 (click)="skipPreferences()">
-                Salta per ora
+                Salta per ora, deciderò dopo
               </button>
             </div>
           }
@@ -164,7 +282,7 @@ import { TravelStyle } from '../../core/models/user.model';
             <div class="form-step animate-fade-in-up">
               <div class="form-header">
                 <h1>Qual è il tuo budget tipico?</h1>
-                <p>Questo ci aiuta a suggerirti destinazioni adatte</p>
+                <p>Questo ci aiuta a suggerirti destinazioni adatte a te</p>
               </div>
 
               <div class="budget-options">
@@ -175,17 +293,39 @@ import { TravelStyle } from '../../core/models/user.model';
                     [class.selected]="selectedBudget === option.value"
                     (click)="selectBudget(option.value)">
                     <span class="budget-icon">{{ option.icon }}</span>
-                    <span class="budget-label">{{ option.label }}</span>
-                    <span class="budget-desc">{{ option.description }}</span>
+                    <div class="budget-info">
+                      <span class="budget-label">{{ option.label }}</span>
+                      <span class="budget-desc">{{ option.description }}</span>
+                    </div>
+                    @if (selectedBudget === option.value) {
+                      <span class="check-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                          <path d="M20 6L9 17l-5-5"/>
+                        </svg>
+                      </span>
+                    }
                   </button>
                 }
               </div>
+
+              @if (error()) {
+                <div class="error-message">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 8v4M12 16h.01"/>
+                  </svg>
+                  {{ error() }}
+                </div>
+              }
 
               <div class="form-actions">
                 <button 
                   type="button" 
                   class="btn btn-ghost"
                   (click)="prevStep()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                  </svg>
                   Indietro
                 </button>
                 <button 
@@ -193,7 +333,12 @@ import { TravelStyle } from '../../core/models/user.model';
                   class="btn btn-primary btn-lg"
                   [disabled]="loading()"
                   (click)="completeRegistration()">
-                  {{ loading() ? 'Creazione...' : 'Inizia a esplorare' }}
+                  @if (loading()) {
+                    <span class="spinner"></span>
+                    Creazione...
+                  } @else {
+                    Inizia a esplorare 🚀
+                  }
                 </button>
               </div>
             </div>
@@ -268,6 +413,10 @@ import { TravelStyle } from '../../core/models/user.model';
         transform: scale(1.05);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       }
+
+      &.completed .step-number {
+        background: #27ae60;
+      }
     }
 
     .step-number {
@@ -280,10 +429,44 @@ import { TravelStyle } from '../../core/models/user.model';
       color: var(--color-accent);
       border-radius: 50%;
       font-weight: 600;
+      transition: background var(--transition-fast);
+
+      svg {
+        stroke: white;
+      }
     }
 
     .step-label {
       font-weight: 500;
+    }
+
+    // Mobile Steps
+    .mobile-steps {
+      display: none;
+      margin-bottom: var(--space-6);
+
+      @media (max-width: 992px) {
+        display: block;
+      }
+    }
+
+    .step-progress {
+      height: 4px;
+      background: var(--color-gray-200);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: var(--space-2);
+    }
+
+    .step-progress-bar {
+      height: 100%;
+      background: var(--color-accent);
+      transition: width var(--transition-base);
+    }
+
+    .step-text {
+      font-size: var(--text-sm);
+      color: var(--color-gray-400);
     }
 
     // Form Side
@@ -323,7 +506,7 @@ import { TravelStyle } from '../../core/models/user.model';
     }
 
     .form-header {
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--space-6);
 
       h1 {
         font-size: var(--text-3xl);
@@ -344,9 +527,10 @@ import { TravelStyle } from '../../core/models/user.model';
         font-weight: 500;
         color: var(--color-gray-500);
         margin-bottom: var(--space-2);
+        transition: color var(--transition-fast);
       }
 
-      input {
+      input:not([type="checkbox"]) {
         width: 100%;
         padding: var(--space-4);
         font-family: var(--font-body);
@@ -354,26 +538,131 @@ import { TravelStyle } from '../../core/models/user.model';
         border: 1.5px solid var(--color-gray-200);
         border-radius: var(--border-radius-md);
         background: var(--color-white);
-        transition: border-color var(--transition-fast);
+        transition: all var(--transition-fast);
 
         &:focus {
           outline: none;
           border-color: var(--color-accent);
+          box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+        }
+
+        &::placeholder {
+          color: var(--color-gray-300);
+        }
+
+        &.invalid {
+          border-color: #e74c3c;
+          background: rgba(231, 76, 60, 0.02);
+        }
+
+        &.valid {
+          border-color: #27ae60;
+        }
+      }
+
+      &.has-error label {
+        color: #c0392b;
+      }
+    }
+
+    .field-error {
+      display: block;
+      margin-top: var(--space-2);
+      font-size: var(--text-xs);
+      color: #c0392b;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    .password-input {
+      position: relative;
+
+      input {
+        padding-right: var(--space-12);
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: var(--space-3);
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2em;
+        opacity: 0.7;
+        transition: opacity var(--transition-fast);
+
+        &:hover {
+          opacity: 1;
         }
       }
     }
 
+    .password-strength {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-2);
+    }
+
+    .strength-bars {
+      display: flex;
+      gap: 4px;
+    }
+
+    .bar {
+      width: 40px;
+      height: 4px;
+      background: var(--color-gray-200);
+      border-radius: 2px;
+      transition: all var(--transition-fast);
+
+      &.active.weak { background: #e74c3c; }
+      &.active.medium { background: #f39c12; }
+      &.active.strong { background: #27ae60; }
+    }
+
+    .strength-text {
+      font-size: var(--text-xs);
+      color: var(--color-gray-400);
+    }
+
     .error-message {
-      padding: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
       background: rgba(231, 76, 60, 0.1);
       color: #c0392b;
-      border-radius: var(--border-radius-sm);
+      border-radius: var(--border-radius-md);
       font-size: var(--text-sm);
       margin-bottom: var(--space-4);
+      border-left: 3px solid #e74c3c;
     }
 
     .full-width {
       width: 100%;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: var(--space-2);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .divider {
@@ -412,15 +701,28 @@ import { TravelStyle } from '../../core/models/user.model';
       }
     }
 
+    // Selection hint
+    .selection-hint {
+      font-size: var(--text-sm);
+      color: var(--color-gray-400);
+      margin-bottom: var(--space-4);
+
+      .hint-count {
+        font-weight: 600;
+        color: var(--color-accent);
+      }
+    }
+
     // Preferences Grid
     .preference-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: var(--space-3);
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--space-6);
     }
 
     .preference-card {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -432,13 +734,19 @@ import { TravelStyle } from '../../core/models/user.model';
       cursor: pointer;
       transition: all var(--transition-fast);
 
-      &:hover {
+      &:hover:not(.disabled) {
         border-color: var(--color-accent);
+        transform: translateY(-2px);
       }
 
       &.selected {
         border-color: var(--color-accent);
         background: rgba(233, 69, 96, 0.05);
+      }
+
+      &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
       .preference-icon {
@@ -449,6 +757,22 @@ import { TravelStyle } from '../../core/models/user.model';
         font-weight: 500;
         color: var(--color-gray-500);
       }
+
+      .check-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-accent);
+        color: white;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: bold;
+      }
     }
 
     // Budget Options
@@ -456,12 +780,11 @@ import { TravelStyle } from '../../core/models/user.model';
       display: flex;
       flex-direction: column;
       gap: var(--space-3);
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--space-6);
     }
 
     .budget-option {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
+      display: flex;
       align-items: center;
       gap: var(--space-4);
       padding: var(--space-4);
@@ -483,6 +806,14 @@ import { TravelStyle } from '../../core/models/user.model';
 
       .budget-icon {
         font-size: 1.5rem;
+        min-width: 40px;
+      }
+
+      .budget-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
       }
 
       .budget-label {
@@ -493,6 +824,10 @@ import { TravelStyle } from '../../core/models/user.model';
         font-size: var(--text-sm);
         color: var(--color-gray-400);
       }
+
+      .check-icon {
+        color: var(--color-accent);
+      }
     }
 
     // Form Actions
@@ -500,6 +835,11 @@ import { TravelStyle } from '../../core/models/user.model';
       display: flex;
       gap: var(--space-3);
       justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-ghost svg {
+      margin-right: var(--space-1);
     }
 
     .skip-link {
@@ -510,22 +850,50 @@ import { TravelStyle } from '../../core/models/user.model';
       background: none;
       border: none;
       color: var(--color-gray-400);
+      font-family: var(--font-body);
       font-size: var(--text-sm);
       cursor: pointer;
       text-align: center;
+      transition: color var(--transition-fast);
 
       &:hover {
         color: var(--color-gray-500);
         text-decoration: underline;
       }
     }
+
+    // Animation
+    .animate-fade-in-up {
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    // Button disabled state
+    button[type="submit"]:disabled,
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   `]
 })
 export class RegisterComponent {
+  @ViewChild('registerForm') registerForm!: NgForm;
+  
   // Form data
   name = '';
   email = '';
   password = '';
+  confirmPassword = '';
   selectedStyles: TravelStyle[] = [];
   selectedBudget: 1 | 2 | 3 | 4 | 5 = 3;
 
@@ -533,6 +901,7 @@ export class RegisterComponent {
   currentStep = signal(1);
   loading = signal(false);
   error = signal('');
+  showPassword = signal(false);
 
   steps = [
     { id: 1, label: 'Crea account' },
@@ -552,10 +921,10 @@ export class RegisterComponent {
   ];
 
   budgetOptions = [
-    { value: 1 as const, icon: '💵', label: 'Zaino in spalla', description: 'Meno di €50/giorno' },
-    { value: 2 as const, icon: '💵💵', label: 'Budget smart', description: '€50-100/giorno' },
-    { value: 3 as const, icon: '💵💵💵', label: 'Comfort', description: '€100-200/giorno' },
-    { value: 4 as const, icon: '💵💵💵💵', label: 'Premium', description: '€200-400/giorno' },
+    { value: 1 as const, icon: '🎒', label: 'Zaino in spalla', description: 'Meno di €50/giorno' },
+    { value: 2 as const, icon: '💵', label: 'Budget smart', description: '€50-100/giorno' },
+    { value: 3 as const, icon: '🏨', label: 'Comfort', description: '€100-200/giorno' },
+    { value: 4 as const, icon: '✨', label: 'Premium', description: '€200-400/giorno' },
     { value: 5 as const, icon: '💎', label: 'Lusso', description: '€400+/giorno' }
   ];
 
@@ -568,19 +937,23 @@ export class RegisterComponent {
     this.router.navigate(['/']);
   }
 
-  nextStep(): void {
-    if (this.currentStep() === 1) {
-      if (!this.name || !this.email || !this.password) {
-        this.error.set('Compila tutti i campi');
-        return;
-      }
-      if (this.password.length < 8) {
-        this.error.set('La password deve avere almeno 8 caratteri');
-        return;
-      }
-      this.error.set('');
+  togglePassword(): void {
+    this.showPassword.update(v => !v);
+  }
+
+  validateAndNext(form: NgForm): void {
+    if (form.invalid || this.password !== this.confirmPassword) {
+      // Mark all fields as touched to show errors
+      Object.keys(form.controls).forEach(key => {
+        form.controls[key].markAsTouched();
+      });
+      return;
     }
-    
+    this.error.set('');
+    this.nextStep();
+  }
+
+  nextStep(): void {
     if (this.currentStep() < 3) {
       this.currentStep.update(v => v + 1);
     }
@@ -610,6 +983,7 @@ export class RegisterComponent {
 
   async completeRegistration(): Promise<void> {
     this.loading.set(true);
+    this.error.set('');
 
     try {
       this.userService.register(this.email, this.name, {
@@ -631,4 +1005,3 @@ export class RegisterComponent {
     }
   }
 }
-
