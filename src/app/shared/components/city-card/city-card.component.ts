@@ -24,7 +24,7 @@ import { UserService } from '../../../core/services/user.service';
           <img [src]="city.thumbnailImage" [alt]="city.name" loading="lazy">
           <div class="image-overlay"></div>
           
-          <!-- Top bar: Tags on left, Save on right -->
+          <!-- Top bar: Tags on left, Save on right (only if no recommendation) -->
           <div class="card-top-bar">
             <div class="card-tags">
               @for (tag of city.tags.slice(0, 2); track tag) {
@@ -32,8 +32,8 @@ import { UserService } from '../../../core/services/user.service';
               }
             </div>
             
-            <!-- Save Button (only for registered users) -->
-            @if (userService.isAuthenticated()) {
+            <!-- Save Button (only for registered users and when no recommendation badge) -->
+            @if (userService.isAuthenticated() && !recommendation) {
               <button 
                 class="save-btn" 
                 [class.saved]="isSaved"
@@ -330,12 +330,11 @@ import { UserService } from '../../../core/services/user.service';
       color: var(--color-gray-600);
     }
 
-    // Recommendation Badge - positioned to not overlap
+    // Recommendation Badge - positioned on the right to avoid overlap
     .recommendation-badge {
       position: absolute;
       top: var(--space-3);
-      left: 50%;
-      transform: translateX(-50%);
+      right: var(--space-3);
       display: flex;
       align-items: center;
       gap: 4px;
@@ -345,16 +344,13 @@ import { UserService } from '../../../core/services/user.service';
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.03em;
       border-radius: var(--border-radius-full);
       box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
       z-index: 10;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: translateX(-50%) scale(1); }
-      50% { transform: translateX(-50%) scale(1.05); }
+      max-width: 55%;
+      text-align: center;
+      line-height: 1.2;
     }
 
     .badge-icon {
