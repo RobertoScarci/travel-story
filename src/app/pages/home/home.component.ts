@@ -73,25 +73,18 @@ import { City } from '../../core/models/city.model';
                   [class.active]="activeFilter() === filter.id"
                   (click)="setFilter(filter.id)">
                   <span class="filter-icon">
-                    @switch (filter.icon) {
-                      @case ('mountain') {
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3l4 8 5-5 5 5V3H8z"/><path d="M2 21l6-6 4 4 4-4 6 6H2z"/></svg>
-                      }
-                      @case ('sun') {
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                      }
-                      @case ('landmark') {
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V8l9-6 9 6v14H3z"/><path d="M9 22V12h6v10"/><path d="M9 8h6"/></svg>
-                      }
-                      @case ('utensils') {
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/><path d="M18 22V15"/></svg>
-                      }
-                      @case ('wallet') {
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"/></svg>
-                      }
-                      @case ('heart') {
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                      }
+                    @if (filter.icon === 'mountain') {
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3l4 8 5-5 5 5V3H8z"/><path d="M2 21l6-6 4 4 4-4 6 6H2z"/></svg>
+                    } @else if (filter.icon === 'sun') {
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    } @else if (filter.icon === 'landmark') {
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V8l9-6 9 6v14H3z"/><path d="M9 22V12h6v10"/><path d="M9 8h6"/></svg>
+                    } @else if (filter.icon === 'utensils') {
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/><path d="M18 22V15"/></svg>
+                    } @else if (filter.icon === 'wallet') {
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"/></svg>
+                    } @else if (filter.icon === 'heart') {
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                     }
                   </span>
                   <span class="filter-label">{{ filter.label }}</span>
@@ -558,10 +551,24 @@ import { City } from '../../core/models/city.model';
     // ===== SECTIONS =====
     .section {
       padding: var(--space-20) 0;
+      position: relative;
 
       @media (max-width: 768px) {
         padding: var(--space-12) 0;
       }
+    }
+
+    // Alternating section backgrounds for visual separation
+    .results-section {
+      background: var(--color-off-white);
+    }
+
+    .trending-section {
+      background: var(--color-white);
+    }
+
+    .emerging-section {
+      background: linear-gradient(180deg, #f8f6f3 0%, #f5f3f0 100%);
     }
 
     .section-header {
@@ -581,7 +588,28 @@ import { City } from '../../core/models/city.model';
       h2 {
         font-size: var(--text-3xl);
         margin: var(--space-2) 0;
+        color: var(--color-primary);
       }
+    }
+
+    // Section divider
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-accent), var(--color-highlight));
+      border-radius: 2px;
+      opacity: 0;
+    }
+
+    .trending-section::before,
+    .emerging-section::before,
+    .compare-section::before {
+      opacity: 1;
     }
 
     .section-badge {
@@ -703,7 +731,15 @@ import { City } from '../../core/models/city.model';
 
     // ===== PERSONALIZED SECTION =====
     .personalized-section {
-      background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-off-white) 100%);
+      background: linear-gradient(180deg, #faf9f7 0%, #f5f4f2 100%);
+      border-top: 1px solid rgba(0, 0, 0, 0.04);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    // ===== RECENT SECTION =====
+    .recent-section {
+      background: var(--color-white);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
     }
 
     // ===== BUDGET SECTION =====
@@ -748,7 +784,8 @@ import { City } from '../../core/models/city.model';
 
     // ===== CTA SECTION =====
     .cta-section {
-      padding: var(--space-12) 0;
+      padding: var(--space-16) 0;
+      background: var(--color-off-white);
     }
 
     .cta-card {
@@ -851,6 +888,7 @@ import { City } from '../../core/models/city.model';
     // ===== COMPARE SECTION =====
     .compare-section {
       padding-bottom: var(--space-24);
+      background: linear-gradient(180deg, #f5f4f2 0%, var(--color-off-white) 100%);
     }
 
     .compare-card {
@@ -858,9 +896,11 @@ import { City } from '../../core/models/city.model';
       flex-direction: column;
       align-items: center;
       text-align: center;
-      background: var(--color-cream);
+      background: var(--color-white);
+      border: 1px solid rgba(0, 0, 0, 0.06);
       border-radius: var(--border-radius-xl);
       padding: var(--space-12);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     }
 
     .compare-icon {
