@@ -113,23 +113,239 @@ export class CityService {
 
   private getCityStory(cityId: string): CityDetails['story'] {
     const stories: Record<string, CityDetails['story']> = {
+      // ===== ASIA =====
       'tokyo': {
         intro: 'Una metropoli dove il futuro incontra la tradizione millenaria. Tokyo non si visita, si vive.',
         atmosphere: 'Neon sfavillanti, templi silenziosi, izakaya nascosti e grattacieli che toccano le nuvole.',
         uniqueAspect: 'L\'ordine perfetto nel caos apparente, dove ogni dettaglio è curato con precisione maniacale.',
         travellerTypes: ['Explorer urbani', 'Amanti della cultura', 'Foodie', 'Tech enthusiast']
       },
+      'kyoto': {
+        intro: 'L\'antica capitale imperiale dove il Giappone tradizionale vive ancora oggi.',
+        atmosphere: 'Geishe che scivolano tra vicoli di legno, giardini zen perfetti, templi dorati al tramonto.',
+        uniqueAspect: 'Più di 2000 templi e santuari concentrati in una sola città, patrimonio UNESCO.',
+        travellerTypes: ['Amanti della cultura', 'Fotografi', 'Spirituali', 'Romantici']
+      },
+      'bali': {
+        intro: 'L\'isola degli dei dove spiritualità e bellezza naturale si fondono in armonia.',
+        atmosphere: 'Risaie a terrazza, templi tra le nuvole, tramonti infuocati e cerimonie induiste quotidiane.',
+        uniqueAspect: 'Ogni giorno è una celebrazione: offerte floreali, incenso e preghiere ovunque.',
+        travellerTypes: ['Yogi', 'Surfisti', 'Digital nomad', 'Coppie in luna di miele']
+      },
+      'bangkok': {
+        intro: 'La città degli angeli: un turbinio di templi dorati, street food e contrasti estremi.',
+        atmosphere: 'Buddha giganti, mercati galleggianti, grattacieli e tuk-tuk che sfrecciano nel traffico.',
+        uniqueAspect: 'Il cibo di strada è arte: ogni vicolo nasconde un piatto che può cambiare la vita.',
+        travellerTypes: ['Foodie', 'Backpacker', 'Amanti del caos organizzato', 'Nottambuli']
+      },
+      'singapore': {
+        intro: 'La città-stato dove l\'Asia incontra il futuro in un giardino tropicale verticale.',
+        atmosphere: 'Grattacieli avveniristici, hawker center fumanti, Gardens by the Bay illuminati.',
+        uniqueAspect: 'Quattro culture (cinese, malese, indiana, occidentale) convivono in perfetta armonia.',
+        travellerTypes: ['Famiglie', 'Business traveller', 'Foodie', 'Amanti del design']
+      },
+      'seoul': {
+        intro: 'Dove antichi palazzi imperiali incontrano il K-pop e la tecnologia più avanzata.',
+        atmosphere: 'Hanok tradizionali, skincare routine, BBQ coreano fumante e neon di Gangnam.',
+        uniqueAspect: 'Una città che non dorme mai, dove tradizione e innovazione coesistono naturalmente.',
+        travellerTypes: ['Appassionati K-culture', 'Techie', 'Foodie', 'Fashionisti']
+      },
+      'hanoi': {
+        intro: 'Mille anni di storia vietnamita tra laghi sacri, pagode e il profumo del phở.',
+        atmosphere: 'Motorini che sciamano, venditrici con il cappello conico, caffè a goccia sul marciapiede.',
+        uniqueAspect: 'Il Quartiere Vecchio: 36 strade, ognuna dedicata a un mestiere diverso da secoli.',
+        travellerTypes: ['Backpacker', 'Amanti della storia', 'Foodie', 'Avventurieri']
+      },
+      'dubai': {
+        intro: 'Dove l\'impossibile diventa realtà: dal deserto è sorta la città dei record.',
+        atmosphere: 'Il Burj Khalifa che tocca il cielo, mall infiniti, isole artificiali e lusso sfrenato.',
+        uniqueAspect: 'In 50 anni è passata da villaggio di pescatori a metropoli futuristica.',
+        travellerTypes: ['Amanti del lusso', 'Shopaholic', 'Famiglie', 'Architetti']
+      },
+      // ===== EUROPA =====
       'lisbon': {
         intro: 'Sette colli affacciati sull\'Atlantico, dove la malinconia del fado si mescola alla vitalità moderna.',
         atmosphere: 'Azulejos che raccontano storie, tram gialli che arrancano, pastéis de nata appena sfornati.',
         uniqueAspect: 'La "saudade" portoghese: un sentimento unico che permea ogni angolo della città.',
         travellerTypes: ['Romantici', 'Amanti del cibo', 'Fotografi', 'Budget traveller']
       },
+      'barcelona': {
+        intro: 'Gaudí, tapas e Mediterráneo: una città che è un\'opera d\'arte a cielo aperto.',
+        atmosphere: 'La Sagrada Familia che svetta, Las Ramblas che pulsa, spiagge urbane al tramonto.',
+        uniqueAspect: 'L\'architettura modernista catalana: ogni edificio è una sorpresa impossibile.',
+        travellerTypes: ['Amanti dell\'arte', 'Festaioli', 'Foodie', 'Beach lover']
+      },
+      'paris': {
+        intro: 'La ville lumière: arte, moda, amore e croissant in ogni angolo.',
+        atmosphere: 'La Tour Eiffel che scintilla, café dove nascono rivoluzioni, bouquinistes sulla Senna.',
+        uniqueAspect: 'Ogni quartiere è un villaggio con la sua anima: Montmartre, Le Marais, Saint-Germain.',
+        travellerTypes: ['Romantici', 'Fashionisti', 'Amanti dell\'arte', 'Gourmet']
+      },
+      'rome': {
+        intro: 'La Città Eterna dove 3000 anni di storia si vivono passeggiando.',
+        atmosphere: 'Il Colosseo al tramonto, fontane barocche, carbonara perfetta in una trattoria nascosta.',
+        uniqueAspect: 'Ogni scavo rivela nuove meraviglie: la storia qui è letteralmente sotto i piedi.',
+        travellerTypes: ['Amanti della storia', 'Foodie', 'Romantici', 'Pellegrini']
+      },
+      'amsterdam': {
+        intro: 'Canali, biciclette e libertà: una città che ha fatto dell\'apertura mentale la sua bandiera.',
+        atmosphere: 'Case storte sui canali, mercati di fiori, musei straordinari e coffeeshop discreti.',
+        uniqueAspect: 'Il 40% della città è sotto il livello del mare: un trionfo dell\'ingegno olandese.',
+        travellerTypes: ['Ciclisti', 'Amanti dell\'arte', 'Alternativi', 'Romantici']
+      },
+      'prague': {
+        intro: 'La città delle cento torri dove il gotico incontra la birra migliore d\'Europa.',
+        atmosphere: 'Il Ponte Carlo all\'alba, l\'Orologio Astronomico, birrifici secolari, jazz nei sotterranei.',
+        uniqueAspect: 'Il centro storico è patrimonio UNESCO praticamente intatto dal Medioevo.',
+        travellerTypes: ['Amanti della storia', 'Beer lover', 'Romantici', 'Budget traveller']
+      },
+      'vienna': {
+        intro: 'Caffè, valzer e torte: l\'eleganza imperiale degli Asburgo vive ancora.',
+        atmosphere: 'Palazzi barocchi, Opera che incanta, Sachertorte nei caffè storici, Klimt dorato.',
+        uniqueAspect: 'La tradizione dei Kaffeehäuser: caffè come istituzioni culturali da 300 anni.',
+        travellerTypes: ['Amanti della musica classica', 'Gourmet', 'Storici', 'Eleganti']
+      },
+      'reykjavik': {
+        intro: 'La capitale più settentrionale del mondo, porta verso paesaggi lunari.',
+        atmosphere: 'Aurora boreale, geyser, lana islandese, musica indie e bagni geotermali.',
+        uniqueAspect: 'L\'Islanda ha più librerie pro-capite di qualsiasi altro paese al mondo.',
+        travellerTypes: ['Amanti della natura', 'Avventurieri', 'Fotografi', 'Hipster']
+      },
+      'athens': {
+        intro: 'La culla della civiltà occidentale: dove la democrazia e la filosofia sono nate.',
+        atmosphere: 'L\'Acropoli che domina, taverne con retsina, gatti ovunque, il mare Egeo all\'orizzonte.',
+        uniqueAspect: '3400 anni di storia continua: la città più antica d\'Europa ancora abitata.',
+        travellerTypes: ['Amanti della storia', 'Filosofi', 'Beach lover', 'Budget traveller']
+      },
+      'florence': {
+        intro: 'La culla del Rinascimento: ogni passo è un incontro con Michelangelo e Leonardo.',
+        atmosphere: 'Il Duomo che svetta, l\'Arno che scorre, botteghe artigiane, bistecca alla fiorentina.',
+        uniqueAspect: 'Il centro storico contiene più capolavori per metro quadro di qualsiasi altra città.',
+        travellerTypes: ['Amanti dell\'arte', 'Gourmet', 'Romantici', 'Storici']
+      },
+      'santorini': {
+        intro: 'Tramonti leggendari, cupole blu e vino vulcanico su un\'isola da sogno.',
+        atmosphere: 'Case bianche a strapiombo sulla caldera, bouganville viola, sole che si tuffa nel mare.',
+        uniqueAspect: 'È il cratere di un vulcano esploso 3600 anni fa, forse l\'Atlantide di Platone.',
+        travellerTypes: ['Romantici', 'Fotografi', 'Luna di miele', 'Amanti del vino']
+      },
+      'dubrovnik': {
+        intro: 'La perla dell\'Adriatico: mura medievali che abbracciano il mare cristallino.',
+        atmosphere: 'Strade di marmo lucido, fortificazioni possenti, ristoranti con vista, Game of Thrones.',
+        uniqueAspect: 'La repubblica di Ragusa fu una delle prime a abolire la schiavitù nel 1416.',
+        travellerTypes: ['Amanti della storia', 'Seriali addicted', 'Beach lover', 'Fotografi']
+      },
+      // ===== AFRICA =====
       'marrakech': {
         intro: 'Un caleidoscopio di colori, profumi e suoni che risveglia tutti i sensi.',
         atmosphere: 'Spezie nei souk, chiamate alla preghiera, giardini segreti dietro mura ocra.',
         uniqueAspect: 'La capacità di trasportarti in un\'altra epoca, dove il tempo scorre diversamente.',
         travellerTypes: ['Avventurieri', 'Amanti dell\'artigianato', 'Fotografi', 'Cercatori di esperienze']
+      },
+      'capetown': {
+        intro: 'Dove due oceani si incontrano sotto una delle montagne più iconiche del mondo.',
+        atmosphere: 'La Table Mountain avvolta di nuvole, vigneti, pinguini e township vibranti.',
+        uniqueAspect: 'È l\'unica città al mondo con pinguini africani sulle spiagge urbane.',
+        travellerTypes: ['Amanti della natura', 'Enologi', 'Avventurieri', 'Fotografi']
+      },
+      'cairo': {
+        intro: 'Le Piramidi all\'orizzonte: 5000 anni di storia che ti lasciano senza fiato.',
+        atmosphere: 'Il Nilo che scorre eterno, minareti che chiamano, bazar che non dormono mai.',
+        uniqueAspect: 'L\'unica delle Sette Meraviglie del mondo antico ancora in piedi.',
+        travellerTypes: ['Amanti della storia', 'Avventurieri', 'Archeologi in erba', 'Fotografi']
+      },
+      'zanzibar': {
+        intro: 'L\'isola delle spezie: spiagge paradisiache e storia swahili millenaria.',
+        atmosphere: 'Stone Town labirintica, dhow al tramonto, profumo di chiodi di garofano ovunque.',
+        uniqueAspect: 'Fu il più grande mercato di spezie e schiavi dell\'Africa orientale.',
+        travellerTypes: ['Beach lover', 'Storici', 'Romantici', 'Subacquei']
+      },
+      // ===== NORD AMERICA =====
+      'newyork': {
+        intro: 'La città che non dorme mai: qui tutto è più grande, più veloce, più intenso.',
+        atmosphere: 'Times Square che abbaglia, Central Park che respira, subway che pulsa 24/7.',
+        uniqueAspect: 'Più di 800 lingue parlate: è la città più diversa linguisticamente del pianeta.',
+        travellerTypes: ['Explorer urbani', 'Fashionisti', 'Amanti del teatro', 'Foodie']
+      },
+      'losangeles': {
+        intro: 'Sogni sotto il sole: Hollywood, spiagge infinite e la fabbrica dei desideri.',
+        atmosphere: 'Palme sulla sunset strip, star sull\'Hollywood Walk, surf a Venice Beach.',
+        uniqueAspect: 'Qui è nato il cinema: ogni angolo è stato set di un film iconico.',
+        travellerTypes: ['Cinefili', 'Beach lover', 'Fashionisti', 'Creativi']
+      },
+      'sanfrancisco': {
+        intro: 'Nebbia, ponti iconici e spirito ribelle: la capitale dell\'innovazione mondiale.',
+        atmosphere: 'Il Golden Gate nella foschia, cable car che arrancano, Painted Ladies vittoriane.',
+        uniqueAspect: 'Da qui sono partite le rivoluzioni tech, hippie e LGBTQ+ che hanno cambiato il mondo.',
+        travellerTypes: ['Techie', 'Hipster', 'Amanti della controcultura', 'Foodie']
+      },
+      'miami': {
+        intro: 'Art Deco, ritmi latini e spiagge infinite: l\'America che parla spagnolo.',
+        atmosphere: 'Ocean Drive al neon, mojito sulla spiaggia, Little Havana che balla salsa.',
+        uniqueAspect: 'È l\'unica grande città americana fondata da una donna (Julia Tuttle, 1896).',
+        travellerTypes: ['Festaioli', 'Beach lover', 'Amanti dell\'Art Deco', 'Latini']
+      },
+      'vancouver': {
+        intro: 'Montagne che si tuffano nell\'oceano: natura selvaggia alle porte della metropoli.',
+        atmosphere: 'Kayak tra le orche, sci al mattino, sushi pluripremiato la sera, Stanley Park.',
+        uniqueAspect: 'Votata ripetutamente la città più vivibile del mondo.',
+        travellerTypes: ['Amanti della natura', 'Sportivi', 'Foodie', 'Eco-conscious']
+      },
+      'mexicocity': {
+        intro: 'Sulle rovine azteche: 700 anni di storia, arte muralista e tacos perfetti.',
+        atmosphere: 'Murales di Diego Rivera, mariachi a Garibaldi, mercati infiniti, Frida ovunque.',
+        uniqueAspect: 'Costruita sui resti di Tenochtitlan, capitale azteca, su un lago prosciugato.',
+        travellerTypes: ['Amanti dell\'arte', 'Foodie', 'Storici', 'Avventurieri']
+      },
+      // ===== SUD AMERICA =====
+      'buenosaires': {
+        intro: 'Tango, bistecca e passione: la Parigi del Sudamerica con anima latina.',
+        atmosphere: 'Milongas fumose, La Boca colorata, caffè letterari, asado domenicale.',
+        uniqueAspect: 'Ha più teatri pro-capite di qualsiasi altra città al mondo.',
+        travellerTypes: ['Amanti del tango', 'Carnivori', 'Romantici', 'Nottambuli']
+      },
+      'riodejaneiro': {
+        intro: 'Il Cristo che abbraccia: samba, spiagge leggendarie e energia contagiosa.',
+        atmosphere: 'Copacabana al tramonto, favela che pulsa, Carnevale che esplode, caipirinha in mano.',
+        uniqueAspect: 'Il Carnevale di Rio è lo spettacolo più grande del mondo: 2 milioni di persone in strada.',
+        travellerTypes: ['Festaioli', 'Beach lover', 'Sportivi', 'Amanti della musica']
+      },
+      'cusco': {
+        intro: 'L\'ombelico del mondo: porta d\'accesso a Machu Picchu e all\'impero Inca.',
+        atmosphere: 'Mura inca perfette, mercati andini colorati, pisco sour in piazza, lama ovunque.',
+        uniqueAspect: 'A 3400m di altitudine: preparati all\'altura e alla coca tea.',
+        travellerTypes: ['Trekker', 'Storici', 'Avventurieri', 'Spirituali']
+      },
+      'cartagena': {
+        intro: 'Mura coloniali che racchiudono la magia caraibica della Colombia.',
+        atmosphere: 'Balconi fioriti, colori pastello, ritmi di cumbia, ceviche sulla terrazza.',
+        uniqueAspect: 'Il centro storico è un museo vivente: patrimonio UNESCO dal 1984.',
+        travellerTypes: ['Romantici', 'Storici', 'Beach lover', 'Foodie']
+      },
+      // ===== OCEANIA =====
+      'sydney': {
+        intro: 'L\'Opera, il ponte, il surf: l\'Australia inizia qui con stile.',
+        atmosphere: 'Harbour Bridge all\'alba, surfisti a Bondi, brunch infiniti, multiculturalità.',
+        uniqueAspect: 'L\'Opera House ha oltre 1 milione di piastrelle che cambiano colore con la luce.',
+        travellerTypes: ['Beach lover', 'Foodie', 'Amanti dell\'architettura', 'Surfisti']
+      },
+      'melbourne': {
+        intro: 'Caffè, street art e cultura alternativa: l\'anima cool dell\'Australia.',
+        atmosphere: 'Laneways piene di graffiti, baristi perfezionisti, mercati vintage, AFL fever.',
+        uniqueAspect: 'Considerata la capitale mondiale del caffè specialty.',
+        travellerTypes: ['Hipster', 'Amanti del caffè', 'Artisti', 'Foodie']
+      },
+      'queenstown': {
+        intro: 'La capitale mondiale dell\'avventura: adrenalina garantita tra montagne e laghi.',
+        atmosphere: 'Bungee jumping, jet boat, heli-ski, poi Fergburger alle 2 di notte.',
+        uniqueAspect: 'Qui è nato il bungee jumping commerciale: tutto è iniziato dal Kawarau Bridge.',
+        travellerTypes: ['Adrenalinici', 'Sciatori', 'Amanti della natura', 'Avventurieri']
+      },
+      'fiji': {
+        intro: 'Bula! 333 isole di paradiso tropicale dove il tempo rallenta.',
+        atmosphere: 'Spiagge deserte, resort sull\'acqua, snorkeling tra i coralli, kava ceremony.',
+        uniqueAspect: 'Il primo paese al mondo a vedere l\'alba ogni giorno (fuso orario GMT+12/13).',
+        travellerTypes: ['Romantici', 'Subacquei', 'Luna di miele', 'Relax seeker']
       }
     };
 
@@ -184,16 +400,290 @@ export class CityService {
 
   private generateSeeItems(cityId: string): SectionItem[] {
     const items: Record<string, SectionItem[]> = {
+      // ===== ASIA =====
       'tokyo': [
-        { id: '1', title: 'Tempio Senso-ji', description: 'Il tempio più antico di Tokyo, un\'oasi di spiritualità nel cuore di Asakusa.', image: 'sensoji.jpg', duration: '2-3 ore' },
-        { id: '2', title: 'Shibuya Crossing', description: 'L\'incrocio più trafficato del mondo, simbolo della Tokyo moderna.', image: 'shibuya.jpg', duration: '30 min' },
-        { id: '3', title: 'Meiji Shrine', description: 'Un santuario shintoista immerso in una foresta nel cuore della città.', image: 'meiji.jpg', duration: '1-2 ore' },
-        { id: '4', title: 'TeamLab Borderless', description: 'Un museo digitale immersivo che sfida i confini dell\'arte.', image: 'teamlab.jpg', duration: '3-4 ore', priceRange: '€€' }
+        { id: '1', title: 'Tempio Senso-ji', description: 'Il tempio più antico di Tokyo, un\'oasi di spiritualità nel cuore di Asakusa. La porta Kaminarimon con la sua lanterna rossa è iconica.', duration: '2-3 ore' },
+        { id: '2', title: 'Shibuya Crossing', description: 'L\'incrocio più trafficato del mondo: fino a 3000 persone lo attraversano ogni cambio di semaforo.', duration: '30 min' },
+        { id: '3', title: 'Meiji Shrine', description: 'Santuario shintoista dedicato all\'imperatore Meiji, immerso in una foresta di 100.000 alberi donati da tutto il Giappone.', duration: '1-2 ore' },
+        { id: '4', title: 'TeamLab Borderless', description: 'Museo d\'arte digitale immersivo dove le opere si muovono, interagiscono e sfumano l\'una nell\'altra.', duration: '3-4 ore', priceRange: '€€' },
+        { id: '5', title: 'Tokyo Skytree', description: 'La torre più alta del Giappone (634m) con vista a 360° sulla città fino al Monte Fuji.', duration: '2 ore', priceRange: '€€' },
+        { id: '6', title: 'Quartiere di Harajuku', description: 'Il centro della moda giovanile giapponese: Takeshita Street è un\'esplosione di colori e creatività.', duration: '2-3 ore' }
       ],
+      'kyoto': [
+        { id: '1', title: 'Fushimi Inari-Taisha', description: 'Il santuario dei 10.000 torii rossi che formano tunnel suggestivi lungo la montagna.', duration: '3-4 ore' },
+        { id: '2', title: 'Kinkaku-ji (Padiglione d\'Oro)', description: 'Tempio zen ricoperto di foglia d\'oro che si riflette perfettamente nel lago.', duration: '1-2 ore', priceRange: '€' },
+        { id: '3', title: 'Arashiyama Bamboo Grove', description: 'Passeggiata tra altissime canne di bambù che ondeggiano nel vento: pura magia.', duration: '2 ore' },
+        { id: '4', title: 'Quartiere di Gion', description: 'Il distretto delle geishe: case di legno tradizionali e possibili incontri con maiko.', duration: '2-3 ore' },
+        { id: '5', title: 'Tempio Kiyomizu-dera', description: 'Tempio UNESCO con terrazza in legno sospesa a 13 metri, costruito senza un solo chiodo.', duration: '2 ore', priceRange: '€' }
+      ],
+      'bali': [
+        { id: '1', title: 'Tegallalang Rice Terraces', description: 'Iconiche risaie a terrazze verdi scolpite nella collina secondo il sistema subak millenario.', duration: '2-3 ore' },
+        { id: '2', title: 'Tempio di Tanah Lot', description: 'Tempio indù sul mare, spettacolare al tramonto quando la marea sale e lo isola.', duration: '2 ore', priceRange: '€' },
+        { id: '3', title: 'Ubud Monkey Forest', description: 'Foresta sacra con oltre 700 macachi e templi antichi avvolti dalle radici degli alberi.', duration: '2 ore', priceRange: '€' },
+        { id: '4', title: 'Tempio Uluwatu', description: 'Tempio arroccato su una scogliera a picco sull\'oceano, famoso per la danza Kecak al tramonto.', duration: '3 ore', priceRange: '€' },
+        { id: '5', title: 'Gates of Heaven (Lempuyang)', description: 'Il famoso portale con vista sul vulcano Agung: la foto più instagrammata di Bali.', duration: '4 ore' }
+      ],
+      'bangkok': [
+        { id: '1', title: 'Grand Palace', description: 'L\'abbagliante residenza reale: 200.000 mq di templi dorati e architettura thai.', duration: '3-4 ore', priceRange: '€€' },
+        { id: '2', title: 'Wat Arun', description: 'Il Tempio dell\'Alba decorato con porcellane cinesi che brillano al sole.', duration: '1-2 ore', priceRange: '€' },
+        { id: '3', title: 'Wat Pho', description: 'Casa del Buddha sdraiato di 46 metri coperto d\'oro e scuola storica di massaggio thai.', duration: '2 ore', priceRange: '€' },
+        { id: '4', title: 'Mercato galleggiante Damnoen Saduak', description: 'Venditori su barchette vendono frutta, cibo e souvenir lungo i canali.', duration: '4 ore' },
+        { id: '5', title: 'Chatuchak Weekend Market', description: 'Uno dei mercati più grandi del mondo: 15.000 bancarelle su 35 acri.', duration: '4-5 ore' }
+      ],
+      'singapore': [
+        { id: '1', title: 'Gardens by the Bay', description: 'Giardini futuristici con Supertree di 50 metri, Cloud Forest e Flower Dome.', duration: '4-5 ore', priceRange: '€€' },
+        { id: '2', title: 'Marina Bay Sands', description: 'L\'iconico hotel con la nave sul tetto e l\'infinity pool più alta del mondo.', duration: '2-3 ore', priceRange: '€€€' },
+        { id: '3', title: 'Hawker Centres', description: 'Templi del cibo dove assaggiare la cucina di strada stellata Michelin a pochi euro.', duration: '2 ore', priceRange: '€' },
+        { id: '4', title: 'Chinatown & Little India', description: 'Due quartieri etnici vibranti con templi, mercati e cibo autentico.', duration: '3-4 ore' },
+        { id: '5', title: 'Sentosa Island', description: 'Isola del divertimento con spiagge, Universal Studios e S.E.A. Aquarium.', duration: '1 giorno', priceRange: '€€€' }
+      ],
+      'seoul': [
+        { id: '1', title: 'Gyeongbokgung Palace', description: 'Il più grande dei Cinque Palazzi Reali, con cambio della guardia coreana.', duration: '3 ore', priceRange: '€' },
+        { id: '2', title: 'Bukchon Hanok Village', description: 'Quartiere di 600 anni con case tradizionali hanok dove vivono ancora residenti.', duration: '2-3 ore' },
+        { id: '3', title: 'N Seoul Tower', description: 'Torre sul monte Namsan con lucchetti dell\'amore e vista notturna spettacolare.', duration: '2 ore', priceRange: '€' },
+        { id: '4', title: 'Dongdaemun Design Plaza', description: 'Architettura futuristica di Zaha Hadid, hub di design e mercati notturni.', duration: '2-3 ore' },
+        { id: '5', title: 'Gangnam', description: 'Il quartiere del K-pop, luxury shopping e locali notturni esclusivi.', duration: '3-4 ore' }
+      ],
+      'hanoi': [
+        { id: '1', title: 'Quartiere Vecchio (36 Streets)', description: 'Labirinto di vie medievali, ognuna dedicata a un mestiere specifico.', duration: '3-4 ore' },
+        { id: '2', title: 'Tempio della Letteratura', description: 'La prima università del Vietnam (1070 d.C.), giardini confuciani sereni.', duration: '1-2 ore', priceRange: '€' },
+        { id: '3', title: 'Mausoleo di Ho Chi Minh', description: 'Il padre della nazione riposa qui: file lunghe ma esperienza toccante.', duration: '2 ore' },
+        { id: '4', title: 'Lago Hoan Kiem', description: 'Il lago della Spada Restituita, cuore romantico della città con la Pagoda.', duration: '1-2 ore' },
+        { id: '5', title: 'Water Puppet Theatre', description: 'Arte tradizionale di marionette sull\'acqua: spettacolo unico al mondo.', duration: '1 ora', priceRange: '€' }
+      ],
+      'dubai': [
+        { id: '1', title: 'Burj Khalifa', description: 'L\'edificio più alto del mondo (828m): la vista dal 148° piano toglie il fiato.', duration: '2-3 ore', priceRange: '€€€' },
+        { id: '2', title: 'Dubai Mall', description: 'Il centro commerciale più grande del mondo con acquario, pista di pattinaggio e 1200 negozi.', duration: '4-5 ore' },
+        { id: '3', title: 'Palm Jumeirah', description: 'L\'isola artificiale a forma di palma visibile dallo spazio.', duration: '3-4 ore' },
+        { id: '4', title: 'Dubai Marina', description: 'Grattacieli futuristici lungo un canale artificiale con yacht di lusso.', duration: '2-3 ore' },
+        { id: '5', title: 'Souq dell\'Oro e delle Spezie', description: 'I mercati tradizionali: tonnellate d\'oro in vetrina e spezie profumate.', duration: '2 ore' },
+        { id: '6', title: 'Safari nel deserto', description: 'Dune bashing, cena beduina, danze del ventre sotto le stelle.', duration: '6 ore', priceRange: '€€' }
+      ],
+      // ===== EUROPA =====
       'lisbon': [
-        { id: '1', title: 'Torre di Belém', description: 'Simbolo dell\'era delle scoperte portoghesi.', image: 'belem.jpg', duration: '1 ora' },
-        { id: '2', title: 'Alfama', description: 'Il quartiere più antico, un labirinto di vicoli e fado.', image: 'alfama.jpg', duration: '3-4 ore' },
-        { id: '3', title: 'Miradouro da Senhora do Monte', description: 'Il più bel punto panoramico della città.', image: 'miradouro.jpg', duration: '1 ora' }
+        { id: '1', title: 'Torre di Belém', description: 'Fortezza manuelina del 1515, simbolo dell\'era delle grandi scoperte portoghesi.', duration: '1 ora', priceRange: '€' },
+        { id: '2', title: 'Alfama', description: 'Il quartiere più antico: vicoli medievali, case di fado, azulejos e panni stesi.', duration: '3-4 ore' },
+        { id: '3', title: 'Monastero dos Jerónimos', description: 'Capolavoro gotico-manuelino, riposo di Vasco da Gama. Patrimonio UNESCO.', duration: '2 ore', priceRange: '€' },
+        { id: '4', title: 'Tram 28', description: 'Il tram giallo storico che arranca per i sette colli: attrazione in sé.', duration: '1 ora', priceRange: '€' },
+        { id: '5', title: 'LX Factory', description: 'Ex fabbrica trasformata in hub creativo: ristoranti, libreria, street art.', duration: '2-3 ore' }
+      ],
+      'barcelona': [
+        { id: '1', title: 'Sagrada Familia', description: 'Il capolavoro incompiuto di Gaudí: iniziato nel 1882, previsto completamento 2026.', duration: '2-3 ore', priceRange: '€€' },
+        { id: '2', title: 'Park Güell', description: 'Giardino pubblico con mosaici colorati e salamandra iconica di Gaudí.', duration: '2-3 ore', priceRange: '€' },
+        { id: '3', title: 'La Rambla', description: 'Il viale pedonale più famoso della Spagna: artisti di strada, mercato e caos.', duration: '1-2 ore' },
+        { id: '4', title: 'Barrio Gótico', description: 'Quartiere medievale con la Cattedrale, piazze nascoste e tapas bar autentici.', duration: '3 ore' },
+        { id: '5', title: 'Casa Batlló', description: 'La casa del drago di Gaudí: facciata ondulata, balconi-teschi, interni surreali.', duration: '1-2 ore', priceRange: '€€' },
+        { id: '6', title: 'Barceloneta Beach', description: 'La spiaggia urbana più famosa: paella, sangria e beach volley.', duration: '4 ore' }
+      ],
+      'paris': [
+        { id: '1', title: 'Tour Eiffel', description: 'La Dame de Fer: 330 metri, 18.000 pezzi metallici, 7 milioni di visitatori/anno.', duration: '2-3 ore', priceRange: '€€' },
+        { id: '2', title: 'Museo del Louvre', description: 'Il museo più visitato al mondo: Monna Lisa, Venere di Milo e 380.000 opere.', duration: '4-6 ore', priceRange: '€€' },
+        { id: '3', title: 'Montmartre', description: 'La collina degli artisti: Sacré-Cœur, pittori in Place du Tertre, cabaret.', duration: '3-4 ore' },
+        { id: '4', title: 'Champs-Élysées', description: 'Il viale più bello del mondo: dall\'Arco di Trionfo a Place de la Concorde.', duration: '2-3 ore' },
+        { id: '5', title: 'Notre-Dame', description: 'La cattedrale gotica in restauro dopo l\'incendio 2019. Cantiere storico visibile.', duration: '1 ora' },
+        { id: '6', title: 'Musée d\'Orsay', description: 'Stazione ferroviaria trasformata in tempio dell\'Impressionismo: Monet, Renoir, Van Gogh.', duration: '3-4 ore', priceRange: '€€' }
+      ],
+      'rome': [
+        { id: '1', title: 'Colosseo', description: 'L\'anfiteatro dei gladiatori: 50.000 spettatori, 2000 anni di storia.', duration: '2-3 ore', priceRange: '€€' },
+        { id: '2', title: 'Fontana di Trevi', description: 'Lancia una moneta e tornerai a Roma. 3000€ al giorno finiscono in beneficenza.', duration: '30 min' },
+        { id: '3', title: 'Musei Vaticani e Cappella Sistina', description: 'Michelangelo, Raffaello e 2000 anni di arte sacra. Il soffitto è indimenticabile.', duration: '4-5 ore', priceRange: '€€' },
+        { id: '4', title: 'Pantheon', description: 'Tempio di 2000 anni con la cupola in calcestruzzo non armato più grande del mondo.', duration: '1 ora' },
+        { id: '5', title: 'Trastevere', description: 'Il quartiere più romano di Roma: vicoli acciottolati, trattorie, movida notturna.', duration: '3-4 ore' },
+        { id: '6', title: 'Fori Imperiali', description: 'Passeggiata tra le rovine del centro politico dell\'Impero Romano.', duration: '2 ore', priceRange: '€' }
+      ],
+      'amsterdam': [
+        { id: '1', title: 'Rijksmuseum', description: 'Il museo nazionale: Rembrandt, Vermeer e 8000 oggetti del Secolo d\'Oro.', duration: '3-4 ore', priceRange: '€€' },
+        { id: '2', title: 'Casa di Anna Frank', description: 'Il rifugio segreto dove Anne scrisse il diario. Prenota mesi prima.', duration: '1-2 ore', priceRange: '€' },
+        { id: '3', title: 'Van Gogh Museum', description: 'La più grande collezione al mondo di Van Gogh: 200 dipinti, 500 disegni.', duration: '2-3 ore', priceRange: '€€' },
+        { id: '4', title: 'Canali (Grachten)', description: 'UNESCO: 165 canali, 1500 ponti, case storte del XVII secolo.', duration: '2-3 ore' },
+        { id: '5', title: 'Vondelpark', description: 'Il Central Park di Amsterdam: picnic, concerti, relax tra i tulipani.', duration: '2 ore' },
+        { id: '6', title: 'Jordaan', description: 'Quartiere bohémien con gallerie, vintage shop, café e bruin cafe storici.', duration: '2-3 ore' }
+      ],
+      'prague': [
+        { id: '1', title: 'Ponte Carlo', description: '30 statue barocche sorvegliano il ponte gotico più romantico d\'Europa. Vai all\'alba.', duration: '1-2 ore' },
+        { id: '2', title: 'Orologio Astronomico', description: 'Ogni ora dal 1410 le figurine si animano: l\'orologio funzionante più antico del mondo.', duration: '30 min' },
+        { id: '3', title: 'Castello di Praga', description: 'Il più grande castello antico del mondo: Cattedrale di San Vito, Vicolo d\'Oro.', duration: '4-5 ore', priceRange: '€€' },
+        { id: '4', title: 'Quartiere Ebraico', description: 'Sinagoghe storiche, il vecchio cimitero con 12.000 lapidi accatastate.', duration: '2-3 ore', priceRange: '€' },
+        { id: '5', title: 'Piazza della Città Vecchia', description: 'Cuore gotico di Praga: chiese, palazzi, mercatini di Natale indimenticabili.', duration: '1-2 ore' }
+      ],
+      'vienna': [
+        { id: '1', title: 'Palazzo di Schönbrunn', description: 'La Versailles asburgica: 1441 stanze, giardini imperiali, zoo più antico del mondo.', duration: '4-5 ore', priceRange: '€€' },
+        { id: '2', title: 'Opera di Vienna', description: 'Una delle opere più prestigiose: biglietti in piedi a 4€, dress code rigoroso.', duration: '3 ore', priceRange: '€-€€€€' },
+        { id: '3', title: 'Cattedrale di Santo Stefano', description: 'Il Duomo gotico con il tetto a mosaico di 230.000 tegole colorate.', duration: '1-2 ore' },
+        { id: '4', title: 'Museo di Storia dell\'Arte', description: 'Bruegel, Vermeer, Raffaello in un edificio che è esso stesso un\'opera d\'arte.', duration: '3-4 ore', priceRange: '€€' },
+        { id: '5', title: 'Naschmarkt', description: 'Mercato dal 1780: spezie, olive, formaggi, vini e brunch leggendari.', duration: '2 ore' }
+      ],
+      'reykjavik': [
+        { id: '1', title: 'Hallgrímskirkja', description: 'Chiesa luterana che sembra un razzo: design ispirato alle colonne basaltiche islandesi.', duration: '1 ora', priceRange: '€' },
+        { id: '2', title: 'Blue Lagoon', description: 'Spa geotermica nell\'acqua lattiginosa azzurra a 38°C tra i campi di lava.', duration: '3-4 ore', priceRange: '€€€' },
+        { id: '3', title: 'Golden Circle', description: 'Tour classico: Þingvellir (placche tettoniche), Geysir, cascata Gullfoss.', duration: '8 ore' },
+        { id: '4', title: 'Aurora Boreale', description: 'Da settembre a marzo: caccia alle luci del nord lontano dalla città.', duration: '4-5 ore', priceRange: '€€' },
+        { id: '5', title: 'Harpa Concert Hall', description: 'Architettura contemporanea: facciata di 10.000 pannelli di vetro colorato.', duration: '1 ora' }
+      ],
+      'athens': [
+        { id: '1', title: 'Acropoli', description: 'Il Partenone domina la città da 2500 anni: simbolo della civiltà occidentale.', duration: '3-4 ore', priceRange: '€€' },
+        { id: '2', title: 'Museo dell\'Acropoli', description: 'I tesori del Partenone (quelli non portati via da Lord Elgin) in un museo moderno.', duration: '2-3 ore', priceRange: '€' },
+        { id: '3', title: 'Plaka', description: 'Il quartiere più antico: taverne, bouzouki, negozi di sandali e gatti ovunque.', duration: '3-4 ore' },
+        { id: '4', title: 'Agorà Antica', description: 'La piazza dove nacque la democrazia: filosofi, mercanti e politici qui dibattevano.', duration: '2 ore', priceRange: '€' },
+        { id: '5', title: 'Monastiraki', description: 'Il mercato delle pulci di Atene: antichità, vintage e souvlaki per strada.', duration: '2-3 ore' }
+      ],
+      'florence': [
+        { id: '1', title: 'Galleria degli Uffizi', description: 'Botticelli, Leonardo, Michelangelo, Caravaggio: il Rinascimento in un edificio.', duration: '4-5 ore', priceRange: '€€' },
+        { id: '2', title: 'Duomo di Firenze', description: 'La cupola di Brunelleschi: 463 gradini per la vista più bella della città.', duration: '2-3 ore', priceRange: '€€' },
+        { id: '3', title: 'Galleria dell\'Accademia', description: 'Il David di Michelangelo: 5 metri di perfezione marmorea che toglie il fiato.', duration: '2 ore', priceRange: '€€' },
+        { id: '4', title: 'Ponte Vecchio', description: 'Il ponte medievale con le botteghe degli orafi: romantico al tramonto.', duration: '1 ora' },
+        { id: '5', title: 'Palazzo Pitti e Giardino di Boboli', description: 'La reggia dei Medici con giardini all\'italiana che dominano la città.', duration: '3-4 ore', priceRange: '€€' }
+      ],
+      'santorini': [
+        { id: '1', title: 'Oia al tramonto', description: 'Il tramonto più fotografato del mondo: cupole blu, case bianche, sole che si tuffa.', duration: '2-3 ore' },
+        { id: '2', title: 'Fira', description: 'Il capoluogo arroccato sulla caldera: shopping, musei, vista vertiginosa.', duration: '3-4 ore' },
+        { id: '3', title: 'Red Beach', description: 'Spiaggia con scogliere rosse di lava: paesaggio marziano nel Mediterraneo.', duration: '2-3 ore' },
+        { id: '4', title: 'Akrotiri', description: 'La Pompei greca: città minoica sepolta 3600 anni fa da un\'eruzione.', duration: '2 ore', priceRange: '€' },
+        { id: '5', title: 'Cantine di Santorini', description: 'Degustazione di Assyrtiko vulcanico con vista sulla caldera.', duration: '3 ore', priceRange: '€€' }
+      ],
+      'dubrovnik': [
+        { id: '1', title: 'Mura di Dubrovnik', description: 'Passeggiata di 2 km sulle mura medievali: vista sul mare e sui tetti rossi.', duration: '2-3 ore', priceRange: '€€' },
+        { id: '2', title: 'Stradun', description: 'La via principale di marmo lucido: caffè, shopping, passeggio serale.', duration: '1-2 ore' },
+        { id: '3', title: 'Lokrum Island', description: 'Isola paradisiaca a 10 minuti di barca: nudisti, pavoni, Game of Thrones.', duration: '4 ore', priceRange: '€' },
+        { id: '4', title: 'Cable Car', description: 'Funivia al Monte Srđ: panorama a 360° sulla città e le isole Elafiti.', duration: '1-2 ore', priceRange: '€€' },
+        { id: '5', title: 'Kayak al tramonto', description: 'Pagaiare intorno alle mura mentre il sole tramonta sul mare.', duration: '2-3 ore', priceRange: '€€' }
+      ],
+      // ===== AFRICA =====
+      'marrakech': [
+        { id: '1', title: 'Piazza Jemaa el-Fna', description: 'Il cuore pulsante: incantatori di serpenti, acrobati, bancarelle di cibo fumante.', duration: '3-4 ore' },
+        { id: '2', title: 'Souk della Medina', description: 'Labirinto di 20.000 botteghe: spezie, tappeti, lanterne, contrattazione obbligatoria.', duration: '3-4 ore' },
+        { id: '3', title: 'Palazzo Bahia', description: 'Capolavoro dell\'architettura marocchina: mosaici, legno di cedro, giardini.', duration: '1-2 ore', priceRange: '€' },
+        { id: '4', title: 'Jardin Majorelle', description: 'Il giardino blu di Yves Saint Laurent: cactus, bouganville, museo berbero.', duration: '1-2 ore', priceRange: '€€' },
+        { id: '5', title: 'Hammam tradizionale', description: 'Bagno turco marocchino con gommage: rito di purificazione millenario.', duration: '2 ore', priceRange: '€-€€€' }
+      ],
+      'capetown': [
+        { id: '1', title: 'Table Mountain', description: 'Funivia rotante fino ai 1085 metri: vista su due oceani e tutta la penisola.', duration: '3-4 ore', priceRange: '€€' },
+        { id: '2', title: 'Boulders Beach', description: 'Spiaggia con colonia di 3000 pinguini africani: nuota con loro!', duration: '2 ore', priceRange: '€' },
+        { id: '3', title: 'Cape of Good Hope', description: 'Il punto più a sud-ovest dell\'Africa: paesaggi drammatici, babbuini curiosi.', duration: '6-8 ore' },
+        { id: '4', title: 'Robben Island', description: 'Dove Nelson Mandela fu imprigionato 18 anni: tour con ex-detenuti.', duration: '4 ore', priceRange: '€€' },
+        { id: '5', title: 'Bo-Kaap', description: 'Quartiere colorato malese-musulmano: case pastello e cucina Cape Malay.', duration: '2 ore' },
+        { id: '6', title: 'Winelands', description: 'Degustazioni tra i migliori vini del Nuovo Mondo: Stellenbosch, Franschhoek.', duration: '1 giorno', priceRange: '€€' }
+      ],
+      'cairo': [
+        { id: '1', title: 'Piramidi di Giza', description: 'L\'unica delle Sette Meraviglie rimasta: 4500 anni di mistero che svettano nel deserto.', duration: '4-5 ore', priceRange: '€€' },
+        { id: '2', title: 'Sfinge', description: 'Il leone con testa umana che guarda l\'alba da millenni: 73 metri di enigma.', duration: '1 ora' },
+        { id: '3', title: 'Museo Egizio', description: 'I tesori di Tutankhamon, mummie reali e 120.000 reperti in un edificio storico.', duration: '4-5 ore', priceRange: '€' },
+        { id: '4', title: 'Khan el-Khalili', description: 'Il bazar medievale: oro, spezie, artigianato in un labirinto di 500 anni.', duration: '3-4 ore' },
+        { id: '5', title: 'Crociera sul Nilo', description: 'Feluca al tramonto: il fiume sacro visto come gli antichi faraoni.', duration: '2-3 ore', priceRange: '€' }
+      ],
+      'zanzibar': [
+        { id: '1', title: 'Stone Town', description: 'Centro storico UNESCO: labirinto di vicoli, porte scolpite, palazzo dei sultani.', duration: '4-5 ore' },
+        { id: '2', title: 'Spiagge della costa est', description: 'Nungwi, Kendwa, Paje: sabbia bianca, acqua turchese, kitesurf.', duration: '1 giorno' },
+        { id: '3', title: 'Spice Tour', description: 'Piantagioni di vaniglia, chiodi di garofano, cannella: l\'isola delle spezie.', duration: '4 ore', priceRange: '€' },
+        { id: '4', title: 'Prison Island', description: 'Tartarughe giganti centenarie in un\'ex prigione: nuota con i pesci tropicali.', duration: '4 ore', priceRange: '€€' },
+        { id: '5', title: 'The Rock Restaurant', description: 'Ristorante su uno scoglio raggiungibile a piedi con la bassa marea.', duration: '2-3 ore', priceRange: '€€€' }
+      ],
+      // ===== NORD AMERICA =====
+      'newyork': [
+        { id: '1', title: 'Statua della Libertà', description: 'Lady Liberty accoglie il mondo dal 1886: corona accessibile con prenotazione.', duration: '4 ore', priceRange: '€€' },
+        { id: '2', title: 'Central Park', description: '341 ettari di verde: il polmone di Manhattan con zoo, lago e Strawberry Fields.', duration: '3-4 ore' },
+        { id: '3', title: 'Times Square', description: 'L\'incrocio più famoso del mondo: neon, Broadway, l\'America che non dorme.', duration: '1-2 ore' },
+        { id: '4', title: 'Metropolitan Museum', description: 'Uno dei musei più grandi del mondo: 2 milioni di opere su 5000 anni.', duration: '5-6 ore', priceRange: '€€' },
+        { id: '5', title: 'Brooklyn Bridge', description: 'Attraversa a piedi il ponte iconico: vista sullo skyline al tramonto.', duration: '1 ora' },
+        { id: '6', title: '9/11 Memorial', description: 'Due piscine dove sorgevano le Torri Gemelle: omaggio toccante alle vittime.', duration: '2 ore' }
+      ],
+      'losangeles': [
+        { id: '1', title: 'Hollywood Walk of Fame', description: '2600+ stelle sui marciapiedi: cerca quelle dei tuoi divi preferiti.', duration: '2 ore' },
+        { id: '2', title: 'Griffith Observatory', description: 'Vista gratuita su LA e la scritta Hollywood: tramonto indimenticabile.', duration: '2-3 ore' },
+        { id: '3', title: 'Santa Monica Pier', description: 'Il molo iconico: ruota panoramica, Route 66 endpoint, musclemen.', duration: '2-3 ore' },
+        { id: '4', title: 'Venice Beach', description: 'Boardwalk della controcultura: skater, artisti, Muscle Beach, canali nascosti.', duration: '3-4 ore' },
+        { id: '5', title: 'Universal Studios', description: 'Parco a tema dietro le quinte: Wizarding World, Jurassic, Studio Tour.', duration: '1 giorno', priceRange: '€€€' },
+        { id: '6', title: 'Getty Center', description: 'Arte e architettura sulla collina: Van Gogh, giardini, vista su LA. Gratis!', duration: '3-4 ore' }
+      ],
+      'sanfrancisco': [
+        { id: '1', title: 'Golden Gate Bridge', description: 'Iconico ponte rosso (in realtà arancione internazionale): cammina i suoi 2.7 km.', duration: '1-2 ore' },
+        { id: '2', title: 'Alcatraz', description: 'L\'isola-prigione dei gangster: audio tour narrato da ex-detenuti. Prenota!', duration: '3-4 ore', priceRange: '€€' },
+        { id: '3', title: 'Cable Cars', description: 'I tram a cavo più antichi del mondo ancora in funzione: aggrappati e parti!', duration: '30 min-1 ora', priceRange: '€' },
+        { id: '4', title: 'Fisherman\'s Wharf', description: 'Il porto turistico: leoni marini al Pier 39, clam chowder nel pane.', duration: '2-3 ore' },
+        { id: '5', title: 'Painted Ladies', description: 'Le case vittoriane colorate più fotografate: vista da Alamo Square.', duration: '1 ora' },
+        { id: '6', title: 'Chinatown', description: 'La Chinatown più antica del Nord America: dim sum e souvenir kitsch.', duration: '2-3 ore' }
+      ],
+      'miami': [
+        { id: '1', title: 'South Beach & Ocean Drive', description: 'Art Deco pastello, palme, modelle: il set di Miami Vice dal vivo.', duration: '3-4 ore' },
+        { id: '2', title: 'Wynwood Walls', description: 'Street art museum a cielo aperto: murales giganti che cambiano spesso.', duration: '2-3 ore' },
+        { id: '3', title: 'Little Havana', description: 'Cuba in esilio: domino al parco, sigari arrotolati a mano, mojito perfetti.', duration: '3 ore' },
+        { id: '4', title: 'Everglades', description: 'Airboat tra gli alligatori: ecosistema unico di paludi tropicali.', duration: '4-5 ore', priceRange: '€€' },
+        { id: '5', title: 'Key Biscayne', description: 'Fuga dall\'urban: spiagge selvagge e il faro più antico della Florida.', duration: '4 ore' }
+      ],
+      'vancouver': [
+        { id: '1', title: 'Stanley Park', description: '405 ettari di foresta pluviale: Seawall, totem, acquario, spiagge.', duration: '3-4 ore' },
+        { id: '2', title: 'Capilano Suspension Bridge', description: 'Ponte sospeso a 70 metri sopra il canyon nella foresta: brivido garantito.', duration: '3 ore', priceRange: '€€' },
+        { id: '3', title: 'Granville Island', description: 'Ex zona industriale: mercato alimentare, birrifici artigianali, artisti.', duration: '3-4 ore' },
+        { id: '4', title: 'Grouse Mountain', description: 'La cima di Vancouver: skyride, orsi grizzly, sci in inverno.', duration: '4 ore', priceRange: '€€' },
+        { id: '5', title: 'Gastown', description: 'Quartiere storico vittoriano: l\'orologio a vapore, cocktail bar, vintage.', duration: '2-3 ore' }
+      ],
+      'mexicocity': [
+        { id: '1', title: 'Museo Nacional de Antropología', description: 'Il più grande museo dell\'America Latina: la Piedra del Sol azteca.', duration: '4-5 ore', priceRange: '€' },
+        { id: '2', title: 'Zócalo', description: 'Una delle piazze più grandi del mondo: Cattedrale, Palacio Nacional, murales di Rivera.', duration: '2-3 ore' },
+        { id: '3', title: 'Teotihuacán', description: 'Le piramidi del Sole e della Luna: misteriosa città pre-azteca a 1 ora da CDMX.', duration: '6 ore', priceRange: '€€' },
+        { id: '4', title: 'Xochimilco', description: 'I giardini galleggianti azteci: barca colorata, mariachi, birra, caos gioioso.', duration: '4-5 ore', priceRange: '€' },
+        { id: '5', title: 'Casa Azul (Museo Frida Kahlo)', description: 'Dove Frida nacque e morì: le sue opere, i suoi abiti, il suo mondo.', duration: '2 ore', priceRange: '€' },
+        { id: '6', title: 'Coyoacán', description: 'Il quartiere bohémien: librerie, caffè, la casa di Trotsky, mercato.', duration: '3-4 ore' }
+      ],
+      // ===== SUD AMERICA =====
+      'buenosaires': [
+        { id: '1', title: 'La Boca & Caminito', description: 'Case di lamiera colorata, tango per strada, la Bombonera del Boca Juniors.', duration: '2-3 ore' },
+        { id: '2', title: 'Recoleta Cemetery', description: 'Il cimitero più elegante del mondo: Evita riposa qui tra mausolei Liberty.', duration: '2 ore' },
+        { id: '3', title: 'Teatro Colón', description: 'Tra i 5 teatri d\'opera più importanti: acustica perfetta, lusso europeo.', duration: '1-2 ore', priceRange: '€-€€€' },
+        { id: '4', title: 'San Telmo', description: 'Mercatino domenicale dell\'antiquariato, tango nelle strade, caffè storici.', duration: '3-4 ore' },
+        { id: '5', title: 'MALBA', description: 'Museo di arte latinoamericana: Frida, Diego Rivera, arte contemporanea.', duration: '2-3 ore', priceRange: '€' },
+        { id: '6', title: 'Palermo Soho', description: 'Quartiere trendy: boutique di design, brunch, vita notturna, parchi.', duration: '3-4 ore' }
+      ],
+      'riodejaneiro': [
+        { id: '1', title: 'Cristo Redentore', description: 'Una delle Nuove Sette Meraviglie: 38 metri che abbracciano Rio dal Corcovado.', duration: '3-4 ore', priceRange: '€€' },
+        { id: '2', title: 'Pão de Açúcar', description: 'Due funivie per il Pan di Zucchero: vista a 360° su Rio e le spiagge.', duration: '3 ore', priceRange: '€€' },
+        { id: '3', title: 'Copacabana', description: 'La spiaggia più famosa del mondo: 4 km di sabbia, caipirinha, altinha (footvolley).', duration: '4 ore' },
+        { id: '4', title: 'Ipanema', description: 'La spiaggia della canzone: al tramonto vai alla Pedra do Arpoador.', duration: '4 ore' },
+        { id: '5', title: 'Escadaria Selarón', description: '215 gradini rivestiti di piastrelle da 60 paesi: l\'ossessione di Jorge Selarón.', duration: '1 ora' },
+        { id: '6', title: 'Santa Teresa', description: 'Quartiere bohémien sulla collina: strade acciottolate, gallerie, samba.', duration: '2-3 ore' }
+      ],
+      'cusco': [
+        { id: '1', title: 'Machu Picchu', description: 'La città perduta degli Inca a 2430m: treno o trekking dell\'Inca Trail.', duration: '1 giorno', priceRange: '€€€' },
+        { id: '2', title: 'Plaza de Armas', description: 'Il cuore coloniale costruito sulle fondamenta inca: Cattedrale, Compañía.', duration: '1-2 ore' },
+        { id: '3', title: 'Sacsayhuamán', description: 'Fortezza inca con massi di 200 tonnellate incastrati senza malta.', duration: '2 ore', priceRange: '€' },
+        { id: '4', title: 'Valle Sacra', description: 'Ollantaytambo, Pisac, Moray: rovine inca tra montagne andine mozzafiato.', duration: '1 giorno', priceRange: '€€' },
+        { id: '5', title: 'San Pedro Market', description: 'Mercato locale: succhi, ceviche, foglie di coca, artigianato a prezzi veri.', duration: '2 ore' }
+      ],
+      'cartagena': [
+        { id: '1', title: 'Ciudad Amurallada', description: 'Centro storico UNESCO: mura del XVI secolo, balconi fioriti, colori pastello.', duration: '4-5 ore' },
+        { id: '2', title: 'Castillo San Felipe', description: 'La più grande fortezza spagnola nelle Americhe: tunnel, labirinti, vista.', duration: '2 ore', priceRange: '€' },
+        { id: '3', title: 'Getsemaní', description: 'Quartiere trendy fuori mura: street art, ostelli, vita notturna, autentico.', duration: '2-3 ore' },
+        { id: '4', title: 'Islas del Rosario', description: 'Arcipelago corallino a 45 min: snorkeling, spiagge deserte, pesce fresco.', duration: '1 giorno', priceRange: '€€' },
+        { id: '5', title: 'Café Havana', description: 'Il bar di salsa più famoso: balla con i locali fino all\'alba.', duration: '4 ore', priceRange: '€' }
+      ],
+      // ===== OCEANIA =====
+      'sydney': [
+        { id: '1', title: 'Sydney Opera House', description: 'Capolavoro di Utzon patrimonio UNESCO: visita guidata o meglio, assisti a uno spettacolo.', duration: '2-3 ore', priceRange: '€-€€€' },
+        { id: '2', title: 'Harbour Bridge', description: 'Arrampicati sulla "gruccia" per la vista: BridgeClimb è un\'esperienza unica.', duration: '3 ore', priceRange: '€€€' },
+        { id: '3', title: 'Bondi Beach', description: 'La spiaggia più iconica d\'Australia: surf, Icebergs Pool, Bondi to Coogee walk.', duration: '4 ore' },
+        { id: '4', title: 'The Rocks', description: 'Il quartiere più antico: mercatini del weekend, pub storici, street art.', duration: '2-3 ore' },
+        { id: '5', title: 'Taronga Zoo', description: 'Zoo con vista sull\'Opera: koala, canguri, ornitorinco. Arriva in traghetto!', duration: '4 ore', priceRange: '€€' }
+      ],
+      'melbourne': [
+        { id: '1', title: 'Laneways & Street Art', description: 'Hosier Lane, AC/DC Lane: labirinto di vicoli pieni di graffiti e caffè nascosti.', duration: '3-4 ore' },
+        { id: '2', title: 'Queen Victoria Market', description: 'Dal 1878: prodotti freschi, deli europei, vintage, cibo di strada.', duration: '2-3 ore' },
+        { id: '3', title: 'Great Ocean Road', description: 'I 12 Apostoli e scogliere spettacolari: il road trip più scenico d\'Australia.', duration: '1-2 giorni', priceRange: '€€' },
+        { id: '4', title: 'Royal Botanic Gardens', description: '38 ettari di giardini vittoriani: pipistrelli giganti al tramonto!', duration: '2-3 ore' },
+        { id: '5', title: 'NGV (National Gallery of Victoria)', description: 'La più antica e grande galleria d\'Australia: ingresso gratuito.', duration: '2-3 ore' }
+      ],
+      'queenstown': [
+        { id: '1', title: 'Bungee Jumping al Kawarau Bridge', description: 'Dove è nato il bungee commerciale: 43 metri di volo libero.', duration: '3 ore', priceRange: '€€€' },
+        { id: '2', title: 'Milford Sound', description: 'Il fiordo più spettacolare: crociera tra cascate, foche, delfini.', duration: '8-12 ore', priceRange: '€€€' },
+        { id: '3', title: 'Skyline Gondola', description: 'Funivia con vista sulle Remarkables: poi luge downhill adrenalinico.', duration: '3 ore', priceRange: '€€' },
+        { id: '4', title: 'Jet Boat sul Shotover River', description: '85 km/h tra canyon stretti: il pilota sfiora le rocce apposta.', duration: '1 ora', priceRange: '€€€' },
+        { id: '5', title: 'Fergburger', description: 'Il burger più famoso della Nuova Zelanda: code di 30 minuti, aperto fino a tardi.', duration: '1 ora', priceRange: '€' }
+      ],
+      'fiji': [
+        { id: '1', title: 'Mamanuca Islands', description: 'L\'arcipelago di Castaway: spiagge da cartolina, resort sull\'acqua.', duration: '1+ giorni', priceRange: '€€€' },
+        { id: '2', title: 'Snorkeling & Diving', description: 'Barriera corallina morbida, mante giganti, squali (amichevoli): il top mondiale.', duration: '4-6 ore', priceRange: '€€' },
+        { id: '3', title: 'Cloud 9', description: 'Piattaforma galleggiante in mezzo all\'oceano: bar, DJ, prendisole.', duration: '4 ore', priceRange: '€€' },
+        { id: '4', title: 'Villaggio Fijiano', description: 'Visita tradizionale con cerimonia della kava: cultura autentica.', duration: '4 ore', priceRange: '€' },
+        { id: '5', title: 'Garden of the Sleeping Giant', description: '2000 varietà di orchidee ai piedi della catena montuosa.', duration: '2 ore', priceRange: '€' }
       ]
     };
     return items[cityId] || [
@@ -204,14 +694,247 @@ export class CityService {
 
   private generateEatItems(cityId: string): SectionItem[] {
     const items: Record<string, SectionItem[]> = {
+      // ===== ASIA =====
       'tokyo': [
-        { id: 'e1', title: 'Ramen a Shinjuku', description: 'Omoide Yokocho: vicoli fumosi pieni di izakaya autentici.', priceRange: '€', location: 'Shinjuku' },
-        { id: 'e2', title: 'Sushi al Tsukiji Outer Market', description: 'Il pesce più fresco del mondo, servito all\'alba.', priceRange: '€€', location: 'Tsukiji' },
-        { id: 'e3', title: 'Kaiseki a Ginza', description: 'Alta cucina giapponese: un\'esperienza multisensoriale.', priceRange: '€€€€', location: 'Ginza' }
+        { id: 'e1', title: 'Ramen a Shinjuku', description: 'Omoide Yokocho: vicoli fumosi pieni di izakaya con ramen tonkotsu cremoso.', priceRange: '€', location: 'Shinjuku' },
+        { id: 'e2', title: 'Sushi al Tsukiji Outer Market', description: 'Il pesce più fresco del mondo servito all\'alba. Prova l\'omakase!', priceRange: '€€', location: 'Tsukiji' },
+        { id: 'e3', title: 'Kaiseki a Ginza', description: 'Alta cucina giapponese stagionale: ogni portata è un\'opera d\'arte.', priceRange: '€€€€', location: 'Ginza' },
+        { id: 'e4', title: 'Street food a Yanaka', description: 'Quartiere vecchia Tokyo: senbei artigianali, taiyaki, mochi appena fatto.', priceRange: '€', location: 'Yanaka' },
+        { id: 'e5', title: 'Tempura Kondo', description: '2 stelle Michelin: la tempura leggera come aria, croccante come vetro.', priceRange: '€€€€', location: 'Ginza' }
       ],
+      'kyoto': [
+        { id: 'e1', title: 'Kaiseki tradizionale', description: 'La cucina dei monaci zen: estetica, stagionalità, ingredienti locali.', priceRange: '€€€-€€€€', location: 'Gion' },
+        { id: 'e2', title: 'Nishiki Market', description: 'La cucina di Kyoto: 400 anni di bancarelle con cibi da assaggiare.', priceRange: '€', location: 'Centro' },
+        { id: 'e3', title: 'Matcha e wagashi', description: 'Cerimonia del tè con dolci tradizionali: esperienza meditativa.', priceRange: '€€', location: 'Gion' },
+        { id: 'e4', title: 'Tofu di Nanzenji', description: 'Tofu artigianale cucinato in mille modi: specialità kyotoita.', priceRange: '€€', location: 'Nanzenji' }
+      ],
+      'bali': [
+        { id: 'e1', title: 'Warung locale', description: 'Nasi goreng, mie goreng, satay a pochi euro: la vera cucina balinese.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e2', title: 'Babi Guling (maialino arrosto)', description: 'Il piatto balinese per eccellenza: ibu Oka a Ubud è leggendaria.', priceRange: '€', location: 'Ubud' },
+        { id: 'e3', title: 'Smoothie bowl a Canggu', description: 'Capitale mondiale dell\'healthy food: acai, pitaya, granola homemade.', priceRange: '€', location: 'Canggu' },
+        { id: 'e4', title: 'Bebek betutu', description: 'Anatra ripiena di spezie, cotta per ore avvolta in foglie di banano.', priceRange: '€€', location: 'Ubud' }
+      ],
+      'bangkok': [
+        { id: 'e1', title: 'Pad Thai di Thip Samai', description: 'La leggenda del pad thai: code di 1 ora, ne vale ogni minuto.', priceRange: '€', location: 'Old Town' },
+        { id: 'e2', title: 'Street food a Yaowarat (Chinatown)', description: 'Il paradiso notturno: dim sum, granchi al pepe, frutti di mare fumanti.', priceRange: '€', location: 'Chinatown' },
+        { id: 'e3', title: 'Jay Fai (1 stella Michelin)', description: 'Nonna con occhialoni che cucina il miglior crab omelette del mondo.', priceRange: '€€€', location: 'Old Town' },
+        { id: 'e4', title: 'Som Tam (insalata di papaya)', description: 'Piccante, acido, dolce, salato: il perfetto equilibrio thai.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e5', title: 'Rooftop bar con vista', description: 'Cocktail a 60 piani: Lebua (Hangover 2), Banyan Tree, Octave.', priceRange: '€€€', location: 'Silom/Sathorn' }
+      ],
+      'singapore': [
+        { id: 'e1', title: 'Hawker Chan (1 stella Michelin)', description: 'Il cibo di strada più economico stellato: soya chicken rice a 3€.', priceRange: '€', location: 'Chinatown Complex' },
+        { id: 'e2', title: 'Chili Crab a Jumbo', description: 'Il piatto nazionale: granchio in salsa chili dolce-piccante. Mantou per intingere!', priceRange: '€€€', location: 'Clarke Quay' },
+        { id: 'e3', title: 'Lau Pa Sat Hawker Center', description: 'Centro food vittoriano: satay street si accende la sera.', priceRange: '€', location: 'CBD' },
+        { id: 'e4', title: 'Din Tai Fung', description: 'I migliori xiaolongbao del mondo: 18 pieghe, brodo perfetto.', priceRange: '€€', location: 'Vari' },
+        { id: 'e5', title: 'Indian food a Little India', description: 'Banana leaf rice, roti prata, fish head curry: India autentica.', priceRange: '€', location: 'Little India' }
+      ],
+      'seoul': [
+        { id: 'e1', title: 'Korean BBQ a Mapo', description: 'Griglia sul tavolo, soju che scorre, ssam wrap con kimchi.', priceRange: '€€', location: 'Mapo-gu' },
+        { id: 'e2', title: 'Myeongdong street food', description: 'Tornado potato, tteokbokki, hotteok: food walk infinito.', priceRange: '€', location: 'Myeongdong' },
+        { id: 'e3', title: 'Jjimdak a Andong', description: 'Pollo brasato con noodles di vetro: comfort food coreano.', priceRange: '€', location: 'Vari' },
+        { id: 'e4', title: 'Fried Chicken & Beer', description: 'Chimaek (chicken + maekju): rituale notturno coreano imperdibile.', priceRange: '€', location: 'Hongdae' },
+        { id: 'e5', title: 'Temple food', description: 'Cucina vegetariana buddista: 1000 anni di sapienza in ogni piatto.', priceRange: '€€', location: 'Insadong' }
+      ],
+      'hanoi': [
+        { id: 'e1', title: 'Phở a Phở Thìn', description: 'La zuppa nazionale: brodo di 12 ore, manzo tenero, erbe fresche.', priceRange: '€', location: 'Old Quarter' },
+        { id: 'e2', title: 'Bún Chả', description: 'Il piatto che Obama mangiò con Bourdain: maiale grigliato, noodles, erbe.', priceRange: '€', location: 'Bun Cha Huong Lien' },
+        { id: 'e3', title: 'Egg coffee (Cà Phê Trứng)', description: 'Caffè con crema di uovo: invenzione hanoiana degli anni \'40.', priceRange: '€', location: 'Giang Café' },
+        { id: 'e4', title: 'Bánh mì', description: 'La baguette vietnamita: fusione perfetta Francia-Vietnam.', priceRange: '€', location: 'Ovunque' }
+      ],
+      'dubai': [
+        { id: 'e1', title: 'Al Fanar', description: 'Cucina emiratina autentica: machboos, harees, luqaimat.', priceRange: '€€', location: 'Festival City' },
+        { id: 'e2', title: 'Brunch del venerdì', description: 'Tradizione di Dubai: all-you-can-eat gourmet con champagne.', priceRange: '€€€€', location: 'Hotel 5 stelle' },
+        { id: 'e3', title: 'Ravi Restaurant', description: 'Pakistani economico: curry di capra, biryani, naan. Cult dal 1978.', priceRange: '€', location: 'Satwa' },
+        { id: 'e4', title: 'At.mosphere', description: 'Ristorante al 122° piano del Burj Khalifa: mangia sopra le nuvole.', priceRange: '€€€€', location: 'Burj Khalifa' }
+      ],
+      // ===== EUROPA =====
       'lisbon': [
-        { id: 'e1', title: 'Pastéis de Belém', description: 'L\'originale pastel de nata, dal 1837.', priceRange: '€', location: 'Belém' },
-        { id: 'e2', title: 'Time Out Market', description: 'Il meglio della gastronomia portoghese sotto un unico tetto.', priceRange: '€€', location: 'Cais do Sodré' }
+        { id: 'e1', title: 'Pastéis de Belém', description: 'L\'originale pastel de nata dal 1837: crema, sfoglia, zucchero a velo.', priceRange: '€', location: 'Belém' },
+        { id: 'e2', title: 'Time Out Market', description: 'Food hall con i migliori chef portoghesi: assaggia tutto!', priceRange: '€€', location: 'Cais do Sodré' },
+        { id: 'e3', title: 'Cervejaria Ramiro', description: 'Frutti di mare alla griglia: gamberi, percebes, santola. Prenota!', priceRange: '€€€', location: 'Intendente' },
+        { id: 'e4', title: 'Tascas in Alfama', description: 'Trattorie a gestione familiare: bacalhau, bifana, ginjinha.', priceRange: '€', location: 'Alfama' }
+      ],
+      'barcelona': [
+        { id: 'e1', title: 'Mercato de la Boqueria', description: 'Paradiso gastronomico dal 1217: frutti di mare, jamón, succhi freschi.', priceRange: '€-€€', location: 'La Rambla' },
+        { id: 'e2', title: 'Tapas al Barri Gòtic', description: 'Bar Cañete, Quimet y Quimet: patatas bravas, croquetas, anchoas.', priceRange: '€€', location: 'Barri Gòtic' },
+        { id: 'e3', title: 'Paella a Barceloneta', description: 'La paella sul mare: Can Paixano per cava e tapas, Can Majó per paella.', priceRange: '€€', location: 'Barceloneta' },
+        { id: 'e4', title: 'Tickets (Albert Adrià)', description: 'Tapas creative del fratello di Ferran: esperienza stellata giocosa.', priceRange: '€€€€', location: 'Poble Sec' }
+      ],
+      'paris': [
+        { id: 'e1', title: 'Croissant da Du Pain et des Idées', description: 'La boulangerie più fotogenica: pain des amis, escargot pistache.', priceRange: '€', location: 'Canal Saint-Martin' },
+        { id: 'e2', title: 'Bistrot classico', description: 'Steak frites, coq au vin, crème brûlée: Le Comptoir, Chez l\'Ami Jean.', priceRange: '€€-€€€', location: 'Saint-Germain' },
+        { id: 'e3', title: 'Formaggi da Fromagerie Laurent Dubois', description: 'MOF (Migliori Artigiani di Francia): 200 formaggi affinati.', priceRange: '€€', location: 'Maubert' },
+        { id: 'e4', title: 'Café de Flore', description: 'Il caffè dove Sartre e Beauvoir scrivevano: caffè, croque-monsieur, storia.', priceRange: '€€', location: 'Saint-Germain' },
+        { id: 'e5', title: 'Rue Mouffetard food market', description: 'Mercato di quartiere storico: ostriche, crêpes, vino naturale.', priceRange: '€', location: '5ème' }
+      ],
+      'rome': [
+        { id: 'e1', title: 'Carbonara da Roscioli', description: 'La carbonara definitiva: guanciale, pecorino, uovo cremoso. Prenota!', priceRange: '€€', location: 'Centro' },
+        { id: 'e2', title: 'Supplì a Trapizzino', description: 'Street food romano: supplì al telefono, trapizzino, fiori di zucca.', priceRange: '€', location: 'Testaccio' },
+        { id: 'e3', title: 'Cacio e pepe a Felice a Testaccio', description: 'Tre ingredienti, perfezione assoluta: la preparano al tavolo.', priceRange: '€€', location: 'Testaccio' },
+        { id: 'e4', title: 'Gelato da Giolitti', description: 'Dal 1900: crema, pistacchio, zabaione. I Papi venivano qui!', priceRange: '€', location: 'Centro' },
+        { id: 'e5', title: 'Aperitivo a Trastevere', description: 'Spritz al tramonto sulle piazzette: Freni e Frizioni, Ma Che Siete Venuti a Fà.', priceRange: '€', location: 'Trastevere' }
+      ],
+      'amsterdam': [
+        { id: 'e1', title: 'Stroopwafel fresco', description: 'Al mercato Albert Cuyp: waffle caldo con sciroppo che cola.', priceRange: '€', location: 'De Pijp' },
+        { id: 'e2', title: 'Rijsttafel indonesiana', description: 'Eredità coloniale: 20+ piatti indonesiani in un pasto. Blauw è top.', priceRange: '€€', location: 'De Pijp' },
+        { id: 'e3', title: 'Haring crudo', description: 'Aringa marinata con cipolla e cetriolini: street food olandese iconico.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e4', title: 'Foodhallen', description: 'Ex deposito tram ora food court trendy: bitterballen, pulled pork, poké.', priceRange: '€€', location: 'Oud-West' }
+      ],
+      'prague': [
+        { id: 'e1', title: 'Svíčková na smetaně', description: 'Manzo marinato con salsa alla panna, knedlíky e mirtilli.', priceRange: '€', location: 'Lokal' },
+        { id: 'e2', title: 'Trdelník', description: 'Dolce a camino caramellato: tourist trap ma irresistibile con gelato.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e3', title: 'Birra ceca nei pivnice', description: 'Pilsner Urquell, Budvar alla spina: la migliore birra del mondo a 2€.', priceRange: '€', location: 'U Zlatého Tygra' },
+        { id: 'e4', title: 'Smažený sýr', description: 'Formaggio fritto con maionese e patatine: guilty pleasure praghese.', priceRange: '€', location: 'Ovunque' }
+      ],
+      'vienna': [
+        { id: 'e1', title: 'Sachertorte al Hotel Sacher', description: 'La torta al cioccolato originale dal 1832: umida, non troppo dolce.', priceRange: '€€', location: 'Centro' },
+        { id: 'e2', title: 'Wiener Schnitzel', description: 'Cotoletta di vitello battuta sottile, fritta nel burro: Figlmüller fa 30cm!', priceRange: '€€', location: 'Centro' },
+        { id: 'e3', title: 'Kaffeehäuser', description: 'Café Central, Sperl: ordina un Melange, leggi il giornale per ore.', priceRange: '€€', location: 'Centro' },
+        { id: 'e4', title: 'Naschmarkt', description: 'Mercato dal 1780: spezie, olive, hummus, brunch internazionale.', priceRange: '€-€€', location: 'Naschmarkt' }
+      ],
+      'reykjavik': [
+        { id: 'e1', title: 'Hot dog da Bæjarins Beztu', description: 'Il miglior hot dog del mondo (parola di Clinton): agnello, remoulade, cipolla.', priceRange: '€', location: 'Centro' },
+        { id: 'e2', title: 'Pesce del giorno', description: 'Merluzzo, salmone, balena: pescato freschissimo, preparazione semplice.', priceRange: '€€-€€€', location: 'Porto' },
+        { id: 'e3', title: 'Þorramatur (cibo tradizionale)', description: 'Squalo fermentato (hákarl), testa di pecora: per i coraggiosi!', priceRange: '€€', location: 'Ristoranti tradizionali' },
+        { id: 'e4', title: 'Skyr', description: 'Yogurt islandese proteico: colazione nazionale, anche in gelato.', priceRange: '€', location: 'Ovunque' }
+      ],
+      'athens': [
+        { id: 'e1', title: 'Souvlaki da O Kostas', description: 'Il miglior souvlaki di Atene: pita, tzatziki, pomodoro, cipolla. 2€.', priceRange: '€', location: 'Syntagma' },
+        { id: 'e2', title: 'Taverna a Plaka', description: 'Moussaka, gemista, dolmades con retsina: cucina della nonna.', priceRange: '€', location: 'Plaka' },
+        { id: 'e3', title: 'Frutti di mare al Pireo', description: 'Polpo grigliato, sardine, calamari: vista mare, ouzo che scorre.', priceRange: '€€', location: 'Mikrolimano' },
+        { id: 'e4', title: 'Loukoumades', description: 'Frittelle al miele: le ciambelle greche calde servite con cannella.', priceRange: '€', location: 'Monastiraki' }
+      ],
+      'florence': [
+        { id: 'e1', title: 'Bistecca alla Fiorentina', description: '1.2 kg di Chianina al sangue: esperienza carnivora definitiva.', priceRange: '€€€', location: 'Trattoria Mario' },
+        { id: 'e2', title: 'Panino con il lampredotto', description: 'Trippa bollita nel panino: street food fiorentino DOC.', priceRange: '€', location: 'Mercato Centrale' },
+        { id: 'e3', title: 'Mercato Centrale', description: 'Piano terra: prodotti freschi. Piano alto: food court gourmet.', priceRange: '€-€€', location: 'San Lorenzo' },
+        { id: 'e4', title: 'Gelato da Vivoli', description: 'Dal 1929: crema, nocciola, stracciatella. I fiorentini vengono qui.', priceRange: '€', location: 'Santa Croce' }
+      ],
+      'santorini': [
+        { id: 'e1', title: 'Fava santorini', description: 'Purea di legumi locali con cipolla caramellata e capperi: specialità unica.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e2', title: 'Tomatokeftedes', description: 'Frittelle di pomodori santorini (piccoli, dolcissimi): imperdibili.', priceRange: '€', location: 'Taverne' },
+        { id: 'e3', title: 'Cena con vista caldera', description: 'Ambrosia, Lycabettus: piatti greci mentre il sole si tuffa.', priceRange: '€€€', location: 'Oia/Fira' },
+        { id: 'e4', title: 'Wine tasting', description: 'Assyrtiko vulcanico nelle cantine storiche: Santo, Venetsanos.', priceRange: '€€', location: 'Cantine' }
+      ],
+      'dubrovnik': [
+        { id: 'e1', title: 'Pesce fresco alla Konoba', description: 'Orata alla griglia, risotto nero, brudet: semplicità mediterranea.', priceRange: '€€', location: 'Città vecchia' },
+        { id: 'e2', title: 'Peka', description: 'Carne o polpo cotti sotto la campana: piatto tradizionale dalmata.', priceRange: '€€', location: 'Ristoranti locali' },
+        { id: 'e3', title: 'Gelato da Dolce Vita', description: 'Gelato artigianale con vista Stradun: gusti creativi mediterranei.', priceRange: '€', location: 'Stradun' },
+        { id: 'e4', title: 'Cocktail al Buža Bar', description: 'Bar nascosto nel buco delle mura: drink con vista mare da brivido.', priceRange: '€€', location: 'Mura esterne' }
+      ],
+      // ===== AFRICA =====
+      'marrakech': [
+        { id: 'e1', title: 'Tagine a Jemaa el-Fna', description: 'Stufato berbero in coccio: agnello, prugne, mandorle, spezie.', priceRange: '€', location: 'Medina' },
+        { id: 'e2', title: 'Street food alla piazza', description: 'Escargots piccanti, testa di pecora, succo d\'arancia fresco.', priceRange: '€', location: 'Jemaa el-Fna' },
+        { id: 'e3', title: 'Pastilla', description: 'Torta sfogliata dolce-salata con piccione, mandorle, cannella.', priceRange: '€€', location: 'Ristoranti' },
+        { id: 'e4', title: 'Tè alla menta', description: 'Rituale di ospitalità: versato dall\'alto tre volte, dolcissimo.', priceRange: '€', location: 'Ovunque' }
+      ],
+      'capetown': [
+        { id: 'e1', title: 'Braai (BBQ sudafricano)', description: 'Boerewors (salsicce), sosatie, pap: rituale sociale domenicale.', priceRange: '€€', location: 'Ovunque' },
+        { id: 'e2', title: 'Cape Malay curry', description: 'Curry speziato della comunità malese di Bo-Kaap: bobotie, bredie.', priceRange: '€', location: 'Bo-Kaap' },
+        { id: 'e3', title: 'Seafood a Hout Bay', description: 'Fish and chips freschissimo al porto: foche che chiedono l\'elemosina.', priceRange: '€', location: 'Hout Bay' },
+        { id: 'e4', title: 'Wine tasting a Stellenbosch', description: 'Pinotage, Chenin Blanc: i migliori vini africani con vista vigneti.', priceRange: '€€', location: 'Winelands' }
+      ],
+      'cairo': [
+        { id: 'e1', title: 'Kushari', description: 'Il piatto nazionale: pasta, riso, lenticchie, ceci, cipolla fritta, pomodoro.', priceRange: '€', location: 'Abou Tarek' },
+        { id: 'e2', title: 'Ful medames', description: 'Fave stufate per colazione: l\'energia egiziana per iniziare.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e3', title: 'Kebab e kofta', description: 'Carne grigliata perfetta: Felfela è un\'istituzione dal 1959.', priceRange: '€', location: 'Centro' },
+        { id: 'e4', title: 'Shisha sul Nilo', description: 'Narghilè, tè, dolci: relax egiziano guardando il fiume eterno.', priceRange: '€', location: 'Zamalek' }
+      ],
+      'zanzibar': [
+        { id: 'e1', title: 'Zanzibar Mix', description: 'Street food notturno a Forodhani: spiedini, zanzibar pizza, seafood.', priceRange: '€', location: 'Stone Town' },
+        { id: 'e2', title: 'Pesce alla griglia', description: 'Barracuda, red snapper, gamberi: pescato del giorno in spiaggia.', priceRange: '€€', location: 'Spiagge' },
+        { id: 'e3', title: 'Curry swahili', description: 'Influenze arabe, indiane, africane: cocco, spezie, storia.', priceRange: '€', location: 'Stone Town' },
+        { id: 'e4', title: 'Succo di canna da zucchero', description: 'Spremuto al momento con zenzero: energia tropicale istantanea.', priceRange: '€', location: 'Mercati' }
+      ],
+      // ===== NORD AMERICA =====
+      'newyork': [
+        { id: 'e1', title: 'Pizza a Brooklyn', description: 'Di Fara, L&B Spumoni, Lucali: la pizza slice che ha definito l\'America.', priceRange: '€', location: 'Brooklyn' },
+        { id: 'e2', title: 'Bagel da Russ & Daughters', description: 'Bagel con lox (salmone) e cream cheese dal 1914: l\'appetizing perfetto.', priceRange: '€', location: 'Lower East Side' },
+        { id: 'e3', title: 'Pastrami da Katz\'s Deli', description: '"I\'ll have what she\'s having" (When Harry Met Sally): qui da 1888.', priceRange: '€€', location: 'Lower East Side' },
+        { id: 'e4', title: 'Dumplings a Chinatown', description: 'Joe\'s Shanghai, Nom Wah: i migliori dumpling fuori dall\'Asia.', priceRange: '€', location: 'Chinatown' },
+        { id: 'e5', title: 'Fine dining a Manhattan', description: 'Eleven Madison Park, Le Bernardin, Per Se: il top mondiale.', priceRange: '€€€€', location: 'Manhattan' }
+      ],
+      'losangeles': [
+        { id: 'e1', title: 'Tacos a East LA', description: 'Al pastor, carnitas, birria: la scena taco più autentica degli USA.', priceRange: '€', location: 'East LA' },
+        { id: 'e2', title: 'In-N-Out Burger', description: 'Il burger californiano: Double-Double animal style, menu segreto.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e3', title: 'Korean BBQ a Koreatown', description: 'La più grande Koreatown fuori dalla Corea: griglie a volontà.', priceRange: '€€', location: 'Koreatown' },
+        { id: 'e4', title: 'Farmers Market a The Grove', description: 'Dal 1934: cucine internazionali, prodotti freschi, celebrity spotting.', priceRange: '€€', location: 'Fairfax' }
+      ],
+      'sanfrancisco': [
+        { id: 'e1', title: 'Clam chowder in sourdough bowl', description: 'Zuppa di vongole nel pane a lievitazione naturale: icona di SF.', priceRange: '€', location: 'Fisherman\'s Wharf' },
+        { id: 'e2', title: 'Mission burrito', description: 'Il burrito della Mission: enorme, completo, cult dal 1969 (La Taqueria).', priceRange: '€', location: 'Mission District' },
+        { id: 'e3', title: 'Dim Sum a Chinatown', description: 'Yank Sing, R&G Lounge: carrelli che girano, ordini col dito.', priceRange: '€€', location: 'Chinatown' },
+        { id: 'e4', title: 'Farm-to-table a Berkeley', description: 'Chez Panisse di Alice Waters: dove è nato il movimento.', priceRange: '€€€€', location: 'Berkeley' }
+      ],
+      'miami': [
+        { id: 'e1', title: 'Cuban sandwich a Little Havana', description: 'Prosciutto, maiale, formaggio, pickle, mostarda: premuto alla cubana.', priceRange: '€', location: 'Calle Ocho' },
+        { id: 'e2', title: 'Ceviche a Brickell', description: 'Pesce marinato peruviano-miami style: fresco, piccante, trendy.', priceRange: '€€', location: 'Brickell' },
+        { id: 'e3', title: 'Stone crab da Joe\'s', description: 'Chele di granchio con salsa mostarda: stagione ottobre-maggio.', priceRange: '€€€€', location: 'South Beach' },
+        { id: 'e4', title: 'Cafecito a Versailles', description: 'Colazione cubana: café cubano, pastelitos, medianoche.', priceRange: '€', location: 'Little Havana' }
+      ],
+      'vancouver': [
+        { id: 'e1', title: 'Sushi su Robson Street', description: 'Sushi grade altissimo a prezzi onesti: la scena giapponese è top.', priceRange: '€€', location: 'Downtown' },
+        { id: 'e2', title: 'Japadog', description: 'Hot dog giapponese: teriyaki, oroshi, okonomi. Street food fusion.', priceRange: '€', location: 'Downtown' },
+        { id: 'e3', title: 'Dim Sum a Richmond', description: 'La miglior dim sum fuori da Hong Kong: code la domenica mattina.', priceRange: '€', location: 'Richmond' },
+        { id: 'e4', title: 'Granville Island Market', description: 'Pesce, formaggi, dolci: il mercato pubblico più amato del Canada.', priceRange: '€-€€', location: 'Granville Island' }
+      ],
+      'mexicocity': [
+        { id: 'e1', title: 'Tacos al pastor', description: 'Maiale marinato su spiedo verticale: El Huequito è leggendario.', priceRange: '€', location: 'Centro' },
+        { id: 'e2', title: 'Churros con chocolate', description: 'Churrería El Moro dal 1935: inzuppa nel cioccolato messicano.', priceRange: '€', location: 'Centro' },
+        { id: 'e3', title: 'Mercado San Juan', description: 'Ingredienti gourmet: chapulines (cavallette), huitlacoche, formaggi artigianali.', priceRange: '€€', location: 'Centro' },
+        { id: 'e4', title: 'Mezcal a La Clandestina', description: 'Mezcaleria hipster: degustazione con sal de gusano e arancia.', priceRange: '€€', location: 'Condesa' },
+        { id: 'e5', title: 'Pujol (World\'s 50 Best)', description: 'Enrique Olvera reinterpreta la cucina messicana: mole madre 2500 giorni.', priceRange: '€€€€', location: 'Polanco' }
+      ],
+      // ===== SUD AMERICA =====
+      'buenosaires': [
+        { id: 'e1', title: 'Asado in parrilla', description: 'BBQ argentino: costilla, entraña, morcilla. Don Julio è il top.', priceRange: '€€-€€€', location: 'Palermo' },
+        { id: 'e2', title: 'Empanadas', description: 'Fagottini ripieni di carne, cipolla, olive: ogni provincia ha la sua.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e3', title: 'Medialunas e café', description: 'Croissant argentini per colazione: dolci con dulce de leche.', priceRange: '€', location: 'Café Tortoni' },
+        { id: 'e4', title: 'Helado', description: 'Il gelato argentino è serio: dulce de leche, sambayón al Cadore.', priceRange: '€', location: 'Palermo' }
+      ],
+      'riodejaneiro': [
+        { id: 'e1', title: 'Feijoada', description: 'Stufato di fagioli neri e maiale: il piatto brasiliano del sabato.', priceRange: '€€', location: 'Casa da Feijoada' },
+        { id: 'e2', title: 'Churrasco', description: 'Rodizio: camerieri portano tagli di carne infiniti, dì quando basta.', priceRange: '€€€', location: 'Fogo de Chão' },
+        { id: 'e3', title: 'Açaí bowl', description: 'Superfood amazzonico: frozen con granola e frutta. Carburante da spiaggia.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e4', title: 'Caipirinha in boteco', description: 'Cachaça, lime, zucchero: il drink perfetto in un bar di quartiere.', priceRange: '€', location: 'Lapa' }
+      ],
+      'cusco': [
+        { id: 'e1', title: 'Ceviche', description: 'Pesce marinato nel lime con mais gigante e patate dolci.', priceRange: '€', location: 'Mercati' },
+        { id: 'e2', title: 'Cuy (porcellino d\'india)', description: 'Piatto inca tradizionale: croccante fuori, tenero dentro. Per i coraggiosi!', priceRange: '€€', location: 'Ristoranti tradizionali' },
+        { id: 'e3', title: 'Pisco Sour', description: 'Cocktail nazionale: pisco, lime, albume, bitter. Musée del Pisco è top.', priceRange: '€', location: 'Plaza de Armas' },
+        { id: 'e4', title: 'Mercado San Pedro', description: 'Succhi di frutta, zuppe calde, piatti locali a pochissimo.', priceRange: '€', location: 'San Pedro' }
+      ],
+      'cartagena': [
+        { id: 'e1', title: 'Ceviche de camarón', description: 'Gamberi marinati nel lime con avocado: freschezza caraibica.', priceRange: '€', location: 'Ciudad Amurallada' },
+        { id: 'e2', title: 'Arepa con huevo', description: 'Focaccina di mais fritta con uovo dentro: street food cartagenero.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e3', title: 'Coctel de frutas', description: 'Venditori ambulanti con carretto: mango, papaya, ananas con lime e sale.', priceRange: '€', location: 'Spiagge' },
+        { id: 'e4', title: 'La Cevicheria', description: 'Di Rausch (chef colombiano famoso): ceviche gourmet, cocktail perfetti.', priceRange: '€€€', location: 'Getsemaní' }
+      ],
+      // ===== OCEANIA =====
+      'sydney': [
+        { id: 'e1', title: 'Fish and chips a Bondi', description: 'Barramundi fresco con vista sull\'oceano: il classico australiano.', priceRange: '€', location: 'Bondi Beach' },
+        { id: 'e2', title: 'Meat pie', description: 'Torta salata ripiena di carne: comfort food australiano. Harry\'s Café de Wheels.', priceRange: '€', location: 'Woolloomooloo' },
+        { id: 'e3', title: 'Brunch', description: 'Sydney ha inventato l\'avocado toast: Bills, Grounds of Alexandria.', priceRange: '€€', location: 'Surry Hills' },
+        { id: 'e4', title: 'Sydney Fish Market', description: 'Il terzo mercato ittico più grande del mondo: sashimi, ostriche, aragoste.', priceRange: '€€', location: 'Pyrmont' }
+      ],
+      'melbourne': [
+        { id: 'e1', title: 'Caffè specialty', description: 'Melbourne è la capitale mondiale del caffè: Patricia, Market Lane, St. Ali.', priceRange: '€', location: 'CBD/Brunswick' },
+        { id: 'e2', title: 'Greek food a Oakleigh', description: 'La più grande comunità greca fuori dalla Grecia: souvlaki, baklava.', priceRange: '€', location: 'Oakleigh' },
+        { id: 'e3', title: 'Dumplings a Chinatown', description: 'ShanDong Mama, HuTong: code lunghissime per dumplings perfetti.', priceRange: '€', location: 'Chinatown' },
+        { id: 'e4', title: 'Rooftop bar', description: 'Loop, Naked for Satan, Rooftop Bar: cocktail con vista sulla città.', priceRange: '€€', location: 'CBD' }
+      ],
+      'queenstown': [
+        { id: 'e1', title: 'Fergburger', description: 'Il burger più famoso della NZ: porzioni enormi, code alle 3 di notte.', priceRange: '€', location: 'Centro' },
+        { id: 'e2', title: 'Lamb (agnello NZ)', description: 'L\'agnello neozelandese è tra i migliori al mondo: roast, rack, shank.', priceRange: '€€', location: 'Ristoranti' },
+        { id: 'e3', title: 'Hokey Pokey gelato', description: 'Gelato al caramello con pezzi di honeycomb: gusto kiwi iconico.', priceRange: '€', location: 'Patagonia Chocolates' },
+        { id: 'e4', title: 'Après-ski drinks', description: 'Dopo lo sci: vino di Central Otago, birre craft, fuoco che scoppietta.', priceRange: '€€', location: 'Vari' }
+      ],
+      'fiji': [
+        { id: 'e1', title: 'Kokoda (ceviche fijiano)', description: 'Pesce crudo nel latte di cocco con lime e peperoncino.', priceRange: '€', location: 'Resort/Hotel' },
+        { id: 'e2', title: 'Lovo feast', description: 'Carne e verdure cotte sotto terra in foglie di banano: tradizione.', priceRange: '€€', location: 'Villaggi' },
+        { id: 'e3', title: 'Fiji Bitter', description: 'La birra nazionale ghiacciata: il modo migliore per rinfrescarsi.', priceRange: '€', location: 'Ovunque' },
+        { id: 'e4', title: 'Fresh coconut', description: 'Bevuto direttamente dalla noce aperta con il machete: tropicale puro.', priceRange: '€', location: 'Spiagge' }
       ]
     };
     return items[cityId] || [
@@ -241,19 +964,277 @@ export class CityService {
 
   private getPracticalInfo(cityId: string): CityDetails['practicalInfo'] {
     const info: Record<string, CityDetails['practicalInfo']> = {
+      // ===== ASIA =====
       'tokyo': {
         documents: 'Passaporto valido. Visto non richiesto per soggiorni fino a 90 giorni per cittadini UE.',
         bestTimeToVisit: 'Primavera (marzo-maggio) per i ciliegi, Autunno (settembre-novembre) per il foliage.',
         averageCosts: { meal: '€10-30', transport: '€5-15/giorno', accommodation: '€60-150/notte' },
-        gettingAround: ['Metro efficientissima', 'JR Pass per spostamenti', 'Suica card consigliata'],
-        tipsFromLocals: ['Non parlare al telefono sui mezzi', 'Porta sempre contanti', 'Inchino leggero per salutare']
+        gettingAround: ['Metro efficientissima (Suica card)', 'JR Pass per viaggi fuori città', 'Evita i taxi (costosi)'],
+        tipsFromLocals: ['Non parlare al telefono sui mezzi', 'Porta sempre contanti', 'Togli le scarpe quando richiesto']
       },
+      'kyoto': {
+        documents: 'Passaporto valido. Visto non richiesto per soggiorni fino a 90 giorni per cittadini UE.',
+        bestTimeToVisit: 'Primavera (ciliegi) e autunno (foglie rosse). Evita luglio-agosto (caldo umido).',
+        averageCosts: { meal: '€8-25', transport: '€4-10/giorno', accommodation: '€50-200/notte' },
+        gettingAround: ['Bus turistici (1-day pass)', 'Bicicletta (molti noleggi)', 'Treno per spostamenti'],
+        tipsFromLocals: ['I templi chiudono alle 17', 'Visita Fushimi Inari all\'alba', 'Rispetta il silenzio nei templi']
+      },
+      'bali': {
+        documents: 'Passaporto valido 6+ mesi. Visa on arrival per 30 giorni (35 USD, estendibile).',
+        bestTimeToVisit: 'Stagione secca (aprile-ottobre). Evita Natale/Capodanno (prezzi x3).',
+        averageCosts: { meal: '€3-15', transport: '€5-20/giorno', accommodation: '€20-100/notte' },
+        gettingAround: ['Scooter (patente internazionale)', 'Driver privato (€30-40/giorno)', 'Grab/Gojek (rideshare)'],
+        tipsFromLocals: ['Baratta sempre (50% dello starting price)', 'Non toccare la testa delle persone', 'Vesti modesto nei templi']
+      },
+      'bangkok': {
+        documents: 'Passaporto valido 6+ mesi. Visto non richiesto fino a 45 giorni per turismo.',
+        bestTimeToVisit: 'Novembre-febbraio (stagione fresca). Evita aprile (caldissimo).',
+        averageCosts: { meal: '€2-10', transport: '€2-8/giorno', accommodation: '€15-80/notte' },
+        gettingAround: ['BTS/MRT (metro sopraelevata)', 'Grab per taxi sicuri', 'Tuk-tuk solo per esperienza'],
+        tipsFromLocals: ['Non criticare mai la monarchia', 'Togli le scarpe nei templi', 'Porta sempre un ombrello']
+      },
+      'singapore': {
+        documents: 'Passaporto valido 6+ mesi. Visto non richiesto fino a 90 giorni.',
+        bestTimeToVisit: 'Tutto l\'anno (tropicale costante). Dicembre-gennaio più piovoso.',
+        averageCosts: { meal: '€3-30', transport: '€5-15/giorno', accommodation: '€80-250/notte' },
+        gettingAround: ['MRT efficientissimo', 'Bus capillare', 'Taxi/Grab economici e sicuri'],
+        tipsFromLocals: ['Non masticare gomme (multa)', 'Non mangiare sui mezzi pubblici', 'Aria condizionata ovunque: porta una felpa']
+      },
+      'seoul': {
+        documents: 'Passaporto valido. K-ETA richiesta (€8, valida 2 anni).',
+        bestTimeToVisit: 'Primavera (aprile-maggio) e autunno (settembre-novembre).',
+        averageCosts: { meal: '€5-20', transport: '€3-10/giorno', accommodation: '€40-120/notte' },
+        gettingAround: ['Metro capillare (T-money card)', 'Bus notturni', 'Taxi economici e sicuri'],
+        tipsFromLocals: ['Versa da bere agli altri, mai a te stesso', 'Inchino leggero per salutare', 'Tutto è aperto fino a tardi']
+      },
+      'hanoi': {
+        documents: 'Passaporto valido 6+ mesi. E-visa online (25 USD, 30 giorni).',
+        bestTimeToVisit: 'Ottobre-dicembre e marzo-aprile. Evita estate (monsoni).',
+        averageCosts: { meal: '€2-8', transport: '€1-5/giorno', accommodation: '€15-50/notte' },
+        gettingAround: ['Grab moto o auto', 'A piedi nel Quartiere Vecchio', 'Evita di guidare (traffico caotico)'],
+        tipsFromLocals: ['Attraversa la strada con calma costante', 'Baratta sempre', 'Contanti ovunque']
+      },
+      'dubai': {
+        documents: 'Passaporto valido 6+ mesi. Visto gratuito all\'arrivo per 90 giorni (cittadini UE).',
+        bestTimeToVisit: 'Novembre-marzo (inverno mite). Estate fino a 50°C!',
+        averageCosts: { meal: '€10-50', transport: '€5-30/giorno', accommodation: '€80-400/notte' },
+        gettingAround: ['Metro moderna', 'Taxi Uber/Careem', 'Tram per la Marina'],
+        tipsFromLocals: ['Vestiti modesti fuori dai resort', 'No PDA (effusioni pubbliche)', 'Alcol solo in hotel/bar autorizzati']
+      },
+      // ===== EUROPA =====
       'lisbon': {
         documents: 'Carta d\'identità valida per cittadini UE.',
         bestTimeToVisit: 'Primavera e autunno per clima mite e meno turisti.',
         averageCosts: { meal: '€8-20', transport: '€3-6/giorno', accommodation: '€40-100/notte' },
-        gettingAround: ['Tram 28 iconico', 'Metro moderna', 'Molto camminabile'],
-        tipsFromLocals: ['I ristoranti turistici hanno pesce surgelato', 'I locali cenano dopo le 21', 'Porta scarpe comode per le salite']
+        gettingAround: ['Tram 28 iconico', 'Metro moderna', 'Molto camminabile (ma salite!)'],
+        tipsFromLocals: ['Evita i ristoranti sul Tram 28', 'Cenare dopo le 21', 'Scarpe comode obbligatorie']
+      },
+      'barcelona': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Maggio-giugno e settembre-ottobre. Estate affollata e calda.',
+        averageCosts: { meal: '€10-25', transport: '€4-10/giorno', accommodation: '€50-150/notte' },
+        gettingAround: ['Metro efficiente (T-Casual 10 viaggi)', 'A piedi nel centro', 'Bici elettriche'],
+        tipsFromLocals: ['Attenzione ai borseggiatori', 'Prenota la Sagrada Familia online', 'Tapas solo nei bar veri']
+      },
+      'paris': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Aprile-giugno e settembre-ottobre. Agosto: parigini in vacanza.',
+        averageCosts: { meal: '€12-35', transport: '€5-15/giorno', accommodation: '€80-200/notte' },
+        gettingAround: ['Metro capillare (Navigo week €30)', 'RER per aeroporti', 'Vélib biciclette condivise'],
+        tipsFromLocals: ['Saluta sempre entrando nei negozi', 'Prenota tutto in anticipo', 'Cena non prima delle 20']
+      },
+      'rome': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Aprile-maggio e settembre-ottobre. Estate torrida e affollata.',
+        averageCosts: { meal: '€10-25', transport: '€3-8/giorno', accommodation: '€50-150/notte' },
+        gettingAround: ['Metro (2 linee utili)', 'A piedi nel centro', 'Autobus per periferia'],
+        tipsFromLocals: ['Prenota Vaticano e Colosseo online', 'Evita i ristoranti sui monumenti', 'Acqua fresca dalle nasone']
+      },
+      'amsterdam': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Aprile-maggio (tulipani) e settembre. Inverno freddo ma suggestivo.',
+        averageCosts: { meal: '€12-30', transport: '€3-10/giorno', accommodation: '€80-180/notte' },
+        gettingAround: ['Bicicletta (noleggio o OV-fiets)', 'Tram e metro', 'A piedi nel centro'],
+        tipsFromLocals: ['Attenzione alle bici (precedenza a loro!)', 'Prenota Anne Frank mesi prima', 'Coffeeshop ≠ café (caffè)']
+      },
+      'prague': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Primavera e autunno. Dicembre per i mercatini di Natale.',
+        averageCosts: { meal: '€6-15', transport: '€2-5/giorno', accommodation: '€30-80/notte' },
+        gettingAround: ['Metro e tram (Lítačka card)', 'A piedi nel centro storico', 'Taxi solo con tassametro'],
+        tipsFromLocals: ['Cambia soldi solo nelle banche', 'Ponte Carlo: vai all\'alba', 'La birra costa meno dell\'acqua']
+      },
+      'vienna': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Primavera e dicembre (mercatini). Estate per i concerti all\'aperto.',
+        averageCosts: { meal: '€12-30', transport: '€4-10/giorno', accommodation: '€60-150/notte' },
+        gettingAround: ['Metro U-Bahn eccellente', 'Tram storici', 'Vienna Card per sconti'],
+        tipsFromLocals: ['Prenota Opera e Schönbrunn', 'Nicht rauchen nei luoghi pubblici', 'I caffè sono istituzioni: non affrettarti']
+      },
+      'reykjavik': {
+        documents: 'Carta d\'identità valida per cittadini UE (Schengen).',
+        bestTimeToVisit: 'Giugno-agosto per sole 24h. Inverno per aurora boreale.',
+        averageCosts: { meal: '€20-50', transport: '€5-30/giorno', accommodation: '€100-250/notte' },
+        gettingAround: ['Auto a noleggio (quasi obbligatoria)', 'A piedi in centro', 'Bus Strætó per escursioni'],
+        tipsFromLocals: ['Porta strati di vestiti', 'Il meteo cambia ogni 10 minuti', 'Rispetta la natura: niente sentieri improvvisati']
+      },
+      'athens': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Aprile-giugno e settembre-ottobre. Estate molto calda.',
+        averageCosts: { meal: '€8-18', transport: '€2-6/giorno', accommodation: '€40-100/notte' },
+        gettingAround: ['Metro moderna (3 linee)', 'A piedi nel centro', 'Taxi economici'],
+        tipsFromLocals: ['Visita l\'Acropoli all\'apertura', 'Le taverne senza menu sono le migliori', 'Siesta: negozi chiusi 15-17']
+      },
+      'florence': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Aprile-maggio e settembre-ottobre. Evita agosto (caldo, chiusure).',
+        averageCosts: { meal: '€12-30', transport: '€2-5/giorno', accommodation: '€60-150/notte' },
+        gettingAround: ['A piedi (centro compatto)', 'Bus ATAF', 'Treno per Pisa, Siena'],
+        tipsFromLocals: ['Prenota Uffizi e Accademia online', 'No pranzo al sacco in strada (multe)', 'Coperto è la norma nei ristoranti']
+      },
+      'santorini': {
+        documents: 'Carta d\'identità valida per cittadini UE.',
+        bestTimeToVisit: 'Maggio-giugno e settembre. Luglio-agosto: affollato e costoso.',
+        averageCosts: { meal: '€15-35', transport: '€5-30/giorno', accommodation: '€100-400/notte' },
+        gettingAround: ['Noleggio quad o auto', 'Bus KTEL economici', 'Taxi/transfer prenotati'],
+        tipsFromLocals: ['Prenota il tramonto a Oia con largo anticipo', 'Le spiagge sono di sabbia nera vulcanica', 'Fira più economica di Oia']
+      },
+      'dubrovnik': {
+        documents: 'Carta d\'identità valida per cittadini UE (Croazia in Schengen).',
+        bestTimeToVisit: 'Maggio-giugno e settembre. Evita agosto (navi da crociera).',
+        averageCosts: { meal: '€12-30', transport: '€2-10/giorno', accommodation: '€80-200/notte' },
+        gettingAround: ['A piedi nella città vecchia', 'Bus per spiagge', 'Ferry per le isole'],
+        tipsFromLocals: ['Mura: vai presto o tardi', 'Nessun bagaglio a rotelle (tutto gradini)', 'Spiagge fuori mura più belle']
+      },
+      // ===== AFRICA =====
+      'marrakech': {
+        documents: 'Passaporto valido 6+ mesi. Visto non richiesto fino a 90 giorni.',
+        bestTimeToVisit: 'Marzo-maggio e ottobre-novembre. Estate oltre 40°C.',
+        averageCosts: { meal: '€4-15', transport: '€1-10/giorno', accommodation: '€30-150/notte' },
+        gettingAround: ['A piedi nella Medina', 'Taxi petit (fisso il prezzo prima)', 'Calesse per turismo'],
+        tipsFromLocals: ['Baratta SEMPRE (50% del prezzo)', 'Mai foto senza permesso', 'Guide ufficiali solo (badge)']
+      },
+      'capetown': {
+        documents: 'Passaporto valido 30+ giorni. Visto non richiesto fino a 90 giorni per UE.',
+        bestTimeToVisit: 'Novembre-marzo (estate australe). Inverno piovoso ma verde.',
+        averageCosts: { meal: '€8-25', transport: '€3-15/giorno', accommodation: '€40-150/notte' },
+        gettingAround: ['Uber/Bolt sicuri ed economici', 'MyCiti bus', 'Auto per Garden Route'],
+        tipsFromLocals: ['Non camminare di notte nelle zone isolate', 'Prenota Table Mountain presto', 'Crisi idrica: docce brevi']
+      },
+      'cairo': {
+        documents: 'Passaporto valido 6+ mesi. Visa on arrival (25 USD) o e-visa.',
+        bestTimeToVisit: 'Ottobre-aprile. Estate oltre 40°C e umidità.',
+        averageCosts: { meal: '€3-12', transport: '€1-5/giorno', accommodation: '€20-80/notte' },
+        gettingAround: ['Uber sicuro', 'Metro per fughe dal traffico', 'Evita di guidare'],
+        tipsFromLocals: ['Baratta tutto', 'Evita l\'acqua del rubinetto', 'Visita le Piramidi all\'alba per le foto']
+      },
+      'zanzibar': {
+        documents: 'Passaporto valido 6+ mesi. Visa on arrival (50 USD).',
+        bestTimeToVisit: 'Giugno-ottobre (secco). Evita aprile-maggio (piogge).',
+        averageCosts: { meal: '€5-15', transport: '€5-20/giorno', accommodation: '€30-150/notte' },
+        gettingAround: ['Dala-dala (minibus locali)', 'Taxi/transfer', 'Scooter (con cautela)'],
+        tipsFromLocals: ['Vestiti modesti fuori dai resort (cultura musulmana)', 'Porta dollari in contanti', 'Le maree cambiano le spiagge']
+      },
+      // ===== NORD AMERICA =====
+      'newyork': {
+        documents: 'Passaporto valido + ESTA (21 USD, 2 anni).',
+        bestTimeToVisit: 'Aprile-giugno e settembre-ottobre. Dicembre per l\'atmosfera.',
+        averageCosts: { meal: '€15-40', transport: '€5-20/giorno', accommodation: '€150-350/notte' },
+        gettingAround: ['Subway 24/7 (MetroCard)', 'A piedi a Manhattan', 'Uber/Lyft per Brooklyn'],
+        tipsFromLocals: ['Mancia 18-20% obbligatoria', 'Cammina veloce (destra del marciapiede)', 'Niente foto in mezzo alla strada']
+      },
+      'losangeles': {
+        documents: 'Passaporto valido + ESTA (21 USD, 2 anni).',
+        bestTimeToVisit: 'Tutto l\'anno (clima perfetto). Primavera e autunno ideali.',
+        averageCosts: { meal: '€12-35', transport: '€10-40/giorno', accommodation: '€100-250/notte' },
+        gettingAround: ['Auto quasi obbligatoria', 'Uber/Lyft', 'Metro limitata ma in espansione'],
+        tipsFromLocals: ['Il traffico è infernale (evita rush hour)', 'Mancia 18-20%', 'Tutto è lontano da tutto']
+      },
+      'sanfrancisco': {
+        documents: 'Passaporto valido + ESTA (21 USD, 2 anni).',
+        bestTimeToVisit: 'Settembre-ottobre (estate indiana). Estate: nebbia e freddo!',
+        averageCosts: { meal: '€15-40', transport: '€5-20/giorno', accommodation: '€150-300/notte' },
+        gettingAround: ['BART/Muni', 'Cable car (esperienza)', 'A piedi nei quartieri'],
+        tipsFromLocals: ['Porta strati (microclimi)', 'Prenota Alcatraz settimane prima', 'Non lasciare nulla in auto visibile']
+      },
+      'miami': {
+        documents: 'Passaporto valido + ESTA (21 USD, 2 anni).',
+        bestTimeToVisit: 'Novembre-aprile. Estate calda, umida e con uragani.',
+        averageCosts: { meal: '€12-35', transport: '€5-25/giorno', accommodation: '€100-300/notte' },
+        gettingAround: ['Auto consigliata', 'Uber/Lyft', 'Metromover gratuito downtown'],
+        tipsFromLocals: ['Lo spagnolo aiuta', 'Mancia 18-20%', 'Crema solare sempre']
+      },
+      'vancouver': {
+        documents: 'Passaporto valido + eTA (7 CAD).',
+        bestTimeToVisit: 'Giugno-settembre. Inverno piovoso ma bello per sci.',
+        averageCosts: { meal: '€12-30', transport: '€5-15/giorno', accommodation: '€100-200/notte' },
+        gettingAround: ['SkyTrain efficiente', 'SeaBus panoramico', 'A piedi/bici downtown'],
+        tipsFromLocals: ['Porta un ombrello sempre', 'Prenota Capilano in anticipo', 'Le montagne sono a 30 min']
+      },
+      'mexicocity': {
+        documents: 'Passaporto valido. Visto non richiesto fino a 180 giorni per turismo.',
+        bestTimeToVisit: 'Marzo-maggio (secco). Altitudine: acclimatati gradualmente.',
+        averageCosts: { meal: '€4-15', transport: '€1-5/giorno', accommodation: '€30-80/notte' },
+        gettingAround: ['Metro (€0.25 a corsa!)', 'Uber sicuro', 'A piedi nei quartieri'],
+        tipsFromLocals: ['Non bere acqua del rubinetto', 'Uber più sicuro dei taxi', 'Attenzione all\'altitudine (2240m)']
+      },
+      // ===== SUD AMERICA =====
+      'buenosaires': {
+        documents: 'Passaporto valido. Visto non richiesto fino a 90 giorni per UE.',
+        bestTimeToVisit: 'Marzo-maggio e settembre-novembre. Estate umida.',
+        averageCosts: { meal: '€8-20', transport: '€1-5/giorno', accommodation: '€30-80/notte' },
+        gettingAround: ['Subte (metro)', 'Bus (SUBE card)', 'Uber/Cabify'],
+        tipsFromLocals: ['Porta dollari in contanti (cambio blue)', 'Cena dopo le 21', 'Le milonghe aprono a mezzanotte']
+      },
+      'riodejaneiro': {
+        documents: 'Passaporto valido. Visto non richiesto fino a 90 giorni per UE.',
+        bestTimeToVisit: 'Maggio-ottobre (inverno mite). Carnevale: febbraio/marzo.',
+        averageCosts: { meal: '€6-18', transport: '€2-8/giorno', accommodation: '€30-100/notte' },
+        gettingAround: ['Metro pulita', 'Uber sicuro', 'A piedi nelle zone turistiche'],
+        tipsFromLocals: ['Non ostentare oggetti di valore', 'Prenota il Cristo Redentore online', 'Copacabana di notte: attenzione']
+      },
+      'cusco': {
+        documents: 'Passaporto valido. Visto non richiesto fino a 90 giorni per UE.',
+        bestTimeToVisit: 'Aprile-ottobre (stagione secca). Machu Picchu: prenota mesi prima.',
+        averageCosts: { meal: '€4-12', transport: '€1-5/giorno', accommodation: '€15-60/notte' },
+        gettingAround: ['A piedi nel centro', 'Colectivos per Valle Sacra', 'Taxi economici'],
+        tipsFromLocals: ['Acclimatati 1-2 giorni (3400m altitudine)', 'Coca tea per il mal di montagna', 'Boleto Turistico per i siti']
+      },
+      'cartagena': {
+        documents: 'Passaporto valido. Visto non richiesto fino a 90 giorni per UE.',
+        bestTimeToVisit: 'Dicembre-aprile (secco). Evita settembre-novembre (piogge).',
+        averageCosts: { meal: '€5-15', transport: '€2-8/giorno', accommodation: '€30-100/notte' },
+        gettingAround: ['A piedi nella città murata', 'Uber/taxi', 'Barca per le isole'],
+        tipsFromLocals: ['Baratta con i venditori di spiaggia', 'Crema solare aggressiva', 'Zanzare al tramonto']
+      },
+      // ===== OCEANIA =====
+      'sydney': {
+        documents: 'Passaporto valido + eVisitor (gratuito online).',
+        bestTimeToVisit: 'Settembre-novembre e marzo-maggio. Estate (dic-feb) calda.',
+        averageCosts: { meal: '€15-35', transport: '€5-20/giorno', accommodation: '€80-200/notte' },
+        gettingAround: ['Opal card (treni, bus, ferry)', 'Ferry per Manly (scenic)', 'A piedi nel CBD'],
+        tipsFromLocals: ['Crema solare sempre (buco ozono)', 'Domenica: Opal cap €2.80', 'Surf lessons a Bondi!']
+      },
+      'melbourne': {
+        documents: 'Passaporto valido + eVisitor (gratuito online).',
+        bestTimeToVisit: 'Marzo-maggio e settembre-novembre. "4 stagioni in un giorno".',
+        averageCosts: { meal: '€12-30', transport: '€5-15/giorno', accommodation: '€70-180/notte' },
+        gettingAround: ['Tram gratuito nel CBD', 'Myki card', 'A piedi nelle laneway'],
+        tipsFromLocals: ['Porta strati (meteo pazzo)', 'Café: ordina flat white', 'AFL match: esperienza locale']
+      },
+      'queenstown': {
+        documents: 'Passaporto valido + NZeTA (17 NZD + IVL 35 NZD).',
+        bestTimeToVisit: 'Tutto l\'anno! Estate per trekking, inverno per sci.',
+        averageCosts: { meal: '€15-35', transport: '€10-50/giorno', accommodation: '€80-200/notte' },
+        gettingAround: ['Auto per esplorare', 'Shuttle per piste da sci', 'A piedi in centro'],
+        tipsFromLocals: ['Prenota attività avventura in anticipo', 'Milford Sound: vai con bel tempo', 'Fergburger: vai alle 3 di notte']
+      },
+      'fiji': {
+        documents: 'Passaporto valido 6+ mesi. Visto gratuito all\'arrivo (4 mesi).',
+        bestTimeToVisit: 'Maggio-ottobre (inverno secco). Evita stagione cicloni (nov-apr).',
+        averageCosts: { meal: '€10-30', transport: '€20-50/giorno', accommodation: '€50-300/notte' },
+        gettingAround: ['Barca/ferry tra le isole', 'Bus (Fiji Express)', 'Transfer prenotati'],
+        tipsFromLocals: ['Porta cash (isole remote)', 'Reef shoes per le spiagge', 'Rispetta il villaggio (chiedi permesso)']
       }
     };
     return info[cityId] || {
