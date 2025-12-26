@@ -943,21 +943,217 @@ export class CityService {
   }
 
   private generateHistoryItems(cityId: string): SectionItem[] {
-    return [
+    const items: Record<string, SectionItem[]> = {
+      // ===== ASIA =====
+      'tokyo': [
+        { id: 'h1', title: 'Da Edo a Tokyo', description: 'Tokyo nacque come piccolo villaggio di pescatori chiamato Edo nel XII secolo. Nel 1603, lo shogun Tokugawa Ieyasu la scelse come capitale del suo governo militare, trasformandola in una delle città più grandi del mondo. Nel 1868, con la Restaurazione Meiji, l\'imperatore si trasferì qui e la città fu rinominata Tokyo, "Capitale dell\'Est".' },
+        { id: 'h2', title: 'La Rinascita del Dopoguerra', description: 'Rasa al suolo dai bombardamenti del 1945, Tokyo risorse dalle ceneri con incredibile determinazione. In soli 19 anni ospitò le Olimpiadi del 1964, mostrando al mondo il suo miracolo economico. Lo Shinkansen, inaugurato per l\'occasione, divenne simbolo del Giappone moderno.' },
+        { id: 'h3', title: 'Curiosità: Più Stelle Michelin di Parigi', description: 'Tokyo detiene il record mondiale di stelle Michelin: oltre 200 ristoranti stellati, più di qualsiasi altra città al mondo. Dal sushi di Jiro ai ramen di Nakiryu, qui il cibo è un\'arte.' },
+        { id: 'h4', title: 'Terremoti e Resilienza', description: 'Il Grande Terremoto del Kanto del 1923 uccise 140.000 persone e distrusse gran parte della città. Tokyo fu ricostruita con standard antisismici all\'avanguardia, e oggi i suoi grattacieli oscillano ma non crollano.' }
+      ],
+      'kyoto': [
+        { id: 'h1', title: 'Mille Anni di Capitale', description: 'Kyoto fu la capitale del Giappone per oltre 1000 anni, dal 794 al 1868. Chiamata Heian-kyō, "Capitale della Pace", fu modellata sulla città cinese di Chang\'an. Qui nacquero il teatro Noh, la cerimonia del tè e l\'estetica wabi-sabi.' },
+        { id: 'h2', title: 'Risparmiata dalla Bomba Atomica', description: 'Kyoto era nella lista degli obiettivi per la bomba atomica, ma il Segretario alla Guerra USA Henry Stimson, che aveva visitato la città in luna di miele, insistette per salvarla. Questa decisione preservò 2000 templi e santuari.' },
+        { id: 'h3', title: 'Le Geishe di Gion', description: 'Le geishe non sono cortigiane ma artiste altamente addestrate in musica, danza e conversazione. A Kyoto si chiamano "geiko" e le apprendiste "maiko". Oggi ne restano circa 300, tesoro vivente del Giappone.' },
+        { id: 'h4', title: 'I 17 Siti UNESCO', description: 'Kyoto vanta 17 siti Patrimonio dell\'Umanità, tra cui il Kinkaku-ji (Padiglione d\'Oro) e il Fushimi Inari con i suoi 10.000 torii rossi.' }
+      ],
+      'bali': [
+        { id: 'h1', title: 'L\'Isola degli Dei', description: 'Bali è l\'unica isola a maggioranza induista in Indonesia, la nazione musulmana più popolosa al mondo. L\'induismo balinese è unico, mescolando credenze hindu, buddhiste e animiste locali. Ogni giorno i balinesi preparano offerte di fiori e incenso agli dei.' },
+        { id: 'h2', title: 'Il Sistema Subak', description: 'Le iconiche risaie a terrazze di Bali sono gestite dal "subak", un sistema cooperativo di irrigazione del IX secolo riconosciuto dall\'UNESCO. I contadini condividono l\'acqua secondo regole antiche tramandate per generazioni.' },
+        { id: 'h3', title: 'Nyepi: Il Giorno del Silenzio', description: 'Una volta l\'anno, per il Capodanno balinese, l\'intera isola si ferma. Niente luci, niente lavoro, niente viaggi. Perfino l\'aeroporto chiude. È il giorno più silenzioso sulla Terra.' },
+        { id: 'h4', title: 'L\'Invasione Olandese e la Resistenza', description: 'Nel 1906, i raja balinesi scelsero il "puputan" (combattimento fino alla morte) piuttosto che arrendersi agli olandesi. Marciarono verso i cannoni nemici vestiti di bianco, con gioielli, scegliendo la morte onorevole.' }
+      ],
+      'bangkok': [
+        { id: 'h1', title: 'La Venezia d\'Oriente', description: 'Bangkok fu costruita su una rete di canali (khlong) che le valse il soprannome di "Venezia d\'Oriente". Oggi molti canali sono stati interrati per far posto alle strade, ma alcuni quartieri conservano ancora questo carattere acquatico.' },
+        { id: 'h2', title: 'Il Nome più Lungo del Mondo', description: 'Il nome completo di Bangkok in thailandese è lungo 169 caratteri e significa "Città degli angeli, grande città, residenza del Buddha di smeraldo...". È il nome di città più lungo del mondo secondo il Guinness.' },
+        { id: 'h3', title: 'Da Capitale a Metropoli', description: 'Bangkok divenne capitale nel 1782 quando Re Rama I fondò la dinastia Chakri. Da piccolo avamposto commerciale è cresciuta fino a 10 milioni di abitanti, uno dei più grandi agglomerati urbani dell\'Asia.' },
+        { id: 'h4', title: 'Il Buddha di Smeraldo', description: 'Il Wat Phra Kaew ospita il Buddha di Smeraldo, la statua più sacra della Thailandia. Alta solo 66 cm, è in realtà fatta di giada. Il Re cambia personalmente i suoi abiti tre volte l\'anno.' }
+      ],
+      'singapore': [
+        { id: 'h1', title: 'Da Villaggio a Metropoli', description: 'Nel 1819, Sir Stamford Raffles sbarcò su un\'isola di pescatori e la trasformò in porto commerciale britannico. In 200 anni Singapore è passata da palude malarica a una delle nazioni più ricche del mondo.' },
+        { id: 'h2', title: 'L\'Indipendenza Indesiderata', description: 'Singapore fu espulsa dalla Malaysia nel 1965 contro la sua volontà. Lee Kuan Yew pianse in diretta TV annunciando l\'indipendenza. Quella che sembrava una condanna divenne un\'opportunità: oggi Singapore ha un PIL pro capite superiore agli USA.' },
+        { id: 'h3', title: 'Le Leggi Curiose', description: 'A Singapore è vietato vendere gomme da masticare (dal 1992), mangiare sui mezzi pubblici, e non tirare lo sciacquone può costarti una multa. Queste leggi severe hanno reso la città una delle più pulite e sicure al mondo.' },
+        { id: 'h4', title: 'Il Giardino nella Città', description: 'Nonostante sia densamente popolata, Singapore è una delle città più verdi del mondo. Il 47% della superficie è coperta da vegetazione, e i Gardens by the Bay rappresentano il pinnacolo di questa filosofia "città-giardino".' }
+      ],
+      'dubai': [
+        { id: 'h1', title: 'Da Villaggio di Pescatori a Metropoli', description: 'Nel 1960 Dubai era un piccolo villaggio di pescatori di perle. La scoperta del petrolio nel 1966 cambiò tutto, ma lo sceicco Rashid capì che il petrolio sarebbe finito. Investì in turismo e commercio, creando la Dubai moderna.' },
+        { id: 'h2', title: 'Record Mondiali', description: 'Dubai detiene decine di record: l\'edificio più alto (Burj Khalifa, 828m), l\'hotel più lussuoso (Burj Al Arab), il centro commerciale più grande, la cornice più grande, la fontana danzante più grande...' },
+        { id: 'h3', title: 'Le Isole Artificiali', description: 'Palm Jumeirah è visibile dallo spazio. Costruita con 94 milioni di metri cubi di sabbia, ha aggiunto 78 km di costa. The World, un arcipelago a forma di mappamondo, rimane in parte incompiuto.' },
+        { id: 'h4', title: 'Zero Tasse e Diversità', description: 'Dubai non ha imposte sul reddito personale. L\'85% della popolazione è straniera: un crogiolo di 200 nazionalità che parlano 140 lingue diverse.' }
+      ],
+      // ===== EUROPA =====
+      'paris': [
+        { id: 'h1', title: 'Lutetia: Le Origini Romane', description: 'Parigi nacque come insediamento gallico sull\'Île de la Cité nel III secolo a.C. I Romani la conquistarono nel 52 a.C. e la chiamarono Lutetia. Le terme romane di Cluny testimoniano ancora quel periodo.' },
+        { id: 'h2', title: 'La Rivoluzione Francese', description: 'Il 14 luglio 1789 la folla assaltò la Bastiglia, dando inizio alla Rivoluzione. Parigi vide la ghigliottina in Place de la Concorde, dove morirono Luigi XVI e Maria Antonietta. Da qui nacquero i principi di "Liberté, Égalité, Fraternité".' },
+        { id: 'h3', title: 'Haussmann e la Parigi Moderna', description: 'Tra il 1853 e il 1870, il Barone Haussmann demolì la Parigi medievale e la ricostruì con i grandi boulevard, i palazzi uniformi e i parchi che vediamo oggi. Un\'operazione urbanistica senza precedenti.' },
+        { id: 'h4', title: 'La Tour Eiffel: Da Odiata a Amata', description: 'Costruita per l\'Expo del 1889, la Torre Eiffel fu inizialmente detestata dagli intellettuali che la chiamarono "orribile scheletro". Doveva essere demolita dopo 20 anni, ma le sue antenne radio la salvarono. Oggi è il monumento più visitato al mondo.' }
+      ],
+      'rome': [
+        { id: 'h1', title: 'La Fondazione Leggendaria', description: 'Secondo la leggenda, Roma fu fondata il 21 aprile 753 a.C. da Romolo, allattato insieme al gemello Remo dalla lupa. La città crebbe da piccolo villaggio sul Palatino a capitale di un impero che dominava il Mediterraneo.' },
+        { id: 'h2', title: 'Caput Mundi', description: 'Al suo apice, l\'Impero Romano controllava 5 milioni di km² e 70 milioni di persone. Roma aveva un milione di abitanti, fognature, acquedotti e strade pavimentate quando Londra e Parigi erano villaggi di capanne.' },
+        { id: 'h3', title: 'La Roma dei Papi', description: 'Dopo la caduta dell\'Impero, i Papi trasformarono Roma. Il Rinascimento portò Michelangelo (Cappella Sistina), Raffaello (Stanze Vaticane) e Bernini (Piazza San Pietro). La Chiesa ricostruì la città eterna.' },
+        { id: 'h4', title: 'Curiosità: I 280 Fontanelle', description: 'Roma ha più di 2000 fontane, di cui 280 "nasoni" - fontanelle pubbliche a forma di naso da cui sgorga acqua potabilissima dell\'Acqua Vergine. I romani li usano dal 1874.' }
+      ],
+      'barcelona': [
+        { id: 'h1', title: 'Barcino: La Città Romana', description: 'Barcellona fu fondata dai Romani come Barcino nel I secolo a.C. Le mura romane sono ancora visibili nel Barrio Gótico. La città crebbe sotto Visigoti, Mori e infine i Conti di Barcellona.' },
+        { id: 'h2', title: 'Il Modernismo Catalano', description: 'Tra il 1888 e il 1911, Barcellona visse una rivoluzione architettonica. Gaudí, Domènech i Montaner e Puig i Cadafalch trasformarono la città con edifici fantastici. La Sagrada Familia, iniziata nel 1882, sarà completata nel 2026.' },
+        { id: 'h3', title: 'La Guerra Civile', description: 'Barcellona fu l\'ultima grande città a cadere nelle mani di Franco nel 1939. Durante la dittatura, parlare catalano in pubblico era proibito. Oggi il catalano è tornato protagonista, simbolo dell\'identità locale.' },
+        { id: 'h4', title: 'Le Olimpiadi del 1992', description: 'I Giochi Olimpici trasformarono Barcellona: fu aperta al mare con la Barceloneta rinnovata, costruito l\'Anello Olimpico di Montjuïc, e la città divenne meta turistica mondiale.' }
+      ],
+      'amsterdam': [
+        { id: 'h1', title: 'Nata dall\'Acqua', description: 'Amsterdam significa "diga sull\'Amstel". Nel XII secolo era un villaggio di pescatori su paludi. I canali furono scavati nel XVII secolo durante l\'Età dell\'Oro, quando la città divenne il centro del commercio mondiale.' },
+        { id: 'h2', title: 'L\'Età dell\'Oro Olandese', description: 'Nel 1600, Amsterdam era la città più ricca del mondo. La Compagnia delle Indie Orientali (VOC) fu la prima multinazionale della storia. Rembrandt, Vermeer e altri maestri dipinsero in questo periodo di prosperità.' },
+        { id: 'h3', title: 'La Tolleranza Olandese', description: 'Amsterdam accolse rifugiati ebrei, ugonotti e pensatori liberi quando altrove erano perseguitati. Spinoza scrisse qui le sue opere. Questa tradizione di tolleranza continua oggi con le politiche liberali su droghe leggere e diritti LGBTQ+.' },
+        { id: 'h4', title: 'Curiosità: 1281 Ponti e 25.000 Biciclette nel Canale', description: 'Amsterdam ha più ponti di Venezia (1281 contro 400) e più biciclette che abitanti. Ogni anno 25.000 bici vengono ripescate dai canali!' }
+      ],
+      'lisbon': [
+        { id: 'h1', title: 'Una delle Città più Antiche d\'Europa', description: 'Lisbona è più antica di Roma di 4 secoli. I Fenici la fondarono intorno al 1200 a.C. chiamandola Allis Ubbo ("porto sicuro"). Passò per Romani, Visigoti e 400 anni di dominio moresco.' },
+        { id: 'h2', title: 'L\'Era delle Scoperte', description: 'Da Lisbona partirono Vasco da Gama (rotta per l\'India, 1498) e le caravelle che scoprirono il Brasile. Il Portogallo divenne il primo impero globale. La Torre di Belém salutava le navi in partenza.' },
+        { id: 'h3', title: 'Il Terremoto del 1755', description: 'Il 1° novembre 1755, un terremoto di magnitudo 8.5 seguito da tsunami e incendi distrusse l\'85% di Lisbona, uccidendo 40.000 persone. Il Marchese di Pombal ricostruì la città con il primo piano urbanistico antisismico della storia.' },
+        { id: 'h4', title: 'Il Fado: Saudade in Musica', description: 'Il Fado, nato nei vicoli di Alfama nel XIX secolo, esprime la "saudade" - la malinconia portoghese per ciò che è perduto. Patrimonio UNESCO, si ascolta ancora nelle taverne tradizionali.' }
+      ],
+      // ===== AMERICHE =====
+      'newyork': [
+        { id: 'h1', title: 'Nuova Amsterdam', description: 'Nel 1626, gli olandesi comprarono Manhattan dai nativi Lenape per merci del valore di 60 fiorini (circa 1000$ attuali). Chiamarono l\'insediamento Nuova Amsterdam. Nel 1664 gli inglesi la conquistarono e la rinominarono New York.' },
+        { id: 'h2', title: 'Ellis Island e l\'Immigrazione', description: 'Tra il 1892 e il 1954, 12 milioni di immigrati entrarono in America attraverso Ellis Island. Italiani, irlandesi, ebrei, polacchi... costruirono la New York che conosciamo. Il 40% degli americani ha un antenato passato da qui.' },
+        { id: 'h3', title: 'I Grattacieli', description: 'New York inventò il grattacielo moderno. L\'Empire State Building (1931) fu costruito in soli 410 giorni durante la Grande Depressione. Oggi lo skyline conta oltre 7.000 edifici sopra i 7 piani.' },
+        { id: 'h4', title: '11 Settembre 2001', description: 'L\'attacco alle Torri Gemelle cambiò New York e il mondo. Oggi, al posto del World Trade Center, due enormi vasche d\'acqua recitano i nomi delle 2.977 vittime. Il One World Trade Center, alto 541 metri, simboleggia la rinascita.' }
+      ],
+      'buenosaires': [
+        { id: 'h1', title: 'La Parigi del Sudamerica', description: 'Buenos Aires fu fondata due volte: nel 1536 e definitivamente nel 1580. Arricchitasi con l\'esportazione di carne e grano, la classe alta costruì palazzi in stile parigino. Il Teatro Colón rivaleggia con La Scala di Milano.' },
+        { id: 'h2', title: 'L\'Immigrazione Italiana', description: 'Tra il 1880 e il 1930, milioni di italiani emigrarono in Argentina. Oggi il 60% dei porteños ha origini italiane. Il lunfardo (gergo di Buenos Aires) è pieno di parole italiane, e la pizza argentina è una tradizione.' },
+        { id: 'h3', title: 'Nascita del Tango', description: 'Il tango nacque nei conventillos (case popolari) della Boca e San Telmo alla fine del XIX secolo, dalla fusione di ritmi africani, italiani e creoli. Inizialmente considerato volgare, conquistò Parigi e poi il mondo.' },
+        { id: 'h4', title: 'Eva Perón', description: 'Evita, moglie del presidente Perón, è ancora venerata dai descamisados (poveri). Morì a 33 anni nel 1952. La sua tomba nel cimitero della Recoleta è meta di pellegrinaggio. "Non piangere per me, Argentina."' }
+      ],
+      // ===== OCEANIA =====
+      'sydney': [
+        { id: 'h1', title: 'La Prima Flotta', description: 'Il 26 gennaio 1788, 11 navi britanniche con 750 detenuti sbarcarono a Sydney Cove, fondando la prima colonia europea in Australia. Quella che era una colonia penale è diventata una delle città più vivibili del mondo.' },
+        { id: 'h2', title: 'Gli Eora: I Primi Abitanti', description: 'Gli aborigeni Eora vivevano nella baia di Sydney da 40.000 anni. La colonizzazione portò malattie e conflitti che decimarono la popolazione. Oggi l\'Australia riconosce questo passato con la "Welcome to Country" ceremony.' },
+        { id: 'h3', title: 'L\'Opera House', description: 'Progettata dal danese Jørn Utzon, l\'Opera House richiese 16 anni di costruzione (1957-1973) e costò 14 volte il budget iniziale. Utzon si dimise prima del completamento e non la vide mai finita. Oggi è Patrimonio UNESCO.' },
+        { id: 'h4', title: 'Le Olimpiadi del 2000', description: 'Le Olimpiadi di Sydney 2000 sono considerate le migliori di sempre. Cathy Freeman, aborigena, accese la fiamma olimpica e vinse i 400 metri. L\'Olympic Park è oggi un quartiere fiorente.' }
+      ]
+    };
+
+    return items[cityId] || [
       { id: 'h1', title: 'Origini', description: 'Le radici antiche di questa città affascinante.' },
       { id: 'h2', title: 'Curiosità', description: 'Fatti sorprendenti che non troverai sulle guide.' }
     ];
   }
 
   private generatePracticalItems(cityId: string): SectionItem[] {
-    return [
+    const items: Record<string, SectionItem[]> = {
+      'tokyo': [
+        { id: 'p1', title: 'Trasporti', description: 'La metro di Tokyo è puntualissima ma labirintica. Compra una Suica o Pasmo card per muoverti facilmente. I treni JR coprono le aree esterne. Il taxi è costoso ma utile di notte.' },
+        { id: 'p2', title: 'Lingua e Comunicazione', description: 'Pochi parlano inglese, ma i giapponesi sono gentilissimi. Google Translate con la fotocamera traduce i menu. Le indicazioni nelle stazioni sono in inglese.' },
+        { id: 'p3', title: 'Denaro e Pagamenti', description: 'Il Giappone ama il contante! Molti ristoranti e negozi non accettano carte. Gli ATM nei 7-Eleven funzionano con carte straniere.' },
+        { id: 'p4', title: 'Etichetta Giapponese', description: 'Non parlare al telefono sui treni. Togli le scarpe quando entri in case e alcuni ristoranti. Non lasciare mance: è considerato offensivo.' }
+      ],
+      'paris': [
+        { id: 'p1', title: 'Trasporti', description: 'La metro di Parigi ha 16 linee e arriva ovunque. Compra un carnet di 10 biglietti o la Paris Visite card. Attenzione ai borseggiatori nelle stazioni turistiche.' },
+        { id: 'p2', title: 'Orari dei Pasti', description: 'I francesi pranzano 12:00-14:00 e cenano dalle 19:30. Molti ristoranti chiudono tra i pasti. La domenica molti negozi sono chiusi.' },
+        { id: 'p3', title: 'Lingua', description: 'Saluta sempre con "Bonjour" prima di chiedere qualcosa. I parigini apprezzano lo sforzo, anche se poi passano all\'inglese.' },
+        { id: 'p4', title: 'Mance', description: 'Il servizio è incluso nel conto (service compris). Lasciare 1-2€ per un buon servizio è apprezzato ma non obbligatorio.' }
+      ],
+      'rome': [
+        { id: 'p1', title: 'Trasporti', description: 'Roma si gira bene a piedi: il centro è compatto. La metro ha solo 3 linee. Gli autobus sono lenti ma panoramici. Taxi solo quelli bianchi ufficiali.' },
+        { id: 'p2', title: 'Orari Italiani', description: 'La pausa pranzo è sacra: 13:00-15:30 molti negozi chiudono. I ristoranti servono pranzo 12:30-15:00, cena dalle 19:30. Mai ordinare cappuccino dopo le 11!' },
+        { id: 'p3', title: 'Prenotazioni', description: 'Prenota online Colosseo, Musei Vaticani e Galleria Borghese per evitare code di ore. La Roma Pass offre sconti e trasporti.' },
+        { id: 'p4', title: 'Acqua Potabile', description: 'I "nasoni" (fontanelle) di Roma offrono acqua fresca e potabile gratis. Porta una borraccia e riempila ovunque!' }
+      ],
+      'barcelona': [
+        { id: 'p1', title: 'Trasporti', description: 'La metro è efficiente e copre tutta la città. La T-Casual (10 viaggi) è il biglietto migliore. Il Bus Turístic collega le attrazioni principali.' },
+        { id: 'p2', title: 'Sicurezza', description: 'Barcellona ha problemi di borseggio. Attenzione sulla Rambla, in metro e in spiaggia. Usa borse a tracolla davanti e non lasciare nulla incustodito.' },
+        { id: 'p3', title: 'Orari Spagnoli', description: 'Gli spagnoli cenano tardi: i ristoranti aprono per cena alle 20:30-21:00. Il pranzo è alle 14:00. La domenica molti locali chiudono.' },
+        { id: 'p4', title: 'Lingua', description: 'Si parla catalano e castigliano. I locali apprezzano un "Bon dia" o "Gràcies". L\'inglese è diffuso nelle zone turistiche.' }
+      ],
+      'amsterdam': [
+        { id: 'p1', title: 'In Bicicletta', description: 'Amsterdam ha 400 km di piste ciclabili. Noleggia una bici e muoviti come un local. Attenzione ai tram e ai turisti che camminano sulle ciclabili!' },
+        { id: 'p2', title: 'Trasporti Pubblici', description: 'Compra la OV-chipkaart per tram, bus e metro. I biglietti cartacei costano di più. Il traghetto per Noord è gratuito.' },
+        { id: 'p3', title: 'Coffee Shop', description: 'I coffee shop vendono cannabis legalmente. Non si può fumare tabacco dentro. Chiedi sempre consiglio al banco se sei inesperto.' },
+        { id: 'p4', title: 'Quartiere a Luci Rosse', description: 'Il Red Light District è sicuro di giorno e di notte, ma non fotografare le vetrine: è vietato e irrispettoso. I tour guidati spiegano la storia.' }
+      ],
+      'lisbon': [
+        { id: 'p1', title: 'Trasporti', description: 'Il Tram 28 è iconico ma affollatissimo. La metro è moderna ed economica. La Lisboa Card include trasporti e musei. Le salite sono ripide: considera le funicolari!' },
+        { id: 'p2', title: 'Orari Portoghesi', description: 'Pranzo 12:30-14:30, cena dalle 20:00. Molti ristoranti chiudono tra i pasti. La domenica il centro è più tranquillo.' },
+        { id: 'p3', title: 'Denaro', description: 'Le carte sono accettate quasi ovunque, ma porta contanti per i negozi più piccoli e il Tram 28.' },
+        { id: 'p4', title: 'Sicurezza', description: 'Lisbona è molto sicura, ma attenzione ai borseggiatori sul Tram 28 e nella Baixa. Non lasciare oggetti in vista in auto.' }
+      ],
+      'newyork': [
+        { id: 'p1', title: 'Trasporti', description: 'La Subway funziona 24/7 ed è il modo più veloce per muoversi. Compra una MetroCard illimitata. Uber e Lyft sono ovunque. I taxi gialli sono iconici ma non economici.' },
+        { id: 'p2', title: 'Mance Obbligatorie', description: 'Negli USA le mance sono parte dello stipendio. Lascia 15-20% nei ristoranti, 1-2$ per drink nei bar, 1$ per bagaglio al portiere.' },
+        { id: 'p3', title: 'Dimensioni delle Porzioni', description: 'Le porzioni americane sono ENORMI. Un piatto può bastare per due. I refill delle bevande sono spesso gratuiti.' },
+        { id: 'p4', title: 'Prezzi + Tax', description: 'I prezzi esposti non includono la sales tax (8.875% a NYC). Al ristorante aggiungi anche la mancia. Lo scontrino sarà più alto del previsto!' }
+      ],
+      'dubai': [
+        { id: 'p1', title: 'Clima', description: 'L\'estate (maggio-settembre) è insopportabile: 45°C e umidità altissima. Visita da novembre ad aprile. L\'aria condizionata è ovunque, porta un cardigan.' },
+        { id: 'p2', title: 'Dress Code', description: 'Rispetta la cultura locale: spalle e ginocchia coperte nei luoghi pubblici (non in spiaggia o hotel). Nei mall e moschee vige un dress code moderato.' },
+        { id: 'p3', title: 'Alcol', description: 'L\'alcol si trova solo nei ristoranti degli hotel e nei bar con licenza. È costoso. Zero tolleranza per la guida in stato di ebbrezza.' },
+        { id: 'p4', title: 'Weekend Locale', description: 'Il weekend a Dubai è venerdì-sabato. Il venerdì è il giorno sacro musulmano. Domenica è un normale giorno lavorativo.' }
+      ],
+      'sydney': [
+        { id: 'p1', title: 'Trasporti', description: 'L\'Opal Card funziona su treni, bus, traghetti e light rail. Il traghetto per Manly è un\'attrazione turistica in sé!' },
+        { id: 'p2', title: 'Sole Australiano', description: 'Il sole australiano è fortissimo: crema solare SPF 50+, cappello e occhiali sono essenziali. "Slip, slop, slap!" è il mantra australiano.' },
+        { id: 'p3', title: 'Animali Pericolosi', description: 'Nuota tra le bandiere rosse e gialle sorvegliate dai lifeguard. Le meduse box jellyfish sono rare a Sydney ma esistono. I ragni sono più comuni degli squali.' },
+        { id: 'p4', title: 'Costo della Vita', description: 'Sydney è cara: un caffè costa 5-6 AUD, un pasto 20-30 AUD, una birra 10-12 AUD. I supermercati sono l\'opzione economica.' }
+      ]
+    };
+
+    return items[cityId] || [
       { id: 'p1', title: 'Come Muoversi', description: 'Trasporti pubblici, taxi e alternative.' },
       { id: 'p2', title: 'Documenti Necessari', description: 'Tutto quello che serve per entrare.' }
     ];
   }
 
   private generateIconicItems(cityId: string): SectionItem[] {
-    return [
+    const items: Record<string, SectionItem[]> = {
+      'tokyo': [
+        { id: 'i1', title: 'Tokyo Tower', description: 'Ispirata alla Torre Eiffel ma 13 metri più alta, la Tokyo Tower (333m) domina lo skyline dal 1958. Di notte si illumina di arancione o bianco a seconda della stagione.', image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=1200&q=80' },
+        { id: 'i2', title: 'Incrocio di Shibuya', description: 'L\'incrocio più fotografato del mondo: quando il semaforo diventa verde, fino a 3000 persone attraversano contemporaneamente da tutte le direzioni. Guardalo dall\'alto allo Starbucks.', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1200&q=80' },
+        { id: 'i3', title: 'Statua di Hachiko', description: 'Hachiko, il cane che aspettò il padrone defunto alla stazione di Shibuya per 9 anni, è diventato simbolo di lealtà. La sua statua è il punto d\'incontro più famoso di Tokyo.' }
+      ],
+      'paris': [
+        { id: 'i1', title: 'Torre Eiffel', description: 'La Dame de Fer fu costruita per l\'Expo 1889. Pesa 7.300 tonnellate e viene ridipinta ogni 7 anni con 60 tonnellate di vernice. Di notte scintilla per 5 minuti ogni ora.', image: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=1200&q=80' },
+        { id: 'i2', title: 'Arco di Trionfo', description: 'Napoleone lo commissionò nel 1806 per celebrare le vittorie militari. Sotto l\'arco arde la fiamma eterna del Milite Ignoto. La vista sui Champs-Élysées è indimenticabile.' },
+        { id: 'i3', title: 'Sacré-Cœur', description: 'La basilica bianca su Montmartre fu costruita dopo la sconfitta di Sedan (1870) come "espiazione". Il suo campanile ospita la Savoyarde, una delle campane più grandi del mondo.' }
+      ],
+      'rome': [
+        { id: 'i1', title: 'Colosseo', description: 'L\'Anfiteatro Flavio poteva ospitare 50.000 spettatori per i giochi dei gladiatori. Costruito in soli 8 anni (72-80 d.C.), usava un sistema di carrucole per far apparire animali dal sottosuolo.', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1200&q=80' },
+        { id: 'i2', title: 'Fontana di Trevi', description: 'Ogni giorno vengono lanciati circa 3000€ nella fontana. I soldi vengono raccolti ogni notte e donati alla Caritas. La tradizione dice che chi lancia una moneta tornerà a Roma.' },
+        { id: 'i3', title: 'Cupola di San Pietro', description: 'Progettata da Michelangelo, la cupola di San Pietro è la più grande del mondo (42m di diametro). Salire i 551 gradini regala una vista su tutta Roma.' }
+      ],
+      'barcelona': [
+        { id: 'i1', title: 'Sagrada Familia', description: 'Gaudí lavorò alla basilica per 43 anni, sapendo che non l\'avrebbe vista finita. Iniziata nel 1882, sarà completata nel 2026, centenario della sua morte. Le torri arriveranno a 172.5 metri.', image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=1200&q=80' },
+        { id: 'i2', title: 'Park Güell', description: 'Nato come città-giardino per 60 famiglie ricche, fu un flop commerciale. Oggi è il parco più visitato di Spagna: il drago di mosaico (El Drac) è il simbolo di Barcellona.' },
+        { id: 'i3', title: 'Casa Batlló', description: 'La "Casa delle Ossa" ha una facciata ondulata che ricorda il mare, con balconi a forma di teschio e un tetto a scaglie di drago. È il capolavoro domestico di Gaudí.' }
+      ],
+      'amsterdam': [
+        { id: 'i1', title: 'Canali (Grachtengordel)', description: 'I 165 canali di Amsterdam formano 90 isole collegate da 1281 ponti. Costruiti nel XVII secolo per drenare le paludi e trasportare merci, sono Patrimonio UNESCO dal 2010.', image: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=1200&q=80' },
+        { id: 'i2', title: 'Case Storte', description: 'Le case di Amsterdam sono strette e inclinate in avanti per design: facilitava il sollevamento delle merci con carrucole. Alcune si sono inclinate con il tempo, creando l\'effetto "ubriaco".' },
+        { id: 'i3', title: 'I Mulini a Vento di Zaanse Schans', description: 'A 20 minuti da Amsterdam, questi mulini del XVII secolo producevano olio, vernici e spezie. Oggi sono un museo vivente della tradizione olandese.' }
+      ],
+      'lisbon': [
+        { id: 'i1', title: 'Torre di Belém', description: 'Costruita nel 1515 per difendere l\'estuario del Tago, la torre in stile manuelino salutava le navi in partenza per le Indie. È il simbolo dell\'Era delle Scoperte.', image: 'https://images.unsplash.com/photo-1548707309-dcebeab9ea9b?w=1200&q=80' },
+        { id: 'i2', title: 'Tram 28', description: 'Il tram giallo del 1930 si arrampica per le strade strette di Alfama e Graça con pendenze del 13.5%. È una macchina del tempo che attraversa la Lisbona antica.' },
+        { id: 'i3', title: 'Elevador de Santa Justa', description: 'Questo ascensore neo-gotico del 1902, progettato da un allievo di Eiffel, collega la Baixa al Bairro Alto. La vista dalla terrazza in cima vale la coda.' }
+      ],
+      'newyork': [
+        { id: 'i1', title: 'Statua della Libertà', description: 'Dono della Francia nel 1886, Lady Liberty è alta 93 metri con il piedistallo. La sua corona ha 7 raggi che rappresentano i 7 continenti e oceani.', image: 'https://images.unsplash.com/photo-1503174971373-b1f69850bded?w=1200&q=80' },
+        { id: 'i2', title: 'Empire State Building', description: 'Per 40 anni fu l\'edificio più alto del mondo (443m). Costruito in 410 giorni durante la Depressione, impiegava 3.400 operai al giorno. King Kong lo scalò nel 1933.' },
+        { id: 'i3', title: 'Brooklyn Bridge', description: 'Completato nel 1883, fu il primo ponte sospeso in acciaio e il più lungo del mondo. Ci vollero 14 anni e la vita di 27 operai. La passeggiata al tramonto è magica.' }
+      ],
+      'dubai': [
+        { id: 'i1', title: 'Burj Khalifa', description: 'L\'edificio più alto del mondo (828m, 163 piani) svetta come un ago nel deserto. L\'ascensore più veloce (10 m/s) porta all\'osservatorio al 148° piano in 60 secondi.', image: 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80' },
+        { id: 'i2', title: 'Burj Al Arab', description: 'L\'unico hotel "7 stelle" al mondo (autoattribuito). A forma di vela, sorge su un\'isola artificiale. La suite reale costa 24.000$/notte.' },
+        { id: 'i3', title: 'The Dubai Fountain', description: 'La fontana danzante più grande del mondo: 150 metri di larghezza, getti alti 152 metri, 6600 luci. Ogni sera offre spettacoli gratuiti ogni 30 minuti.' }
+      ],
+      'sydney': [
+        { id: 'i1', title: 'Sydney Opera House', description: 'Le "vele" bianche del capolavoro di Jørn Utzon sono rivestite da 1.056.006 piastrelle svedesi autopulenti. L\'edificio ospita 1500 spettacoli all\'anno.', image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200&q=80' },
+        { id: 'i2', title: 'Sydney Harbour Bridge', description: 'La "gruccia" più famosa del mondo fu completata nel 1932. Puoi scalarla con BridgeClimb (134 metri sul mare) o attraversarla a piedi gratuitamente.' },
+        { id: 'i3', title: 'Bondi Beach', description: 'La spiaggia più iconica d\'Australia: surfisti, lifeguard in rosso e giallo, e la Bondi to Coogee coastal walk di 6 km con vista mozzafiato sull\'oceano.' }
+      ]
+    };
+
+    return items[cityId] || [
       { id: 'i1', title: 'Il Simbolo della Città', description: 'Il luogo che rappresenta l\'anima del posto.' }
     ];
   }

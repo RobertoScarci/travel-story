@@ -251,13 +251,6 @@ export interface TravelVideo {
                   <span class="tab-label">{{ section.title }}</span>
                 </button>
               }
-              <button 
-                class="nav-tab"
-                [class.active]="activeSection() === 'practical'"
-                (click)="setActiveSection('practical')">
-                <span class="tab-icon">📋</span>
-                <span class="tab-label">Info Pratiche</span>
-              </button>
             </div>
           </div>
         </nav>
