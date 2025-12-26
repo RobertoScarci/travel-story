@@ -402,40 +402,40 @@ export class CityService {
     const items: Record<string, SectionItem[]> = {
       // ===== ASIA =====
       'tokyo': [
-        { id: '1', title: 'Tempio Senso-ji', description: 'Il tempio più antico di Tokyo, un\'oasi di spiritualità nel cuore di Asakusa. La porta Kaminarimon con la sua lanterna rossa è iconica.', duration: '2-3 ore' },
-        { id: '2', title: 'Shibuya Crossing', description: 'L\'incrocio più trafficato del mondo: fino a 3000 persone lo attraversano ogni cambio di semaforo.', duration: '30 min' },
-        { id: '3', title: 'Meiji Shrine', description: 'Santuario shintoista dedicato all\'imperatore Meiji, immerso in una foresta di 100.000 alberi donati da tutto il Giappone.', duration: '1-2 ore' },
-        { id: '4', title: 'TeamLab Borderless', description: 'Museo d\'arte digitale immersivo dove le opere si muovono, interagiscono e sfumano l\'una nell\'altra.', duration: '3-4 ore', priceRange: '€€' },
-        { id: '5', title: 'Tokyo Skytree', description: 'La torre più alta del Giappone (634m) con vista a 360° sulla città fino al Monte Fuji.', duration: '2 ore', priceRange: '€€' },
-        { id: '6', title: 'Quartiere di Harajuku', description: 'Il centro della moda giovanile giapponese: Takeshita Street è un\'esplosione di colori e creatività.', duration: '2-3 ore' }
+        { id: '1', title: 'Tempio Senso-ji', description: 'Il tempio più antico di Tokyo, un\'oasi di spiritualità nel cuore di Asakusa. La porta Kaminarimon con la sua lanterna rossa è iconica.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800' },
+        { id: '2', title: 'Shibuya Crossing', description: 'L\'incrocio più trafficato del mondo: fino a 3000 persone lo attraversano ogni cambio di semaforo.', duration: '30 min', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800' },
+        { id: '3', title: 'Meiji Shrine', description: 'Santuario shintoista dedicato all\'imperatore Meiji, immerso in una foresta di 100.000 alberi donati da tutto il Giappone.', duration: '1-2 ore', image: 'https://images.unsplash.com/photo-1583766395091-2eb9994ed094?w=800' },
+        { id: '4', title: 'TeamLab Borderless', description: 'Museo d\'arte digitale immersivo dove le opere si muovono, interagiscono e sfumano l\'una nell\'altra.', duration: '3-4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=800' },
+        { id: '5', title: 'Tokyo Skytree', description: 'La torre più alta del Giappone (634m) con vista a 360° sulla città fino al Monte Fuji.', duration: '2 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800' },
+        { id: '6', title: 'Quartiere di Harajuku', description: 'Il centro della moda giovanile giapponese: Takeshita Street è un\'esplosione di colori e creatività.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1554797589-7241bb691973?w=800' }
       ],
       'kyoto': [
-        { id: '1', title: 'Fushimi Inari-Taisha', description: 'Il santuario dei 10.000 torii rossi che formano tunnel suggestivi lungo la montagna.', duration: '3-4 ore' },
-        { id: '2', title: 'Kinkaku-ji (Padiglione d\'Oro)', description: 'Tempio zen ricoperto di foglia d\'oro che si riflette perfettamente nel lago.', duration: '1-2 ore', priceRange: '€' },
-        { id: '3', title: 'Arashiyama Bamboo Grove', description: 'Passeggiata tra altissime canne di bambù che ondeggiano nel vento: pura magia.', duration: '2 ore' },
-        { id: '4', title: 'Quartiere di Gion', description: 'Il distretto delle geishe: case di legno tradizionali e possibili incontri con maiko.', duration: '2-3 ore' },
-        { id: '5', title: 'Tempio Kiyomizu-dera', description: 'Tempio UNESCO con terrazza in legno sospesa a 13 metri, costruito senza un solo chiodo.', duration: '2 ore', priceRange: '€' }
+        { id: '1', title: 'Fushimi Inari-Taisha', description: 'Il santuario dei 10.000 torii rossi che formano tunnel suggestivi lungo la montagna.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800' },
+        { id: '2', title: 'Kinkaku-ji (Padiglione d\'Oro)', description: 'Tempio zen ricoperto di foglia d\'oro che si riflette perfettamente nel lago.', duration: '1-2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800' },
+        { id: '3', title: 'Arashiyama Bamboo Grove', description: 'Passeggiata tra altissime canne di bambù che ondeggiano nel vento: pura magia.', duration: '2 ore', image: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800' },
+        { id: '4', title: 'Quartiere di Gion', description: 'Il distretto delle geishe: case di legno tradizionali e possibili incontri con maiko.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800' },
+        { id: '5', title: 'Tempio Kiyomizu-dera', description: 'Tempio UNESCO con terrazza in legno sospesa a 13 metri, costruito senza un solo chiodo.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800' }
       ],
       'bali': [
-        { id: '1', title: 'Tegallalang Rice Terraces', description: 'Iconiche risaie a terrazze verdi scolpite nella collina secondo il sistema subak millenario.', duration: '2-3 ore' },
-        { id: '2', title: 'Tempio di Tanah Lot', description: 'Tempio indù sul mare, spettacolare al tramonto quando la marea sale e lo isola.', duration: '2 ore', priceRange: '€' },
-        { id: '3', title: 'Ubud Monkey Forest', description: 'Foresta sacra con oltre 700 macachi e templi antichi avvolti dalle radici degli alberi.', duration: '2 ore', priceRange: '€' },
-        { id: '4', title: 'Tempio Uluwatu', description: 'Tempio arroccato su una scogliera a picco sull\'oceano, famoso per la danza Kecak al tramonto.', duration: '3 ore', priceRange: '€' },
-        { id: '5', title: 'Gates of Heaven (Lempuyang)', description: 'Il famoso portale con vista sul vulcano Agung: la foto più instagrammata di Bali.', duration: '4 ore' }
+        { id: '1', title: 'Tegallalang Rice Terraces', description: 'Iconiche risaie a terrazze verdi scolpite nella collina secondo il sistema subak millenario.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800' },
+        { id: '2', title: 'Tempio di Tanah Lot', description: 'Tempio indù sul mare, spettacolare al tramonto quando la marea sale e lo isola.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?w=800' },
+        { id: '3', title: 'Ubud Monkey Forest', description: 'Foresta sacra con oltre 700 macachi e templi antichi avvolti dalle radici degli alberi.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800' },
+        { id: '4', title: 'Tempio Uluwatu', description: 'Tempio arroccato su una scogliera a picco sull\'oceano, famoso per la danza Kecak al tramonto.', duration: '3 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800' },
+        { id: '5', title: 'Gates of Heaven (Lempuyang)', description: 'Il famoso portale con vista sul vulcano Agung: la foto più instagrammata di Bali.', duration: '4 ore', image: 'https://images.unsplash.com/photo-1604922824961-87cefb2e4b07?w=800' }
       ],
       'bangkok': [
-        { id: '1', title: 'Grand Palace', description: 'L\'abbagliante residenza reale: 200.000 mq di templi dorati e architettura thai.', duration: '3-4 ore', priceRange: '€€' },
-        { id: '2', title: 'Wat Arun', description: 'Il Tempio dell\'Alba decorato con porcellane cinesi che brillano al sole.', duration: '1-2 ore', priceRange: '€' },
-        { id: '3', title: 'Wat Pho', description: 'Casa del Buddha sdraiato di 46 metri coperto d\'oro e scuola storica di massaggio thai.', duration: '2 ore', priceRange: '€' },
-        { id: '4', title: 'Mercato galleggiante Damnoen Saduak', description: 'Venditori su barchette vendono frutta, cibo e souvenir lungo i canali.', duration: '4 ore' },
-        { id: '5', title: 'Chatuchak Weekend Market', description: 'Uno dei mercati più grandi del mondo: 15.000 bancarelle su 35 acri.', duration: '4-5 ore' }
+        { id: '1', title: 'Grand Palace', description: 'L\'abbagliante residenza reale: 200.000 mq di templi dorati e architettura thai.', duration: '3-4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800' },
+        { id: '2', title: 'Wat Arun', description: 'Il Tempio dell\'Alba decorato con porcellane cinesi che brillano al sole.', duration: '1-2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1506665531195-3566af2b4dfa?w=800' },
+        { id: '3', title: 'Wat Pho', description: 'Casa del Buddha sdraiato di 46 metri coperto d\'oro e scuola storica di massaggio thai.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800' },
+        { id: '4', title: 'Mercato galleggiante Damnoen Saduak', description: 'Venditori su barchette vendono frutta, cibo e souvenir lungo i canali.', duration: '4 ore', image: 'https://images.unsplash.com/photo-1552829327-fc95d43fbc13?w=800' },
+        { id: '5', title: 'Chatuchak Weekend Market', description: 'Uno dei mercati più grandi del mondo: 15.000 bancarelle su 35 acri.', duration: '4-5 ore', image: 'https://images.unsplash.com/photo-1559628233-100c798642d4?w=800' }
       ],
       'singapore': [
-        { id: '1', title: 'Gardens by the Bay', description: 'Giardini futuristici con Supertree di 50 metri, Cloud Forest e Flower Dome.', duration: '4-5 ore', priceRange: '€€' },
-        { id: '2', title: 'Marina Bay Sands', description: 'L\'iconico hotel con la nave sul tetto e l\'infinity pool più alta del mondo.', duration: '2-3 ore', priceRange: '€€€' },
-        { id: '3', title: 'Hawker Centres', description: 'Templi del cibo dove assaggiare la cucina di strada stellata Michelin a pochi euro.', duration: '2 ore', priceRange: '€' },
-        { id: '4', title: 'Chinatown & Little India', description: 'Due quartieri etnici vibranti con templi, mercati e cibo autentico.', duration: '3-4 ore' },
-        { id: '5', title: 'Sentosa Island', description: 'Isola del divertimento con spiagge, Universal Studios e S.E.A. Aquarium.', duration: '1 giorno', priceRange: '€€€' }
+        { id: '1', title: 'Gardens by the Bay', description: 'Giardini futuristici con Supertree di 50 metri, Cloud Forest e Flower Dome.', duration: '4-5 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800' },
+        { id: '2', title: 'Marina Bay Sands', description: 'L\'iconico hotel con la nave sul tetto e l\'infinity pool più alta del mondo.', duration: '2-3 ore', priceRange: '€€€', image: 'https://images.unsplash.com/photo-1508062878650-88b52897f298?w=800' },
+        { id: '3', title: 'Hawker Centres', description: 'Templi del cibo dove assaggiare la cucina di strada stellata Michelin a pochi euro.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800' },
+        { id: '4', title: 'Chinatown & Little India', description: 'Due quartieri etnici vibranti con templi, mercati e cibo autentico.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=800' },
+        { id: '5', title: 'Sentosa Island', description: 'Isola del divertimento con spiagge, Universal Studios e S.E.A. Aquarium.', duration: '1 giorno', priceRange: '€€€', image: 'https://images.unsplash.com/photo-1574227492706-f65b24c3688a?w=800' }
       ],
       'seoul': [
         { id: '1', title: 'Gyeongbokgung Palace', description: 'Il più grande dei Cinque Palazzi Reali, con cambio della guardia coreana.', duration: '3 ore', priceRange: '€' },
@@ -452,52 +452,52 @@ export class CityService {
         { id: '5', title: 'Water Puppet Theatre', description: 'Arte tradizionale di marionette sull\'acqua: spettacolo unico al mondo.', duration: '1 ora', priceRange: '€' }
       ],
       'dubai': [
-        { id: '1', title: 'Burj Khalifa', description: 'L\'edificio più alto del mondo (828m): la vista dal 148° piano toglie il fiato.', duration: '2-3 ore', priceRange: '€€€' },
-        { id: '2', title: 'Dubai Mall', description: 'Il centro commerciale più grande del mondo con acquario, pista di pattinaggio e 1200 negozi.', duration: '4-5 ore' },
-        { id: '3', title: 'Palm Jumeirah', description: 'L\'isola artificiale a forma di palma visibile dallo spazio.', duration: '3-4 ore' },
-        { id: '4', title: 'Dubai Marina', description: 'Grattacieli futuristici lungo un canale artificiale con yacht di lusso.', duration: '2-3 ore' },
-        { id: '5', title: 'Souq dell\'Oro e delle Spezie', description: 'I mercati tradizionali: tonnellate d\'oro in vetrina e spezie profumate.', duration: '2 ore' },
-        { id: '6', title: 'Safari nel deserto', description: 'Dune bashing, cena beduina, danze del ventre sotto le stelle.', duration: '6 ore', priceRange: '€€' }
+        { id: '1', title: 'Burj Khalifa', description: 'L\'edificio più alto del mondo (828m): la vista dal 148° piano toglie il fiato.', duration: '2-3 ore', priceRange: '€€€', image: 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800' },
+        { id: '2', title: 'Dubai Mall', description: 'Il centro commerciale più grande del mondo con acquario, pista di pattinaggio e 1200 negozi.', duration: '4-5 ore', image: 'https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?w=800' },
+        { id: '3', title: 'Palm Jumeirah', description: 'L\'isola artificiale a forma di palma visibile dallo spazio.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=800' },
+        { id: '4', title: 'Dubai Marina', description: 'Grattacieli futuristici lungo un canale artificiale con yacht di lusso.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800' },
+        { id: '5', title: 'Souq dell\'Oro e delle Spezie', description: 'I mercati tradizionali: tonnellate d\'oro in vetrina e spezie profumate.', duration: '2 ore', image: 'https://images.unsplash.com/photo-1548786811-dd6e453ccca7?w=800' },
+        { id: '6', title: 'Safari nel deserto', description: 'Dune bashing, cena beduina, danze del ventre sotto le stelle.', duration: '6 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=800' }
       ],
       // ===== EUROPA =====
       'lisbon': [
-        { id: '1', title: 'Torre di Belém', description: 'Fortezza manuelina del 1515, simbolo dell\'era delle grandi scoperte portoghesi.', duration: '1 ora', priceRange: '€' },
-        { id: '2', title: 'Alfama', description: 'Il quartiere più antico: vicoli medievali, case di fado, azulejos e panni stesi.', duration: '3-4 ore' },
-        { id: '3', title: 'Monastero dos Jerónimos', description: 'Capolavoro gotico-manuelino, riposo di Vasco da Gama. Patrimonio UNESCO.', duration: '2 ore', priceRange: '€' },
-        { id: '4', title: 'Tram 28', description: 'Il tram giallo storico che arranca per i sette colli: attrazione in sé.', duration: '1 ora', priceRange: '€' },
-        { id: '5', title: 'LX Factory', description: 'Ex fabbrica trasformata in hub creativo: ristoranti, libreria, street art.', duration: '2-3 ore' }
+        { id: '1', title: 'Torre di Belém', description: 'Fortezza manuelina del 1515, simbolo dell\'era delle grandi scoperte portoghesi.', duration: '1 ora', priceRange: '€', image: 'https://images.unsplash.com/photo-1548707309-dcebeab9ea9b?w=800' },
+        { id: '2', title: 'Alfama', description: 'Il quartiere più antico: vicoli medievali, case di fado, azulejos e panni stesi.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800' },
+        { id: '3', title: 'Monastero dos Jerónimos', description: 'Capolavoro gotico-manuelino, riposo di Vasco da Gama. Patrimonio UNESCO.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1580323956656-26bbb7b4e25a?w=800' },
+        { id: '4', title: 'Tram 28', description: 'Il tram giallo storico che arranca per i sette colli: attrazione in sé.', duration: '1 ora', priceRange: '€', image: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800' },
+        { id: '5', title: 'LX Factory', description: 'Ex fabbrica trasformata in hub creativo: ristoranti, libreria, street art.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1588860939990-56dc0a5d0785?w=800' }
       ],
       'barcelona': [
-        { id: '1', title: 'Sagrada Familia', description: 'Il capolavoro incompiuto di Gaudí: iniziato nel 1882, previsto completamento 2026.', duration: '2-3 ore', priceRange: '€€' },
-        { id: '2', title: 'Park Güell', description: 'Giardino pubblico con mosaici colorati e salamandra iconica di Gaudí.', duration: '2-3 ore', priceRange: '€' },
-        { id: '3', title: 'La Rambla', description: 'Il viale pedonale più famoso della Spagna: artisti di strada, mercato e caos.', duration: '1-2 ore' },
-        { id: '4', title: 'Barrio Gótico', description: 'Quartiere medievale con la Cattedrale, piazze nascoste e tapas bar autentici.', duration: '3 ore' },
-        { id: '5', title: 'Casa Batlló', description: 'La casa del drago di Gaudí: facciata ondulata, balconi-teschi, interni surreali.', duration: '1-2 ore', priceRange: '€€' },
-        { id: '6', title: 'Barceloneta Beach', description: 'La spiaggia urbana più famosa: paella, sangria e beach volley.', duration: '4 ore' }
+        { id: '1', title: 'Sagrada Familia', description: 'Il capolavoro incompiuto di Gaudí: iniziato nel 1882, previsto completamento 2026.', duration: '2-3 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800' },
+        { id: '2', title: 'Park Güell', description: 'Giardino pubblico con mosaici colorati e salamandra iconica di Gaudí.', duration: '2-3 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=800' },
+        { id: '3', title: 'La Rambla', description: 'Il viale pedonale più famoso della Spagna: artisti di strada, mercato e caos.', duration: '1-2 ore', image: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800' },
+        { id: '4', title: 'Barrio Gótico', description: 'Quartiere medievale con la Cattedrale, piazze nascoste e tapas bar autentici.', duration: '3 ore', image: 'https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800' },
+        { id: '5', title: 'Casa Batlló', description: 'La casa del drago di Gaudí: facciata ondulata, balconi-teschi, interni surreali.', duration: '1-2 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1564221710304-0b37c8b9d729?w=800' },
+        { id: '6', title: 'Barceloneta Beach', description: 'La spiaggia urbana più famosa: paella, sangria e beach volley.', duration: '4 ore', image: 'https://images.unsplash.com/photo-1507619579562-f2e10da1ec86?w=800' }
       ],
       'paris': [
-        { id: '1', title: 'Tour Eiffel', description: 'La Dame de Fer: 330 metri, 18.000 pezzi metallici, 7 milioni di visitatori/anno.', duration: '2-3 ore', priceRange: '€€' },
-        { id: '2', title: 'Museo del Louvre', description: 'Il museo più visitato al mondo: Monna Lisa, Venere di Milo e 380.000 opere.', duration: '4-6 ore', priceRange: '€€' },
-        { id: '3', title: 'Montmartre', description: 'La collina degli artisti: Sacré-Cœur, pittori in Place du Tertre, cabaret.', duration: '3-4 ore' },
-        { id: '4', title: 'Champs-Élysées', description: 'Il viale più bello del mondo: dall\'Arco di Trionfo a Place de la Concorde.', duration: '2-3 ore' },
-        { id: '5', title: 'Notre-Dame', description: 'La cattedrale gotica in restauro dopo l\'incendio 2019. Cantiere storico visibile.', duration: '1 ora' },
-        { id: '6', title: 'Musée d\'Orsay', description: 'Stazione ferroviaria trasformata in tempio dell\'Impressionismo: Monet, Renoir, Van Gogh.', duration: '3-4 ore', priceRange: '€€' }
+        { id: '1', title: 'Tour Eiffel', description: 'La Dame de Fer: 330 metri, 18.000 pezzi metallici, 7 milioni di visitatori/anno.', duration: '2-3 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800' },
+        { id: '2', title: 'Museo del Louvre', description: 'Il museo più visitato al mondo: Monna Lisa, Venere di Milo e 380.000 opere.', duration: '4-6 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800' },
+        { id: '3', title: 'Montmartre', description: 'La collina degli artisti: Sacré-Cœur, pittori in Place du Tertre, cabaret.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=800' },
+        { id: '4', title: 'Champs-Élysées', description: 'Il viale più bello del mondo: dall\'Arco di Trionfo a Place de la Concorde.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1509439581779-6298f75bf6e5?w=800' },
+        { id: '5', title: 'Notre-Dame', description: 'La cattedrale gotica in restauro dopo l\'incendio 2019. Cantiere storico visibile.', duration: '1 ora', image: 'https://images.unsplash.com/photo-1478391679764-b2d8b3cd1e94?w=800' },
+        { id: '6', title: 'Musée d\'Orsay', description: 'Stazione ferroviaria trasformata in tempio dell\'Impressionismo: Monet, Renoir, Van Gogh.', duration: '3-4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1591289009723-aef0a1a8a211?w=800' }
       ],
       'rome': [
-        { id: '1', title: 'Colosseo', description: 'L\'anfiteatro dei gladiatori: 50.000 spettatori, 2000 anni di storia.', duration: '2-3 ore', priceRange: '€€' },
-        { id: '2', title: 'Fontana di Trevi', description: 'Lancia una moneta e tornerai a Roma. 3000€ al giorno finiscono in beneficenza.', duration: '30 min' },
-        { id: '3', title: 'Musei Vaticani e Cappella Sistina', description: 'Michelangelo, Raffaello e 2000 anni di arte sacra. Il soffitto è indimenticabile.', duration: '4-5 ore', priceRange: '€€' },
-        { id: '4', title: 'Pantheon', description: 'Tempio di 2000 anni con la cupola in calcestruzzo non armato più grande del mondo.', duration: '1 ora' },
-        { id: '5', title: 'Trastevere', description: 'Il quartiere più romano di Roma: vicoli acciottolati, trattorie, movida notturna.', duration: '3-4 ore' },
-        { id: '6', title: 'Fori Imperiali', description: 'Passeggiata tra le rovine del centro politico dell\'Impero Romano.', duration: '2 ore', priceRange: '€' }
+        { id: '1', title: 'Colosseo', description: 'L\'anfiteatro dei gladiatori: 50.000 spettatori, 2000 anni di storia.', duration: '2-3 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800' },
+        { id: '2', title: 'Fontana di Trevi', description: 'Lancia una moneta e tornerai a Roma. 3000€ al giorno finiscono in beneficenza.', duration: '30 min', image: 'https://images.unsplash.com/photo-1525874684015-58379d421a52?w=800' },
+        { id: '3', title: 'Musei Vaticani e Cappella Sistina', description: 'Michelangelo, Raffaello e 2000 anni di arte sacra. Il soffitto è indimenticabile.', duration: '4-5 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800' },
+        { id: '4', title: 'Pantheon', description: 'Tempio di 2000 anni con la cupola in calcestruzzo non armato più grande del mondo.', duration: '1 ora', image: 'https://images.unsplash.com/photo-1548585744-eed1b5f28f01?w=800' },
+        { id: '5', title: 'Trastevere', description: 'Il quartiere più romano di Roma: vicoli acciottolati, trattorie, movida notturna.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1529260830199-42c24126f198?w=800' },
+        { id: '6', title: 'Fori Imperiali', description: 'Passeggiata tra le rovine del centro politico dell\'Impero Romano.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1555992828-ca4dbe41d294?w=800' }
       ],
       'amsterdam': [
-        { id: '1', title: 'Rijksmuseum', description: 'Il museo nazionale: Rembrandt, Vermeer e 8000 oggetti del Secolo d\'Oro.', duration: '3-4 ore', priceRange: '€€' },
-        { id: '2', title: 'Casa di Anna Frank', description: 'Il rifugio segreto dove Anne scrisse il diario. Prenota mesi prima.', duration: '1-2 ore', priceRange: '€' },
-        { id: '3', title: 'Van Gogh Museum', description: 'La più grande collezione al mondo di Van Gogh: 200 dipinti, 500 disegni.', duration: '2-3 ore', priceRange: '€€' },
-        { id: '4', title: 'Canali (Grachten)', description: 'UNESCO: 165 canali, 1500 ponti, case storte del XVII secolo.', duration: '2-3 ore' },
-        { id: '5', title: 'Vondelpark', description: 'Il Central Park di Amsterdam: picnic, concerti, relax tra i tulipani.', duration: '2 ore' },
-        { id: '6', title: 'Jordaan', description: 'Quartiere bohémien con gallerie, vintage shop, café e bruin cafe storici.', duration: '2-3 ore' }
+        { id: '1', title: 'Rijksmuseum', description: 'Il museo nazionale: Rembrandt, Vermeer e 8000 oggetti del Secolo d\'Oro.', duration: '3-4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=800' },
+        { id: '2', title: 'Casa di Anna Frank', description: 'Il rifugio segreto dove Anne scrisse il diario. Prenota mesi prima.', duration: '1-2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1584003564911-a5e1e7bfe3da?w=800' },
+        { id: '3', title: 'Van Gogh Museum', description: 'La più grande collezione al mondo di Van Gogh: 200 dipinti, 500 disegni.', duration: '2-3 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1617391654483-79f7b6d6f1b6?w=800' },
+        { id: '4', title: 'Canali (Grachten)', description: 'UNESCO: 165 canali, 1500 ponti, case storte del XVII secolo.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800' },
+        { id: '5', title: 'Vondelpark', description: 'Il Central Park di Amsterdam: picnic, concerti, relax tra i tulipani.', duration: '2 ore', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800' },
+        { id: '6', title: 'Jordaan', description: 'Quartiere bohémien con gallerie, vintage shop, café e bruin cafe storici.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1576924542622-772e0a02a6b2?w=800' }
       ],
       'prague': [
         { id: '1', title: 'Ponte Carlo', description: '30 statue barocche sorvegliano il ponte gotico più romantico d\'Europa. Vai all\'alba.', duration: '1-2 ore' },
@@ -580,12 +580,12 @@ export class CityService {
       ],
       // ===== NORD AMERICA =====
       'newyork': [
-        { id: '1', title: 'Statua della Libertà', description: 'Lady Liberty accoglie il mondo dal 1886: corona accessibile con prenotazione.', duration: '4 ore', priceRange: '€€' },
-        { id: '2', title: 'Central Park', description: '341 ettari di verde: il polmone di Manhattan con zoo, lago e Strawberry Fields.', duration: '3-4 ore' },
-        { id: '3', title: 'Times Square', description: 'L\'incrocio più famoso del mondo: neon, Broadway, l\'America che non dorme.', duration: '1-2 ore' },
-        { id: '4', title: 'Metropolitan Museum', description: 'Uno dei musei più grandi del mondo: 2 milioni di opere su 5000 anni.', duration: '5-6 ore', priceRange: '€€' },
-        { id: '5', title: 'Brooklyn Bridge', description: 'Attraversa a piedi il ponte iconico: vista sullo skyline al tramonto.', duration: '1 ora' },
-        { id: '6', title: '9/11 Memorial', description: 'Due piscine dove sorgevano le Torri Gemelle: omaggio toccante alle vittime.', duration: '2 ore' }
+        { id: '1', title: 'Statua della Libertà', description: 'Lady Liberty accoglie il mondo dal 1886: corona accessibile con prenotazione.', duration: '4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1503174971373-b1f69850bded?w=800' },
+        { id: '2', title: 'Central Park', description: '341 ettari di verde: il polmone di Manhattan con zoo, lago e Strawberry Fields.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800' },
+        { id: '3', title: 'Times Square', description: 'L\'incrocio più famoso del mondo: neon, Broadway, l\'America che non dorme.', duration: '1-2 ore', image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800' },
+        { id: '4', title: 'Metropolitan Museum', description: 'Uno dei musei più grandi del mondo: 2 milioni di opere su 5000 anni.', duration: '5-6 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1575223970966-76ae61ee7838?w=800' },
+        { id: '5', title: 'Brooklyn Bridge', description: 'Attraversa a piedi il ponte iconico: vista sullo skyline al tramonto.', duration: '1 ora', image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800' },
+        { id: '6', title: '9/11 Memorial', description: 'Due piscine dove sorgevano le Torri Gemelle: omaggio toccante alle vittime.', duration: '2 ore', image: 'https://images.unsplash.com/photo-1534270804882-6b5048b1c1fc?w=800' }
       ],
       'losangeles': [
         { id: '1', title: 'Hollywood Walk of Fame', description: '2600+ stelle sui marciapiedi: cerca quelle dei tuoi divi preferiti.', duration: '2 ore' },
@@ -658,11 +658,11 @@ export class CityService {
       ],
       // ===== OCEANIA =====
       'sydney': [
-        { id: '1', title: 'Sydney Opera House', description: 'Capolavoro di Utzon patrimonio UNESCO: visita guidata o meglio, assisti a uno spettacolo.', duration: '2-3 ore', priceRange: '€-€€€' },
-        { id: '2', title: 'Harbour Bridge', description: 'Arrampicati sulla "gruccia" per la vista: BridgeClimb è un\'esperienza unica.', duration: '3 ore', priceRange: '€€€' },
-        { id: '3', title: 'Bondi Beach', description: 'La spiaggia più iconica d\'Australia: surf, Icebergs Pool, Bondi to Coogee walk.', duration: '4 ore' },
-        { id: '4', title: 'The Rocks', description: 'Il quartiere più antico: mercatini del weekend, pub storici, street art.', duration: '2-3 ore' },
-        { id: '5', title: 'Taronga Zoo', description: 'Zoo con vista sull\'Opera: koala, canguri, ornitorinco. Arriva in traghetto!', duration: '4 ore', priceRange: '€€' }
+        { id: '1', title: 'Sydney Opera House', description: 'Capolavoro di Utzon patrimonio UNESCO: visita guidata o meglio, assisti a uno spettacolo.', duration: '2-3 ore', priceRange: '€-€€€', image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800' },
+        { id: '2', title: 'Harbour Bridge', description: 'Arrampicati sulla "gruccia" per la vista: BridgeClimb è un\'esperienza unica.', duration: '3 ore', priceRange: '€€€', image: 'https://images.unsplash.com/photo-1524293581917-878a6d017c71?w=800' },
+        { id: '3', title: 'Bondi Beach', description: 'La spiaggia più iconica d\'Australia: surf, Icebergs Pool, Bondi to Coogee walk.', duration: '4 ore', image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=800' },
+        { id: '4', title: 'The Rocks', description: 'Il quartiere più antico: mercatini del weekend, pub storici, street art.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1528072164453-f4e8ef0d475a?w=800' },
+        { id: '5', title: 'Taronga Zoo', description: 'Zoo con vista sull\'Opera: koala, canguri, ornitorinco. Arriva in traghetto!', duration: '4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=800' }
       ],
       'melbourne': [
         { id: '1', title: 'Laneways & Street Art', description: 'Hosier Lane, AC/DC Lane: labirinto di vicoli pieni di graffiti e caffè nascosti.', duration: '3-4 ore' },
@@ -696,11 +696,11 @@ export class CityService {
     const items: Record<string, SectionItem[]> = {
       // ===== ASIA =====
       'tokyo': [
-        { id: 'e1', title: 'Ramen a Shinjuku', description: 'Omoide Yokocho: vicoli fumosi pieni di izakaya con ramen tonkotsu cremoso.', priceRange: '€', location: 'Shinjuku' },
-        { id: 'e2', title: 'Sushi al Tsukiji Outer Market', description: 'Il pesce più fresco del mondo servito all\'alba. Prova l\'omakase!', priceRange: '€€', location: 'Tsukiji' },
-        { id: 'e3', title: 'Kaiseki a Ginza', description: 'Alta cucina giapponese stagionale: ogni portata è un\'opera d\'arte.', priceRange: '€€€€', location: 'Ginza' },
-        { id: 'e4', title: 'Street food a Yanaka', description: 'Quartiere vecchia Tokyo: senbei artigianali, taiyaki, mochi appena fatto.', priceRange: '€', location: 'Yanaka' },
-        { id: 'e5', title: 'Tempura Kondo', description: '2 stelle Michelin: la tempura leggera come aria, croccante come vetro.', priceRange: '€€€€', location: 'Ginza' }
+        { id: 'e1', title: 'Ramen a Shinjuku', description: 'Omoide Yokocho: vicoli fumosi pieni di izakaya con ramen tonkotsu cremoso.', priceRange: '€', location: 'Shinjuku', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800' },
+        { id: 'e2', title: 'Sushi al Tsukiji Outer Market', description: 'Il pesce più fresco del mondo servito all\'alba. Prova l\'omakase!', priceRange: '€€', location: 'Tsukiji', image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800' },
+        { id: 'e3', title: 'Kaiseki a Ginza', description: 'Alta cucina giapponese stagionale: ogni portata è un\'opera d\'arte.', priceRange: '€€€€', location: 'Ginza', image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=800' },
+        { id: 'e4', title: 'Street food a Yanaka', description: 'Quartiere vecchia Tokyo: senbei artigianali, taiyaki, mochi appena fatto.', priceRange: '€', location: 'Yanaka', image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800' },
+        { id: 'e5', title: 'Tempura Kondo', description: '2 stelle Michelin: la tempura leggera come aria, croccante come vetro.', priceRange: '€€€€', location: 'Ginza', image: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=800' }
       ],
       'kyoto': [
         { id: 'e1', title: 'Kaiseki tradizionale', description: 'La cucina dei monaci zen: estetica, stagionalità, ingredienti locali.', priceRange: '€€€-€€€€', location: 'Gion' },
@@ -749,30 +749,30 @@ export class CityService {
       ],
       // ===== EUROPA =====
       'lisbon': [
-        { id: 'e1', title: 'Pastéis de Belém', description: 'L\'originale pastel de nata dal 1837: crema, sfoglia, zucchero a velo.', priceRange: '€', location: 'Belém' },
-        { id: 'e2', title: 'Time Out Market', description: 'Food hall con i migliori chef portoghesi: assaggia tutto!', priceRange: '€€', location: 'Cais do Sodré' },
-        { id: 'e3', title: 'Cervejaria Ramiro', description: 'Frutti di mare alla griglia: gamberi, percebes, santola. Prenota!', priceRange: '€€€', location: 'Intendente' },
-        { id: 'e4', title: 'Tascas in Alfama', description: 'Trattorie a gestione familiare: bacalhau, bifana, ginjinha.', priceRange: '€', location: 'Alfama' }
+        { id: 'e1', title: 'Pastéis de Belém', description: 'L\'originale pastel de nata dal 1837: crema, sfoglia, zucchero a velo.', priceRange: '€', location: 'Belém', image: 'https://images.unsplash.com/photo-1511861621813-e4c3f6dfc622?w=800' },
+        { id: 'e2', title: 'Time Out Market', description: 'Food hall con i migliori chef portoghesi: assaggia tutto!', priceRange: '€€', location: 'Cais do Sodré', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800' },
+        { id: 'e3', title: 'Cervejaria Ramiro', description: 'Frutti di mare alla griglia: gamberi, percebes, santola. Prenota!', priceRange: '€€€', location: 'Intendente', image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800' },
+        { id: 'e4', title: 'Tascas in Alfama', description: 'Trattorie a gestione familiare: bacalhau, bifana, ginjinha.', priceRange: '€', location: 'Alfama', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800' }
       ],
       'barcelona': [
-        { id: 'e1', title: 'Mercato de la Boqueria', description: 'Paradiso gastronomico dal 1217: frutti di mare, jamón, succhi freschi.', priceRange: '€-€€', location: 'La Rambla' },
-        { id: 'e2', title: 'Tapas al Barri Gòtic', description: 'Bar Cañete, Quimet y Quimet: patatas bravas, croquetas, anchoas.', priceRange: '€€', location: 'Barri Gòtic' },
-        { id: 'e3', title: 'Paella a Barceloneta', description: 'La paella sul mare: Can Paixano per cava e tapas, Can Majó per paella.', priceRange: '€€', location: 'Barceloneta' },
-        { id: 'e4', title: 'Tickets (Albert Adrià)', description: 'Tapas creative del fratello di Ferran: esperienza stellata giocosa.', priceRange: '€€€€', location: 'Poble Sec' }
+        { id: 'e1', title: 'Mercato de la Boqueria', description: 'Paradiso gastronomico dal 1217: frutti di mare, jamón, succhi freschi.', priceRange: '€-€€', location: 'La Rambla', image: 'https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=800' },
+        { id: 'e2', title: 'Tapas al Barri Gòtic', description: 'Bar Cañete, Quimet y Quimet: patatas bravas, croquetas, anchoas.', priceRange: '€€', location: 'Barri Gòtic', image: 'https://images.unsplash.com/photo-1515443961218-a51367888e4b?w=800' },
+        { id: 'e3', title: 'Paella a Barceloneta', description: 'La paella sul mare: Can Paixano per cava e tapas, Can Majó per paella.', priceRange: '€€', location: 'Barceloneta', image: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=800' },
+        { id: 'e4', title: 'Tickets (Albert Adrià)', description: 'Tapas creative del fratello di Ferran: esperienza stellata giocosa.', priceRange: '€€€€', location: 'Poble Sec', image: 'https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?w=800' }
       ],
       'paris': [
-        { id: 'e1', title: 'Croissant da Du Pain et des Idées', description: 'La boulangerie più fotogenica: pain des amis, escargot pistache.', priceRange: '€', location: 'Canal Saint-Martin' },
-        { id: 'e2', title: 'Bistrot classico', description: 'Steak frites, coq au vin, crème brûlée: Le Comptoir, Chez l\'Ami Jean.', priceRange: '€€-€€€', location: 'Saint-Germain' },
-        { id: 'e3', title: 'Formaggi da Fromagerie Laurent Dubois', description: 'MOF (Migliori Artigiani di Francia): 200 formaggi affinati.', priceRange: '€€', location: 'Maubert' },
-        { id: 'e4', title: 'Café de Flore', description: 'Il caffè dove Sartre e Beauvoir scrivevano: caffè, croque-monsieur, storia.', priceRange: '€€', location: 'Saint-Germain' },
-        { id: 'e5', title: 'Rue Mouffetard food market', description: 'Mercato di quartiere storico: ostriche, crêpes, vino naturale.', priceRange: '€', location: '5ème' }
+        { id: 'e1', title: 'Croissant da Du Pain et des Idées', description: 'La boulangerie più fotogenica: pain des amis, escargot pistache.', priceRange: '€', location: 'Canal Saint-Martin', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800' },
+        { id: 'e2', title: 'Bistrot classico', description: 'Steak frites, coq au vin, crème brûlée: Le Comptoir, Chez l\'Ami Jean.', priceRange: '€€-€€€', location: 'Saint-Germain', image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800' },
+        { id: 'e3', title: 'Formaggi da Fromagerie Laurent Dubois', description: 'MOF (Migliori Artigiani di Francia): 200 formaggi affinati.', priceRange: '€€', location: 'Maubert', image: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?w=800' },
+        { id: 'e4', title: 'Café de Flore', description: 'Il caffè dove Sartre e Beauvoir scrivevano: caffè, croque-monsieur, storia.', priceRange: '€€', location: 'Saint-Germain', image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800' },
+        { id: 'e5', title: 'Rue Mouffetard food market', description: 'Mercato di quartiere storico: ostriche, crêpes, vino naturale.', priceRange: '€', location: '5ème', image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800' }
       ],
       'rome': [
-        { id: 'e1', title: 'Carbonara da Roscioli', description: 'La carbonara definitiva: guanciale, pecorino, uovo cremoso. Prenota!', priceRange: '€€', location: 'Centro' },
-        { id: 'e2', title: 'Supplì a Trapizzino', description: 'Street food romano: supplì al telefono, trapizzino, fiori di zucca.', priceRange: '€', location: 'Testaccio' },
-        { id: 'e3', title: 'Cacio e pepe a Felice a Testaccio', description: 'Tre ingredienti, perfezione assoluta: la preparano al tavolo.', priceRange: '€€', location: 'Testaccio' },
-        { id: 'e4', title: 'Gelato da Giolitti', description: 'Dal 1900: crema, pistacchio, zabaione. I Papi venivano qui!', priceRange: '€', location: 'Centro' },
-        { id: 'e5', title: 'Aperitivo a Trastevere', description: 'Spritz al tramonto sulle piazzette: Freni e Frizioni, Ma Che Siete Venuti a Fà.', priceRange: '€', location: 'Trastevere' }
+        { id: 'e1', title: 'Carbonara da Roscioli', description: 'La carbonara definitiva: guanciale, pecorino, uovo cremoso. Prenota!', priceRange: '€€', location: 'Centro', image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800' },
+        { id: 'e2', title: 'Supplì a Trapizzino', description: 'Street food romano: supplì al telefono, trapizzino, fiori di zucca.', priceRange: '€', location: 'Testaccio', image: 'https://images.unsplash.com/photo-1595295333158-4742f28fbd85?w=800' },
+        { id: 'e3', title: 'Cacio e pepe a Felice a Testaccio', description: 'Tre ingredienti, perfezione assoluta: la preparano al tavolo.', priceRange: '€€', location: 'Testaccio', image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800' },
+        { id: 'e4', title: 'Gelato da Giolitti', description: 'Dal 1900: crema, pistacchio, zabaione. I Papi venivano qui!', priceRange: '€', location: 'Centro', image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?w=800' },
+        { id: 'e5', title: 'Aperitivo a Trastevere', description: 'Spritz al tramonto sulle piazzette: Freni e Frizioni, Ma Che Siete Venuti a Fà.', priceRange: '€', location: 'Trastevere', image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800' }
       ],
       'amsterdam': [
         { id: 'e1', title: 'Stroopwafel fresco', description: 'Al mercato Albert Cuyp: waffle caldo con sciroppo che cola.', priceRange: '€', location: 'De Pijp' },
