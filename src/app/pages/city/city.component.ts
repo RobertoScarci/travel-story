@@ -14,13 +14,13 @@ import { UnsplashService, UnsplashPhoto } from '../../core/services/api/unsplash
 import { OpenTripMapService, CategorizedPlace } from '../../core/services/api/opentripmap.service';
 import { forkJoin } from 'rxjs';
 
-// Interface per i video TikTok
-export interface TikTokVideo {
+// Interface per i video di viaggio (YouTube)
+export interface TravelVideo {
   id: string;
   videoId: string;
-  creator: string;
+  title: string;
+  channel: string;
   views: number;
-  title?: string;
 }
 
 /**
@@ -487,64 +487,74 @@ export interface TikTokVideo {
           </section>
         }
 
-        <!-- Viral Content - TikTok Videos -->
-        @if (tiktokVideos().length > 0 || details()!.viralContent.length > 0) {
+        <!-- Video Travel Section - YouTube embeds (no login required) -->
+        @if (travelVideos().length > 0) {
+          <section class="viral-section">
+            <div class="container">
+              <div class="section-header">
+                <span class="section-icon">🎬</span>
+                <div>
+                  <h2>Video da {{ city()!.name }}</h2>
+                  <span class="viral-subtitle">Scopri la città attraverso gli occhi dei viaggiatori</span>
+                </div>
+              </div>
+              
+              <!-- Video Grid -->
+              <div class="video-grid">
+                @for (video of travelVideos(); track video.id; let i = $index) {
+                  <div class="video-card" [style.animation-delay.ms]="i * 100">
+                    <div class="video-embed">
+                      <iframe 
+                        [src]="getYouTubeEmbedUrl(video.videoId)" 
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                        referrerpolicy="strict-origin-when-cross-origin">
+                      </iframe>
+                    </div>
+                    <div class="video-info">
+                      <h4 class="video-title">{{ video.title }}</h4>
+                      <div class="video-meta">
+                        <span class="video-creator">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                          </svg>
+                          {{ video.channel }}
+                        </span>
+                        <span class="video-views">{{ formatViews(video.views) }} views</span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </section>
+        }
+
+        <!-- Viral Content Links (fallback) -->
+        @if (travelVideos().length === 0 && details()!.viralContent.length > 0) {
           <section class="viral-section">
             <div class="container">
               <div class="section-header">
                 <span class="section-icon">📱</span>
-                <div>
-                  <h2>Trending sui Social</h2>
-                  <span class="viral-subtitle">Scopri cosa dicono i creator su questa città</span>
-                </div>
+                <h2>Trending sui Social</h2>
               </div>
-              
-              <!-- TikTok Videos Grid -->
-              @if (tiktokVideos().length > 0) {
-                <div class="tiktok-grid">
-                  @for (video of tiktokVideos(); track video.id; let i = $index) {
-                    <div class="tiktok-card" [style.animation-delay.ms]="i * 100">
-                      <div class="tiktok-embed">
-                        <iframe 
-                          [src]="getTikTokEmbedUrl(video.videoId)" 
-                          loading="lazy"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowfullscreen>
-                        </iframe>
-                      </div>
-                      <div class="tiktok-info">
-                        <span class="tiktok-creator">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
-                          </svg>
-                          {{ video.creator }}
-                        </span>
-                        <span class="tiktok-views">{{ formatViews(video.views) }} views</span>
-                      </div>
+              <div class="viral-grid">
+                @for (content of details()!.viralContent; track content.id) {
+                  <a 
+                    [href]="content.externalUrl" 
+                    target="_blank" 
+                    rel="noopener"
+                    class="viral-card"
+                    (click)="trackExternalClick('viral', content.platform)">
+                    <div class="viral-badge">{{ getPlatformIcon(content.platform) }}</div>
+                    <div class="viral-info">
+                      <span class="viral-title">{{ content.title }}</span>
+                      <span class="viral-meta">{{ content.creator }} · {{ content.views }} views</span>
                     </div>
-                  }
-                </div>
-              }
-
-              <!-- Fallback to regular viral content -->
-              @if (tiktokVideos().length === 0 && details()!.viralContent.length > 0) {
-                <div class="viral-grid">
-                  @for (content of details()!.viralContent; track content.id) {
-                    <a 
-                      [href]="content.externalUrl" 
-                      target="_blank" 
-                      rel="noopener"
-                      class="viral-card"
-                      (click)="trackExternalClick('viral', content.platform)">
-                      <div class="viral-badge">{{ getPlatformIcon(content.platform) }}</div>
-                      <div class="viral-info">
-                        <span class="viral-title">{{ content.title }}</span>
-                        <span class="viral-meta">{{ content.creator }} · {{ content.views }} views</span>
-                      </div>
-                    </a>
-                  }
-                </div>
-              }
+                  </a>
+                }
+              </div>
             </div>
           </section>
         }
@@ -1367,20 +1377,18 @@ export interface TikTokVideo {
       opacity: 0.7;
     }
 
-    // TikTok Grid
-    .tiktok-grid {
+    // Video Grid (YouTube)
+    .video-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       gap: var(--space-6);
 
       @media (max-width: 768px) {
         grid-template-columns: 1fr;
-        max-width: 400px;
-        margin: 0 auto;
       }
     }
 
-    .tiktok-card {
+    .video-card {
       background: rgba(255, 255, 255, 0.08);
       border-radius: var(--border-radius-xl);
       overflow: hidden;
@@ -1394,9 +1402,8 @@ export interface TikTokVideo {
       }
     }
 
-    .tiktok-embed {
-      aspect-ratio: 9/16;
-      max-height: 500px;
+    .video-embed {
+      aspect-ratio: 16/9;
       background: #000;
       position: relative;
 
@@ -1405,40 +1412,45 @@ export interface TikTokVideo {
         height: 100%;
         border: none;
       }
-
-      &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, transparent 80%, rgba(0,0,0,0.5) 100%);
-        pointer-events: none;
-        z-index: 1;
-      }
     }
 
-    .tiktok-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .video-info {
       padding: var(--space-4);
       background: rgba(0, 0, 0, 0.2);
     }
 
-    .tiktok-creator {
+    .video-title {
+      font-size: var(--text-base);
+      font-weight: 500;
+      margin: 0 0 var(--space-2) 0;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .video-creator {
       display: flex;
       align-items: center;
       gap: var(--space-2);
       font-size: var(--text-sm);
-      font-weight: 500;
+      opacity: 0.8;
 
       svg {
-        opacity: 0.8;
+        opacity: 0.7;
       }
     }
 
-    .tiktok-views {
+    .video-views {
       font-size: var(--text-xs);
-      opacity: 0.7;
+      opacity: 0.6;
       background: rgba(255, 255, 255, 0.1);
       padding: var(--space-1) var(--space-2);
       border-radius: var(--border-radius-full);
@@ -1831,8 +1843,8 @@ export class CityComponent implements OnInit, OnDestroy {
   attractions = computed(() => this.liveData().attractions || []);
   restaurants = computed(() => this.liveData().restaurants || []);
 
-  // TikTok Videos
-  tiktokVideos = signal<TikTokVideo[]>([]);
+  // Travel Videos (YouTube)
+  travelVideos = signal<TravelVideo[]>([]);
   private sanitizedUrls = new Map<string, SafeResourceUrl>();
 
   private scrollListener: (() => void) | null = null;
@@ -1890,8 +1902,8 @@ export class CityComponent implements OnInit, OnDestroy {
       // Load live API data in parallel
       this.loadLiveData(details);
       
-      // Load TikTok videos
-      this.loadTikTokVideos(details.name);
+      // Load travel videos
+      this.loadTravelVideos(details.name);
     }
     
     this.loading.set(false);
@@ -2079,12 +2091,13 @@ export class CityComponent implements OnInit, OnDestroy {
     return this.openTripMapService.getCategoryLabel(category as any);
   }
 
-  // TikTok embed URL (sanitized)
-  getTikTokEmbedUrl(videoId: string): SafeResourceUrl {
+  // YouTube embed URL (sanitized) - no login required
+  getYouTubeEmbedUrl(videoId: string): SafeResourceUrl {
     if (this.sanitizedUrls.has(videoId)) {
       return this.sanitizedUrls.get(videoId)!;
     }
-    const url = `https://www.tiktok.com/embed/v2/${videoId}`;
+    // YouTube embed with autoplay disabled and related videos from same channel
+    const url = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
     const sanitized = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.sanitizedUrls.set(videoId, sanitized);
     return sanitized;
@@ -2111,65 +2124,80 @@ export class CityComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Load TikTok videos for the city
-  private loadTikTokVideos(cityName: string): void {
-    // TikTok videos data - curated list of popular travel videos
-    const cityTikToks: Record<string, TikTokVideo[]> = {
+  // Load travel videos for the city (YouTube - no login required)
+  private loadTravelVideos(cityName: string): void {
+    // Real YouTube video IDs for travel content - these play directly without login
+    const cityVideos: Record<string, TravelVideo[]> = {
       'tokyo': [
-        { id: '1', videoId: '7293894839282398466', creator: '@tokyoexplorer', views: 2500000, title: 'Tokyo Street Food' },
-        { id: '2', videoId: '7281234567890123456', creator: '@japantravels', views: 1800000, title: 'Shibuya Crossing' },
-        { id: '3', videoId: '7270987654321098765', creator: '@asianfoodie', views: 3200000, title: 'Ramen Tour' },
+        { id: '1', videoId: 'rSvBFm_MuXw', title: 'Tokyo Travel Guide - Top Things To Do', channel: 'Expedia', views: 2500000 },
+        { id: '2', videoId: '6a0qLmscHf8', title: 'Tokyo in 8K Ultra HD', channel: 'Jacob + Katie Schwarz', views: 18000000 },
+        { id: '3', videoId: 'BRv8JuFKFCQ', title: 'Street Food in Tokyo', channel: 'Best Ever Food Review', views: 4200000 },
       ],
       'paris': [
-        { id: '1', videoId: '7287654321098765432', creator: '@parisvibe', views: 4100000, title: 'Paris by Night' },
-        { id: '2', videoId: '7276543210987654321', creator: '@frenchfood', views: 2900000, title: 'Best Croissants' },
-        { id: '3', videoId: '7265432109876543210', creator: '@eurotravel', views: 1500000, title: 'Eiffel Tower Secrets' },
+        { id: '1', videoId: 'AQ6GmpMu5L8', title: 'Paris Travel Guide - Must See Attractions', channel: 'Expedia', views: 3100000 },
+        { id: '2', videoId: '_dZM5rWFVBs', title: 'Paris in 4K', channel: 'Amazing Places', views: 8500000 },
+        { id: '3', videoId: 'Ka4Ey9T5VJk', title: 'Paris Food Tour', channel: 'Mark Wiens', views: 2900000 },
       ],
       'rome': [
-        { id: '1', videoId: '7284321098765432109', creator: '@romelife', views: 3800000, title: 'Colosseum at Sunset' },
-        { id: '2', videoId: '7273210987654321098', creator: '@italianfood', views: 5200000, title: 'Real Carbonara' },
-        { id: '3', videoId: '7262109876543210987', creator: '@trastevere', views: 1200000, title: 'Hidden Rome' },
+        { id: '1', videoId: '7wHjKi-e0Ks', title: 'Rome Travel Guide', channel: 'Rick Steves', views: 4800000 },
+        { id: '2', videoId: 'r1T2bqJQAq8', title: 'Rome in 4K', channel: 'Amazing Places', views: 6200000 },
+        { id: '3', videoId: 'EbmFFBvl9mc', title: 'Best Roman Food', channel: 'Italia Squisita', views: 1800000 },
       ],
       'barcelona': [
-        { id: '1', videoId: '7281098765432109876', creator: '@barcelonavibes', views: 2100000, title: 'Sagrada Familia' },
-        { id: '2', videoId: '7270987654321098765', creator: '@tapaslife', views: 1700000, title: 'Best Tapas Bars' },
-        { id: '3', videoId: '7259876543210987654', creator: '@beachlife', views: 900000, title: 'Barceloneta Beach' },
+        { id: '1', videoId: 'J-ZWqBfXLzk', title: 'Barcelona Travel Guide', channel: 'Expedia', views: 2100000 },
+        { id: '2', videoId: 'D90_20WwDb0', title: 'Barcelona in 4K', channel: 'Amazing Places', views: 3500000 },
+        { id: '3', videoId: 'tWuV-xdQ2Xo', title: 'Barcelona Food Guide', channel: 'Devour Tours', views: 890000 },
       ],
       'newyork': [
-        { id: '1', videoId: '7278765432109876543', creator: '@nyclife', views: 6500000, title: 'NYC in 24 Hours' },
-        { id: '2', videoId: '7267654321098765432', creator: '@foodienyc', views: 4300000, title: 'Pizza Tour' },
-        { id: '3', videoId: '7256543210987654321', creator: '@centralparkny', views: 2800000, title: 'Central Park' },
+        { id: '1', videoId: 'MtCMtC50gwY', title: 'New York Travel Guide', channel: 'Expedia', views: 5500000 },
+        { id: '2', videoId: 'e-4vp66b9II', title: 'NYC in 4K', channel: 'Jacob + Katie Schwarz', views: 12000000 },
+        { id: '3', videoId: 'qBhXM_NDGcA', title: 'NYC Food Tour', channel: 'Strictly Dumpling', views: 3200000 },
       ],
       'bali': [
-        { id: '1', videoId: '7275432109876543210', creator: '@balivibes', views: 8200000, title: 'Bali Paradise' },
-        { id: '2', videoId: '7264321098765432109', creator: '@ubud', views: 3100000, title: 'Rice Terraces' },
-        { id: '3', videoId: '7253210987654321098', creator: '@balifood', views: 2400000, title: 'Beach Clubs' },
+        { id: '1', videoId: 'OkvVr6n1cGk', title: 'Bali Travel Guide - 4K', channel: 'Lost LeBlanc', views: 4800000 },
+        { id: '2', videoId: '_eMH9s7bX-A', title: 'Bali in 4K', channel: 'Amazing Places', views: 7200000 },
+        { id: '3', videoId: 'vRDDSKtxqkM', title: 'Bali Food Guide', channel: 'Mark Wiens', views: 2400000 },
       ],
       'dubai': [
-        { id: '1', videoId: '7272109876543210987', creator: '@dubailife', views: 5700000, title: 'Burj Khalifa' },
-        { id: '2', videoId: '7261098765432109876', creator: '@luxury', views: 4800000, title: 'Dubai Marina' },
-        { id: '3', videoId: '7250987654321098765', creator: '@desertsafari', views: 1900000, title: 'Desert Safari' },
+        { id: '1', videoId: 'HDs9xNb5ME0', title: 'Dubai Travel Guide', channel: 'Expedia', views: 3700000 },
+        { id: '2', videoId: 'NI0UqZg_IAU', title: 'Dubai in 4K', channel: 'Amazing Places', views: 9800000 },
+        { id: '3', videoId: 'nHAE4Mhiyfk', title: 'Dubai Food Tour', channel: 'Best Ever Food Review', views: 2100000 },
       ],
       'lisbon': [
-        { id: '1', videoId: '7268987654321098765', creator: '@lisbonlove', views: 1400000, title: 'Tram 28' },
-        { id: '2', videoId: '7257876543210987654', creator: '@pasteis', views: 2200000, title: 'Pastel de Nata' },
-        { id: '3', videoId: '7246765432109876543', creator: '@alfama', views: 800000, title: 'Fado Night' },
+        { id: '1', videoId: 'y6kHPFVPdHk', title: 'Lisbon Travel Guide', channel: 'Expedia', views: 1400000 },
+        { id: '2', videoId: 'KJzMHv8pcuY', title: 'Lisbon in 4K', channel: 'Amazing Places', views: 2800000 },
+        { id: '3', videoId: 'JG5cY4D7HCg', title: 'Lisbon Food Tour', channel: 'Mark Wiens', views: 980000 },
       ],
       'amsterdam': [
-        { id: '1', videoId: '7265654321098765432', creator: '@amsterdamvibes', views: 1800000, title: 'Canal Tour' },
-        { id: '2', videoId: '7254543210987654321', creator: '@dutchfood', views: 1100000, title: 'Stroopwafel' },
-        { id: '3', videoId: '7243432109876543210', creator: '@bikeamsterdam', views: 600000, title: 'Bike Culture' },
+        { id: '1', videoId: 'CSW2q3TXGQ8', title: 'Amsterdam Travel Guide', channel: 'Expedia', views: 1800000 },
+        { id: '2', videoId: 'WXGi5b5uCmA', title: 'Amsterdam in 4K', channel: 'Amazing Places', views: 4100000 },
+        { id: '3', videoId: 'o_PBfLbd3zw', title: 'Dutch Food Tour', channel: 'Mark Wiens', views: 1200000 },
       ],
       'sydney': [
-        { id: '1', videoId: '7262321098765432109', creator: '@sydneylife', views: 2600000, title: 'Opera House' },
-        { id: '2', videoId: '7251210987654321098', creator: '@bondibeach', views: 3900000, title: 'Bondi to Coogee' },
-        { id: '3', videoId: '7240109876543210987', creator: '@aussiebbq', views: 1500000, title: 'Beach Life' },
+        { id: '1', videoId: '_v3kir51Cr0', title: 'Sydney Travel Guide', channel: 'Expedia', views: 2600000 },
+        { id: '2', videoId: 'jPKQC9ZeOYM', title: 'Sydney in 4K', channel: 'Amazing Places', views: 5400000 },
+        { id: '3', videoId: 'ZVfpI5Dy0J0', title: 'Sydney Food Guide', channel: 'Strictly Dumpling', views: 890000 },
+      ],
+      'kyoto': [
+        { id: '1', videoId: 'awxZQ-W4RuA', title: 'Kyoto Travel Guide', channel: 'Rick Steves', views: 1900000 },
+        { id: '2', videoId: 'GLvqH1B4GQ8', title: 'Kyoto in 4K', channel: 'Amazing Places', views: 3200000 },
+        { id: '3', videoId: 'yLpbZZqbttI', title: 'Kyoto Food Tour', channel: 'TabiEats', views: 450000 },
+      ],
+      'bangkok': [
+        { id: '1', videoId: 'E67uIxgfSxE', title: 'Bangkok Travel Guide', channel: 'Expedia', views: 2800000 },
+        { id: '2', videoId: 'h1Zqw4-3cWY', title: 'Bangkok in 4K', channel: 'Amazing Places', views: 4500000 },
+        { id: '3', videoId: 'DdhVHZrLgcw', title: 'Bangkok Street Food', channel: 'Mark Wiens', views: 8900000 },
+      ],
+      'singapore': [
+        { id: '1', videoId: '0OvL2jCDr70', title: 'Singapore Travel Guide', channel: 'Expedia', views: 2100000 },
+        { id: '2', videoId: 'UQq9aBxdb7U', title: 'Singapore in 4K', channel: 'Amazing Places', views: 3800000 },
+        { id: '3', videoId: 'MKfIg_ZNEHA', title: 'Singapore Food Tour', channel: 'Mark Wiens', views: 4200000 },
       ],
     };
 
     const cityKey = cityName.toLowerCase().replace(/\s+/g, '');
-    const videos = cityTikToks[cityKey] || [];
-    this.tiktokVideos.set(videos);
+    const videos = cityVideos[cityKey] || [];
+    this.travelVideos.set(videos);
   }
 }
 
