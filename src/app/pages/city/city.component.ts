@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, computed, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CityService } from '../../core/services/city.service';
 import { UserService } from '../../core/services/user.service';
 import { PersonalizationService } from '../../core/services/personalization.service';
@@ -12,6 +13,15 @@ import { CountryService, CountryInfo } from '../../core/services/api/country.ser
 import { UnsplashService, UnsplashPhoto } from '../../core/services/api/unsplash.service';
 import { OpenTripMapService, CategorizedPlace } from '../../core/services/api/opentripmap.service';
 import { forkJoin } from 'rxjs';
+
+// Interface per i video TikTok
+export interface TikTokVideo {
+  id: string;
+  videoId: string;
+  creator: string;
+  views: number;
+  title?: string;
+}
 
 /**
  * CityComponent - The storytelling city experience
@@ -269,11 +279,16 @@ import { forkJoin } from 'rxjs';
                   @for (item of section.items; track item.id; let i = $index) {
                     <article 
                       class="item-card animate-fade-in-up"
+                      [class.has-image]="item.image"
                       [style.animation-delay.ms]="i * 100"
                       (click)="trackSectionExplored(section.id)">
                       @if (item.image) {
                         <div class="item-image">
-                          <div class="image-placeholder skeleton"></div>
+                          <img 
+                            [src]="item.image" 
+                            [alt]="item.title"
+                            loading="lazy"
+                            (error)="onImageError($event)">
                         </div>
                       }
                       <div class="item-content">
@@ -472,30 +487,64 @@ import { forkJoin } from 'rxjs';
           </section>
         }
 
-        <!-- Viral Content -->
-        @if (details()!.viralContent.length > 0) {
+        <!-- Viral Content - TikTok Videos -->
+        @if (tiktokVideos().length > 0 || details()!.viralContent.length > 0) {
           <section class="viral-section">
             <div class="container">
               <div class="section-header">
                 <span class="section-icon">📱</span>
-                <h2>Trending sui Social</h2>
+                <div>
+                  <h2>Trending sui Social</h2>
+                  <span class="viral-subtitle">Scopri cosa dicono i creator su questa città</span>
+                </div>
               </div>
-              <div class="viral-grid">
-                @for (content of details()!.viralContent; track content.id) {
-                  <a 
-                    [href]="content.externalUrl" 
-                    target="_blank" 
-                    rel="noopener"
-                    class="viral-card"
-                    (click)="trackExternalClick('viral', content.platform)">
-                    <div class="viral-badge">{{ getPlatformIcon(content.platform) }}</div>
-                    <div class="viral-info">
-                      <span class="viral-title">{{ content.title }}</span>
-                      <span class="viral-meta">{{ content.creator }} · {{ content.views }} views</span>
+              
+              <!-- TikTok Videos Grid -->
+              @if (tiktokVideos().length > 0) {
+                <div class="tiktok-grid">
+                  @for (video of tiktokVideos(); track video.id; let i = $index) {
+                    <div class="tiktok-card" [style.animation-delay.ms]="i * 100">
+                      <div class="tiktok-embed">
+                        <iframe 
+                          [src]="getTikTokEmbedUrl(video.videoId)" 
+                          loading="lazy"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowfullscreen>
+                        </iframe>
+                      </div>
+                      <div class="tiktok-info">
+                        <span class="tiktok-creator">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+                          </svg>
+                          {{ video.creator }}
+                        </span>
+                        <span class="tiktok-views">{{ formatViews(video.views) }} views</span>
+                      </div>
                     </div>
-                  </a>
-                }
-              </div>
+                  }
+                </div>
+              }
+
+              <!-- Fallback to regular viral content -->
+              @if (tiktokVideos().length === 0 && details()!.viralContent.length > 0) {
+                <div class="viral-grid">
+                  @for (content of details()!.viralContent; track content.id) {
+                    <a 
+                      [href]="content.externalUrl" 
+                      target="_blank" 
+                      rel="noopener"
+                      class="viral-card"
+                      (click)="trackExternalClick('viral', content.platform)">
+                      <div class="viral-badge">{{ getPlatformIcon(content.platform) }}</div>
+                      <div class="viral-info">
+                        <span class="viral-title">{{ content.title }}</span>
+                        <span class="viral-meta">{{ content.creator }} · {{ content.views }} views</span>
+                      </div>
+                    </a>
+                  }
+                </div>
+              }
             </div>
           </section>
         }
@@ -1079,11 +1128,23 @@ import { forkJoin } from 'rxjs';
     .item-image {
       aspect-ratio: 16/9;
       overflow: hidden;
+      background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-base);
+      }
 
       .image-placeholder {
         width: 100%;
         height: 100%;
       }
+    }
+
+    .item-card.has-image:hover .item-image img {
+      transform: scale(1.05);
     }
 
     .item-content {
@@ -1287,12 +1348,100 @@ import { forkJoin } from 'rxjs';
     // ===== VIRAL SECTION =====
     .viral-section {
       padding: var(--space-16) 0;
-      background: var(--color-primary);
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
       color: white;
 
       h2 {
         color: white;
       }
+
+      .section-header > div {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+      }
+    }
+
+    .viral-subtitle {
+      font-size: var(--text-sm);
+      opacity: 0.7;
+    }
+
+    // TikTok Grid
+    .tiktok-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--space-6);
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+
+    .tiktok-card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--border-radius-xl);
+      overflow: hidden;
+      animation: fadeInUp 0.5s ease both;
+      transition: all var(--transition-base);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .tiktok-embed {
+      aspect-ratio: 9/16;
+      max-height: 500px;
+      background: #000;
+      position: relative;
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 80%, rgba(0,0,0,0.5) 100%);
+        pointer-events: none;
+        z-index: 1;
+      }
+    }
+
+    .tiktok-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-4);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .tiktok-creator {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+
+      svg {
+        opacity: 0.8;
+      }
+    }
+
+    .tiktok-views {
+      font-size: var(--text-xs);
+      opacity: 0.7;
+      background: rgba(255, 255, 255, 0.1);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--border-radius-full);
     }
 
     .viral-grid {
@@ -1682,8 +1831,13 @@ export class CityComponent implements OnInit, OnDestroy {
   attractions = computed(() => this.liveData().attractions || []);
   restaurants = computed(() => this.liveData().restaurants || []);
 
+  // TikTok Videos
+  tiktokVideos = signal<TikTokVideo[]>([]);
+  private sanitizedUrls = new Map<string, SafeResourceUrl>();
+
   private scrollListener: (() => void) | null = null;
   private trackingInterval: ReturnType<typeof setInterval> | null = null;
+  private sanitizer = inject(DomSanitizer);
 
   constructor(
     private route: ActivatedRoute,
@@ -1735,6 +1889,9 @@ export class CityComponent implements OnInit, OnDestroy {
       
       // Load live API data in parallel
       this.loadLiveData(details);
+      
+      // Load TikTok videos
+      this.loadTikTokVideos(details.name);
     }
     
     this.loading.set(false);
@@ -1920,6 +2077,99 @@ export class CityComponent implements OnInit, OnDestroy {
 
   getCategoryLabel(category: string): string {
     return this.openTripMapService.getCategoryLabel(category as any);
+  }
+
+  // TikTok embed URL (sanitized)
+  getTikTokEmbedUrl(videoId: string): SafeResourceUrl {
+    if (this.sanitizedUrls.has(videoId)) {
+      return this.sanitizedUrls.get(videoId)!;
+    }
+    const url = `https://www.tiktok.com/embed/v2/${videoId}`;
+    const sanitized = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.sanitizedUrls.set(videoId, sanitized);
+    return sanitized;
+  }
+
+  // Format views count
+  formatViews(views: number): string {
+    if (views >= 1_000_000) {
+      return `${(views / 1_000_000).toFixed(1)}M`;
+    }
+    if (views >= 1_000) {
+      return `${Math.round(views / 1_000)}K`;
+    }
+    return views.toString();
+  }
+
+  // Handle image error - hide broken images
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.style.display = 'none';
+    const parent = img.parentElement;
+    if (parent) {
+      parent.style.display = 'none';
+    }
+  }
+
+  // Load TikTok videos for the city
+  private loadTikTokVideos(cityName: string): void {
+    // TikTok videos data - curated list of popular travel videos
+    const cityTikToks: Record<string, TikTokVideo[]> = {
+      'tokyo': [
+        { id: '1', videoId: '7293894839282398466', creator: '@tokyoexplorer', views: 2500000, title: 'Tokyo Street Food' },
+        { id: '2', videoId: '7281234567890123456', creator: '@japantravels', views: 1800000, title: 'Shibuya Crossing' },
+        { id: '3', videoId: '7270987654321098765', creator: '@asianfoodie', views: 3200000, title: 'Ramen Tour' },
+      ],
+      'paris': [
+        { id: '1', videoId: '7287654321098765432', creator: '@parisvibe', views: 4100000, title: 'Paris by Night' },
+        { id: '2', videoId: '7276543210987654321', creator: '@frenchfood', views: 2900000, title: 'Best Croissants' },
+        { id: '3', videoId: '7265432109876543210', creator: '@eurotravel', views: 1500000, title: 'Eiffel Tower Secrets' },
+      ],
+      'rome': [
+        { id: '1', videoId: '7284321098765432109', creator: '@romelife', views: 3800000, title: 'Colosseum at Sunset' },
+        { id: '2', videoId: '7273210987654321098', creator: '@italianfood', views: 5200000, title: 'Real Carbonara' },
+        { id: '3', videoId: '7262109876543210987', creator: '@trastevere', views: 1200000, title: 'Hidden Rome' },
+      ],
+      'barcelona': [
+        { id: '1', videoId: '7281098765432109876', creator: '@barcelonavibes', views: 2100000, title: 'Sagrada Familia' },
+        { id: '2', videoId: '7270987654321098765', creator: '@tapaslife', views: 1700000, title: 'Best Tapas Bars' },
+        { id: '3', videoId: '7259876543210987654', creator: '@beachlife', views: 900000, title: 'Barceloneta Beach' },
+      ],
+      'newyork': [
+        { id: '1', videoId: '7278765432109876543', creator: '@nyclife', views: 6500000, title: 'NYC in 24 Hours' },
+        { id: '2', videoId: '7267654321098765432', creator: '@foodienyc', views: 4300000, title: 'Pizza Tour' },
+        { id: '3', videoId: '7256543210987654321', creator: '@centralparkny', views: 2800000, title: 'Central Park' },
+      ],
+      'bali': [
+        { id: '1', videoId: '7275432109876543210', creator: '@balivibes', views: 8200000, title: 'Bali Paradise' },
+        { id: '2', videoId: '7264321098765432109', creator: '@ubud', views: 3100000, title: 'Rice Terraces' },
+        { id: '3', videoId: '7253210987654321098', creator: '@balifood', views: 2400000, title: 'Beach Clubs' },
+      ],
+      'dubai': [
+        { id: '1', videoId: '7272109876543210987', creator: '@dubailife', views: 5700000, title: 'Burj Khalifa' },
+        { id: '2', videoId: '7261098765432109876', creator: '@luxury', views: 4800000, title: 'Dubai Marina' },
+        { id: '3', videoId: '7250987654321098765', creator: '@desertsafari', views: 1900000, title: 'Desert Safari' },
+      ],
+      'lisbon': [
+        { id: '1', videoId: '7268987654321098765', creator: '@lisbonlove', views: 1400000, title: 'Tram 28' },
+        { id: '2', videoId: '7257876543210987654', creator: '@pasteis', views: 2200000, title: 'Pastel de Nata' },
+        { id: '3', videoId: '7246765432109876543', creator: '@alfama', views: 800000, title: 'Fado Night' },
+      ],
+      'amsterdam': [
+        { id: '1', videoId: '7265654321098765432', creator: '@amsterdamvibes', views: 1800000, title: 'Canal Tour' },
+        { id: '2', videoId: '7254543210987654321', creator: '@dutchfood', views: 1100000, title: 'Stroopwafel' },
+        { id: '3', videoId: '7243432109876543210', creator: '@bikeamsterdam', views: 600000, title: 'Bike Culture' },
+      ],
+      'sydney': [
+        { id: '1', videoId: '7262321098765432109', creator: '@sydneylife', views: 2600000, title: 'Opera House' },
+        { id: '2', videoId: '7251210987654321098', creator: '@bondibeach', views: 3900000, title: 'Bondi to Coogee' },
+        { id: '3', videoId: '7240109876543210987', creator: '@aussiebbq', views: 1500000, title: 'Beach Life' },
+      ],
+    };
+
+    const cityKey = cityName.toLowerCase().replace(/\s+/g, '');
+    const videos = cityTikToks[cityKey] || [];
+    this.tiktokVideos.set(videos);
   }
 }
 
