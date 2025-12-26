@@ -24,48 +24,75 @@ import { UserService } from '../../../core/services/user.service';
           <img [src]="city.thumbnailImage" [alt]="city.name" loading="lazy">
           <div class="image-overlay"></div>
           
-          <!-- Tags -->
-          <div class="card-tags">
-            @for (tag of city.tags.slice(0, 2); track tag) {
-              <span class="tag">{{ tagLabels[tag] || tag }}</span>
+          <!-- Top bar: Tags on left, Save on right -->
+          <div class="card-top-bar">
+            <div class="card-tags">
+              @for (tag of city.tags.slice(0, 2); track tag) {
+                <span class="tag">{{ tagLabels[tag] || tag }}</span>
+              }
+            </div>
+            
+            <!-- Save Button (only for registered users) -->
+            @if (userService.isAuthenticated()) {
+              <button 
+                class="save-btn" 
+                [class.saved]="isSaved"
+                (click)="onSaveClick($event)"
+                [attr.aria-label]="isSaved ? 'Rimuovi dai salvati' : 'Salva'">
+                <svg width="18" height="18" viewBox="0 0 24 24" [attr.fill]="isSaved ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
             }
           </div>
 
-          <!-- Save Button (only for registered users) -->
-          @if (userService.isAuthenticated()) {
-            <button 
-              class="save-btn" 
-              [class.saved]="isSaved"
-              (click)="onSaveClick($event)"
-              [attr.aria-label]="isSaved ? 'Rimuovi dai salvati' : 'Salva'">
-              <svg width="20" height="20" viewBox="0 0 24 24" [attr.fill]="isSaved ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          <!-- Bottom bar: Location + Price -->
+          <div class="card-bottom-bar">
+            <span class="location-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
               </svg>
-            </button>
-          }
-
-          <!-- Price Level -->
-          <div class="price-level">
-            {{ getPriceIndicator() }}
+              {{ city.country }}
+            </span>
+            <span class="price-level">{{ getPriceIndicator() }}</span>
           </div>
         </div>
 
         <!-- Content -->
         <div class="card-content">
-          <div class="card-header">
-            <h3 class="city-name">{{ city.name }}</h3>
-            <span class="country">{{ city.country }}</span>
-          </div>
-
+          <h3 class="city-name">{{ city.name }}</h3>
           <p class="tagline">{{ city.tagline }}</p>
 
           <div class="card-meta">
             <div class="rating">
-              <span class="star">★</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--color-highlight)" stroke="none">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
               <span>{{ city.rating }}</span>
             </div>
+            <span class="meta-separator">•</span>
             <div class="duration">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
               {{ city.suggestedDays.min }}-{{ city.suggestedDays.max }} giorni
+            </div>
+            <span class="meta-separator">•</span>
+            <div class="best-period">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+              {{ city.bestPeriod[0] }}
             </div>
           </div>
         </div>
@@ -74,7 +101,7 @@ import { UserService } from '../../../core/services/user.service';
       <!-- Recommendation Badge (if provided) -->
       @if (recommendation) {
         <div class="recommendation-badge">
-          <svg class="badge-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <svg class="badge-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
           <span class="badge-text">{{ recommendation }}</span>
@@ -86,20 +113,21 @@ import { UserService } from '../../../core/services/user.service';
     .city-card {
       position: relative;
       background: var(--color-white);
-      border-radius: var(--border-radius-lg);
+      border-radius: var(--border-radius-xl);
       overflow: hidden;
       transition: all var(--transition-base);
+      box-shadow: var(--shadow-sm);
 
       &:hover {
-        transform: translateY(-8px);
+        transform: translateY(-6px);
         box-shadow: var(--shadow-xl);
 
         .card-image img {
-          transform: scale(1.05);
+          transform: scale(1.08);
         }
 
         .image-overlay {
-          opacity: 0.3;
+          opacity: 0.4;
         }
       }
 
@@ -123,7 +151,7 @@ import { UserService } from '../../../core/services/user.service';
     // Image Section
     .card-image {
       position: relative;
-      aspect-ratio: 4/3;
+      aspect-ratio: 3/2;
       overflow: hidden;
 
       img {
@@ -139,49 +167,63 @@ import { UserService } from '../../../core/services/user.service';
       inset: 0;
       background: linear-gradient(
         to bottom,
-        transparent 40%,
-        rgba(0, 0, 0, 0.6) 100%
+        rgba(0, 0, 0, 0.1) 0%,
+        transparent 30%,
+        transparent 60%,
+        rgba(0, 0, 0, 0.5) 100%
       );
-      opacity: 0.5;
       transition: opacity var(--transition-base);
+    }
+
+    // Top bar - contains tags and save button
+    .card-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: var(--space-3);
+      z-index: 2;
     }
 
     // Tags
     .card-tags {
-      position: absolute;
-      top: var(--space-3);
-      left: var(--space-3);
       display: flex;
-      gap: var(--space-2);
+      flex-wrap: wrap;
+      gap: var(--space-1);
+      max-width: calc(100% - 44px);
     }
 
     .tag {
-      padding: var(--space-1) var(--space-3);
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(4px);
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
       border-radius: var(--border-radius-full);
-      font-size: var(--text-xs);
-      font-weight: 500;
-      color: var(--color-gray-500);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
     }
 
     // Save Button
     .save-btn {
-      position: absolute;
-      top: var(--space-3);
-      right: var(--space-3);
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(4px);
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
       border: none;
       border-radius: 50%;
       color: var(--color-gray-400);
       cursor: pointer;
       transition: all var(--transition-fast);
+      flex-shrink: 0;
 
       &:hover {
         transform: scale(1.1);
@@ -190,21 +232,49 @@ import { UserService } from '../../../core/services/user.service';
 
       &.saved {
         color: var(--color-accent);
-        background: rgba(233, 69, 96, 0.1);
+        background: rgba(233, 69, 96, 0.15);
       }
     }
 
-    // Price Level
-    .price-level {
+    // Bottom bar - contains location and price
+    .card-bottom-bar {
       position: absolute;
-      bottom: var(--space-3);
-      right: var(--space-3);
-      padding: var(--space-1) var(--space-2);
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3);
+      z-index: 2;
+    }
+
+    .location-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: var(--border-radius-full);
+      font-size: 11px;
+      font-weight: 500;
+      color: white;
+
+      svg {
+        opacity: 0.8;
+      }
+    }
+
+    .price-level {
+      padding: 4px 10px;
       background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--border-radius-sm);
-      font-size: var(--text-xs);
-      font-weight: 600;
+      backdrop-filter: blur(8px);
+      border-radius: var(--border-radius-full);
+      font-size: 11px;
+      font-weight: 700;
       color: var(--color-primary);
+      letter-spacing: 0.5px;
     }
 
     // Content Section
@@ -212,24 +282,13 @@ import { UserService } from '../../../core/services/user.service';
       padding: var(--space-4);
     }
 
-    .card-header {
-      display: flex;
-      align-items: baseline;
-      gap: var(--space-2);
-      margin-bottom: var(--space-2);
-    }
-
     .city-name {
       font-family: var(--font-display);
-      font-size: var(--text-xl);
-      font-weight: 600;
+      font-size: var(--text-lg);
+      font-weight: 700;
       color: var(--color-primary);
-      margin: 0;
-    }
-
-    .country {
-      font-size: var(--text-sm);
-      color: var(--color-gray-400);
+      margin: 0 0 var(--space-1) 0;
+      line-height: 1.2;
     }
 
     .tagline {
@@ -246,43 +305,56 @@ import { UserService } from '../../../core/services/user.service';
     .card-meta {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: var(--text-sm);
-      color: var(--color-gray-400);
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--color-gray-500);
+    }
+
+    .meta-separator {
+      color: var(--color-gray-300);
+    }
+
+    .rating, .duration, .best-period {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      svg {
+        flex-shrink: 0;
+      }
     }
 
     .rating {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-
-      .star {
-        color: var(--color-highlight);
-      }
+      font-weight: 600;
+      color: var(--color-gray-600);
     }
 
-    // Recommendation Badge
+    // Recommendation Badge - positioned to not overlap
     .recommendation-badge {
       position: absolute;
-      top: 0;
-      left: var(--space-4);
+      top: var(--space-3);
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: var(--space-1);
-      padding: var(--space-2) var(--space-3);
-      background: linear-gradient(135deg, var(--color-accent), var(--color-highlight));
+      gap: 4px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, var(--color-accent), #ff6b6b);
       color: white;
-      font-size: var(--text-xs);
-      font-weight: 500;
-      border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
-      transform: translateY(-100%);
-      animation: slideDown 0.3s ease forwards;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: var(--border-radius-full);
+      box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+      z-index: 10;
+      animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes slideDown {
-      to {
-        transform: translateY(0);
-      }
+    @keyframes pulse {
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.05); }
     }
 
     .badge-icon {
@@ -354,4 +426,5 @@ export class CityCardComponent {
     this.saved.emit(this.city.id);
   }
 }
+
 

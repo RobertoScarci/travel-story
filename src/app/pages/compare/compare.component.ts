@@ -75,9 +75,12 @@ import { City } from '../../core/models/city.model';
 
             <!-- Comparison Rows -->
             @for (row of comparisonData(); track row.label) {
-              <div class="comparison-row">
+              <div class="comparison-row" [class.highlight]="row.highlight">
                 <div class="value" [class.winner]="row.winner === 1">
                   <span class="value-main">{{ row.value1 }}</span>
+                  @if (row.subValue1) {
+                    <span class="value-sub">{{ row.subValue1 }}</span>
+                  }
                   @if (row.winner === 1) {
                     <span class="winner-badge">✓</span>
                   }
@@ -88,12 +91,46 @@ import { City } from '../../core/models/city.model';
                 </div>
                 <div class="value" [class.winner]="row.winner === 2">
                   <span class="value-main">{{ row.value2 }}</span>
+                  @if (row.subValue2) {
+                    <span class="value-sub">{{ row.subValue2 }}</span>
+                  }
                   @if (row.winner === 2) {
                     <span class="winner-badge">✓</span>
                   }
                 </div>
               </div>
             }
+
+            <!-- Verdict Section -->
+            <div class="verdict-section">
+              <h3>📊 Il Nostro Verdetto</h3>
+              <div class="verdict-grid">
+                <div class="verdict-card">
+                  <h4>{{ city1()!.name }}</h4>
+                  <p class="verdict-tagline">{{ city1()!.tagline }}</p>
+                  <div class="verdict-tags">
+                    @for (tag of city1()!.tags.slice(0, 3); track tag) {
+                      <span class="verdict-tag">{{ getTagLabel(tag) }}</span>
+                    }
+                  </div>
+                  <p class="verdict-best">Perfetta per: <strong>{{ getIdealTraveler(city1()!) }}</strong></p>
+                </div>
+                <div class="verdict-vs">VS</div>
+                <div class="verdict-card">
+                  <h4>{{ city2()!.name }}</h4>
+                  <p class="verdict-tagline">{{ city2()!.tagline }}</p>
+                  <div class="verdict-tags">
+                    @for (tag of city2()!.tags.slice(0, 3); track tag) {
+                      <span class="verdict-tag">{{ getTagLabel(tag) }}</span>
+                    }
+                  </div>
+                  <p class="verdict-best">Perfetta per: <strong>{{ getIdealTraveler(city2()!) }}</strong></p>
+                </div>
+              </div>
+              <div class="verdict-summary">
+                <p>{{ getComparisonSummary() }}</p>
+              </div>
+            </div>
 
             <!-- CTA -->
             <div class="comparison-cta">
@@ -331,6 +368,18 @@ import { City } from '../../core/models/city.model';
       font-size: var(--text-lg);
     }
 
+    .value-sub {
+      font-size: var(--text-xs);
+      color: var(--color-gray-400);
+      font-weight: normal;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .comparison-row.highlight {
+      background: var(--color-cream);
+    }
+
     .winner-badge {
       display: flex;
       align-items: center;
@@ -355,6 +404,106 @@ import { City } from '../../core/models/city.model';
 
     .criteria-icon {
       font-size: 1.5rem;
+    }
+
+    // Verdict Section
+    .verdict-section {
+      padding: var(--space-8);
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: white;
+
+      h3 {
+        text-align: center;
+        color: white;
+        margin-bottom: var(--space-6);
+        font-size: var(--text-xl);
+      }
+    }
+
+    .verdict-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: var(--space-4);
+      align-items: start;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .verdict-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: var(--space-5);
+      border-radius: var(--border-radius-lg);
+
+      h4 {
+        color: white;
+        font-size: var(--text-lg);
+        margin: 0 0 var(--space-2) 0;
+      }
+    }
+
+    .verdict-tagline {
+      font-size: var(--text-sm);
+      opacity: 0.85;
+      margin-bottom: var(--space-3);
+      font-style: italic;
+    }
+
+    .verdict-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+
+    .verdict-tag {
+      padding: var(--space-1) var(--space-2);
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: var(--border-radius-full);
+      font-size: var(--text-xs);
+    }
+
+    .verdict-best {
+      font-size: var(--text-sm);
+      opacity: 0.9;
+      margin: 0;
+
+      strong {
+        color: var(--color-highlight);
+      }
+    }
+
+    .verdict-vs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: var(--text-sm);
+      align-self: center;
+
+      @media (max-width: 768px) {
+        margin: var(--space-2) auto;
+      }
+    }
+
+    .verdict-summary {
+      margin-top: var(--space-6);
+      padding: var(--space-4);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius-md);
+      text-align: center;
+
+      p {
+        margin: 0;
+        font-size: var(--text-base);
+        line-height: 1.6;
+      }
     }
 
     .comparison-cta {
@@ -455,55 +604,299 @@ export class CompareComponent {
     return [
       {
         icon: '⭐',
-        label: 'Valutazione',
-        value1: c1.rating.toString(),
-        value2: c2.rating.toString(),
-        winner: c1.rating > c2.rating ? 1 : c1.rating < c2.rating ? 2 : 0
+        label: 'Valutazione Complessiva',
+        value1: `${c1.rating}/5`,
+        value2: `${c2.rating}/5`,
+        subValue1: this.getRatingLabel(c1.rating),
+        subValue2: this.getRatingLabel(c2.rating),
+        winner: c1.rating > c2.rating ? 1 : c1.rating < c2.rating ? 2 : 0,
+        highlight: true,
+        category: 'main'
       },
       {
         icon: '💰',
-        label: 'Costo',
+        label: 'Budget Giornaliero',
         value1: '€'.repeat(c1.priceLevel),
         value2: '€'.repeat(c2.priceLevel),
-        winner: c1.priceLevel < c2.priceLevel ? 1 : c1.priceLevel > c2.priceLevel ? 2 : 0
-      },
-      {
-        icon: '📅',
-        label: 'Giorni consigliati',
-        value1: `${c1.suggestedDays.min}-${c1.suggestedDays.max}`,
-        value2: `${c2.suggestedDays.min}-${c2.suggestedDays.max}`,
-        winner: 0
-      },
-      {
-        icon: '☀️',
-        label: 'Periodo migliore',
-        value1: c1.bestPeriod.slice(0, 2).join(', '),
-        value2: c2.bestPeriod.slice(0, 2).join(', '),
-        winner: 0
-      },
-      {
-        icon: '🌍',
-        label: 'Continente',
-        value1: c1.continent,
-        value2: c2.continent,
-        winner: 0
-      },
-      {
-        icon: '🗣️',
-        label: 'Lingua',
-        value1: c1.language[0],
-        value2: c2.language[0],
-        winner: 0
+        subValue1: this.getDailyBudget(c1.priceLevel),
+        subValue2: this.getDailyBudget(c2.priceLevel),
+        winner: c1.priceLevel < c2.priceLevel ? 1 : c1.priceLevel > c2.priceLevel ? 2 : 0,
+        highlight: true,
+        category: 'main'
       },
       {
         icon: '🔥',
         label: 'Popolarità',
-        value1: c1.popularityScore.toString(),
-        value2: c2.popularityScore.toString(),
-        winner: c1.popularityScore > c2.popularityScore ? 1 : c1.popularityScore < c2.popularityScore ? 2 : 0
+        value1: `${c1.popularityScore}/100`,
+        value2: `${c2.popularityScore}/100`,
+        subValue1: this.getPopularityLabel(c1.popularityScore),
+        subValue2: this.getPopularityLabel(c2.popularityScore),
+        winner: c1.popularityScore > c2.popularityScore ? 1 : c1.popularityScore < c2.popularityScore ? 2 : 0,
+        highlight: true,
+        category: 'main'
+      },
+      {
+        icon: '📅',
+        label: 'Durata Consigliata',
+        value1: `${c1.suggestedDays.min}-${c1.suggestedDays.max} giorni`,
+        value2: `${c2.suggestedDays.min}-${c2.suggestedDays.max} giorni`,
+        subValue1: this.getTripTypeLabel(c1.suggestedDays.max),
+        subValue2: this.getTripTypeLabel(c2.suggestedDays.max),
+        winner: 0,
+        category: 'planning'
+      },
+      {
+        icon: '☀️',
+        label: 'Periodo Migliore',
+        value1: c1.bestPeriod.slice(0, 2).join(' - '),
+        value2: c2.bestPeriod.slice(0, 2).join(' - '),
+        subValue1: this.getSeasonType(c1.bestPeriod),
+        subValue2: this.getSeasonType(c2.bestPeriod),
+        winner: 0,
+        category: 'planning'
+      },
+      {
+        icon: '🌡️',
+        label: 'Clima',
+        value1: this.getClimateType(c1),
+        value2: this.getClimateType(c2),
+        subValue1: this.getClimateDescription(c1),
+        subValue2: this.getClimateDescription(c2),
+        winner: 0,
+        category: 'planning'
+      },
+      {
+        icon: '🕐',
+        label: 'Fuso Orario',
+        value1: c1.timezone,
+        value2: c2.timezone,
+        subValue1: this.getJetLagInfo(c1.timezone),
+        subValue2: this.getJetLagInfo(c2.timezone),
+        winner: 0,
+        category: 'practical'
+      },
+      {
+        icon: '💱',
+        label: 'Valuta',
+        value1: c1.currency,
+        value2: c2.currency,
+        subValue1: this.getCurrencyTip(c1.currency),
+        subValue2: this.getCurrencyTip(c2.currency),
+        winner: 0,
+        category: 'practical'
+      },
+      {
+        icon: '🗣️',
+        label: 'Lingua',
+        value1: c1.language.join(', '),
+        value2: c2.language.join(', '),
+        subValue1: this.getLanguageDifficulty(c1.language),
+        subValue2: this.getLanguageDifficulty(c2.language),
+        winner: 0,
+        category: 'practical'
+      },
+      {
+        icon: '✈️',
+        label: 'Accessibilità',
+        value1: this.getAccessibility(c1),
+        value2: this.getAccessibility(c2),
+        subValue1: this.getFlightInfo(c1),
+        subValue2: this.getFlightInfo(c2),
+        winner: 0,
+        category: 'practical'
+      },
+      {
+        icon: '🛡️',
+        label: 'Sicurezza',
+        value1: this.getSafetyLevel(c1),
+        value2: this.getSafetyLevel(c2),
+        subValue1: this.getSafetyTip(c1),
+        subValue2: this.getSafetyTip(c2),
+        winner: 0,
+        category: 'practical'
+      },
+      {
+        icon: '📞',
+        label: 'Emergenze',
+        value1: c1.emergencyNumber,
+        value2: c2.emergencyNumber,
+        winner: 0,
+        category: 'practical'
       }
     ];
   });
+
+  // Tag labels for display
+  tagLabels: Record<string, string> = {
+    cultural: 'Cultura', foodie: 'Gastronomia', adventure: 'Avventura',
+    relaxation: 'Relax', nightlife: 'Vita notturna', nature: 'Natura',
+    romantic: 'Romantico', budget: 'Low-cost', luxury: 'Lusso',
+    beach: 'Mare', architecture: 'Architettura', spiritual: 'Spirituale',
+    unique: 'Unico', photography: 'Fotografico', wine: 'Vino',
+    wildlife: 'Wildlife', exotic: 'Esotico', technology: 'Tech',
+    historic: 'Storico', family: 'Famiglia', shopping: 'Shopping',
+    music: 'Musica', art: 'Arte', trekking: 'Trekking'
+  };
+
+  getTagLabel(tag: string): string {
+    return this.tagLabels[tag] || tag;
+  }
+
+  getRatingLabel(rating: number): string {
+    if (rating >= 4.8) return 'Eccellente';
+    if (rating >= 4.5) return 'Ottimo';
+    if (rating >= 4.0) return 'Molto buono';
+    if (rating >= 3.5) return 'Buono';
+    return 'Discreto';
+  }
+
+  getCostLabel(level: number): string {
+    const labels = ['', 'Economico', 'Accessibile', 'Medio', 'Costoso', 'Lusso'];
+    return labels[level] || '';
+  }
+
+  getDailyBudget(level: number): string {
+    const budgets = ['', '30-50€/giorno', '50-80€/giorno', '80-120€/giorno', '120-180€/giorno', '180€+/giorno'];
+    return budgets[level] || '';
+  }
+
+  getTripTypeLabel(days: number): string {
+    if (days <= 3) return 'Weekend lungo';
+    if (days <= 5) return 'Settimana corta';
+    if (days <= 7) return 'Settimana piena';
+    return 'Viaggio esteso';
+  }
+
+  getSeasonType(months: string[]): string {
+    const springMonths = ['Marzo', 'Aprile', 'Maggio'];
+    const summerMonths = ['Giugno', 'Luglio', 'Agosto'];
+    const autumnMonths = ['Settembre', 'Ottobre', 'Novembre'];
+    const winterMonths = ['Dicembre', 'Gennaio', 'Febbraio'];
+    
+    if (months.some(m => summerMonths.includes(m))) return 'Alta stagione estiva';
+    if (months.some(m => springMonths.includes(m))) return 'Primavera ideale';
+    if (months.some(m => autumnMonths.includes(m))) return 'Autunno consigliato';
+    return 'Inverno/Bassa stagione';
+  }
+
+  getClimateDescription(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (city.tags.includes('beach')) return 'Caldo tutto l\'anno';
+    if (continent === 'europa') return 'Estati miti, inverni freddi';
+    if (continent === 'asia') return 'Attenzione ai monsoni';
+    return 'Verificare stagione';
+  }
+
+  getJetLagInfo(timezone: string): string {
+    const offset = timezone.replace('GMT', '');
+    if (offset === '+1' || offset === '+2') return 'Nessun jet lag';
+    if (offset.includes('+') && parseInt(offset) <= 4) return 'Jet lag leggero';
+    if (offset.includes('+') && parseInt(offset) <= 8) return 'Jet lag moderato';
+    return 'Jet lag significativo';
+  }
+
+  getCurrencyTip(currency: string): string {
+    if (currency === 'EUR') return 'Nessun cambio';
+    if (currency === 'USD' || currency === 'GBP') return 'Cambio facile';
+    return 'Cambiare in loco';
+  }
+
+  getLanguageDifficulty(languages: string[]): string {
+    const easyLanguages = ['Inglese', 'Spagnolo', 'Francese', 'Italiano', 'Portoghese'];
+    if (languages.some(l => easyLanguages.includes(l))) return 'Facile comunicare';
+    return 'App traduttore utile';
+  }
+
+  getAccessibility(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa') return 'Voli diretti frequenti';
+    if (city.popularityScore >= 80) return 'Ottimi collegamenti';
+    if (city.popularityScore >= 50) return 'Buoni collegamenti';
+    return 'Possibili scali';
+  }
+
+  getFlightInfo(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa') return '1-3h dall\'Italia';
+    if (continent === 'africa') return '3-6h dall\'Italia';
+    if (continent === 'asia') return '8-12h dall\'Italia';
+    if (continent === 'americhe') return '9-14h dall\'Italia';
+    if (continent === 'oceania') return '20h+ dall\'Italia';
+    return 'Verificare voli';
+  }
+
+  getSafetyLevel(city: City): string {
+    const score = city.rating;
+    if (score >= 4.5) return '✅ Molto sicura';
+    if (score >= 4.0) return '✅ Sicura';
+    if (score >= 3.5) return '⚠️ Attenzione';
+    return '⚠️ Cautela';
+  }
+
+  getSafetyTip(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('luxury')) return 'Zone turistiche sicure';
+    if (city.continent.toLowerCase() === 'europa') return 'Standard europei';
+    return 'Precauzioni normali';
+  }
+
+  getPopularityLabel(score: number): string {
+    if (score >= 90) return 'Top mondiale';
+    if (score >= 75) return 'Molto popolare';
+    if (score >= 50) return 'Popolare';
+    if (score >= 25) return 'In crescita';
+    return 'Nascosta';
+  }
+
+  getClimateType(city: City): string {
+    const continent = city.continent.toLowerCase();
+    const tags = city.tags;
+    
+    if (tags.includes('beach') || tags.includes('tropical')) return 'Tropicale';
+    if (city.name.includes('Reykjavik') || city.name.includes('Iceland')) return 'Subartico';
+    if (continent === 'asia' && tags.includes('exotic')) return 'Monsoni';
+    if (continent === 'europa') return 'Temperato';
+    if (continent === 'africa') return 'Caldo/Arido';
+    if (continent === 'oceania') return 'Oceanico';
+    return 'Vario';
+  }
+
+  getIdealTraveler(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('romantic')) return 'Coppie e romantici';
+    if (tags.includes('adventure')) return 'Avventurieri';
+    if (tags.includes('cultural')) return 'Amanti della cultura';
+    if (tags.includes('foodie')) return 'Food lovers';
+    if (tags.includes('beach')) return 'Amanti del mare';
+    if (tags.includes('nightlife')) return 'Nottambuli';
+    if (tags.includes('family')) return 'Famiglie';
+    if (tags.includes('budget')) return 'Viaggiatori budget';
+    return 'Tutti i viaggiatori';
+  }
+
+  getComparisonSummary(): string {
+    const c1 = this.city1();
+    const c2 = this.city2();
+    if (!c1 || !c2) return '';
+
+    const cheaper = c1.priceLevel < c2.priceLevel ? c1.name : c2.name;
+    const moreExpensive = c1.priceLevel > c2.priceLevel ? c1.name : c2.name;
+    const higherRated = c1.rating > c2.rating ? c1.name : c2.name;
+    
+    if (c1.priceLevel === c2.priceLevel && c1.rating === c2.rating) {
+      return `${c1.name} e ${c2.name} sono entrambe ottime scelte! Scegli in base alle tue preferenze personali: ${c1.name} è perfetta per ${this.getIdealTraveler(c1).toLowerCase()}, mentre ${c2.name} è ideale per ${this.getIdealTraveler(c2).toLowerCase()}.`;
+    }
+    
+    if (c1.priceLevel < c2.priceLevel && c1.rating >= c2.rating) {
+      return `${c1.name} offre il miglior rapporto qualità-prezzo: costa meno ed ha una valutazione pari o superiore a ${c2.name}.`;
+    }
+    
+    if (c2.priceLevel < c1.priceLevel && c2.rating >= c1.rating) {
+      return `${c2.name} offre il miglior rapporto qualità-prezzo: costa meno ed ha una valutazione pari o superiore a ${c1.name}.`;
+    }
+
+    return `Se cerchi un'esperienza premium, scegli ${higherRated}. Se vuoi risparmiare senza rinunciare alla qualità, ${cheaper} è un'ottima alternativa.`;
+  }
 
   popularComparisons = [
     { city1: 'tokyo', city2: 'newyork', label: 'Tokyo vs New York' },
