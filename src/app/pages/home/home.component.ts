@@ -527,23 +527,20 @@ import { City } from '../../core/models/city.model';
     // Scroll Indicator
     .scroll-indicator {
       position: absolute;
-      bottom: var(--space-8);
+      bottom: var(--space-4);
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--space-2);
+      gap: var(--space-1);
       color: var(--color-gray-400);
-      font-size: var(--text-sm);
+      font-size: var(--text-xs);
       z-index: 1;
       pointer-events: none;
 
       span {
-        background: var(--color-off-white);
-        padding: var(--space-1) var(--space-3);
-        border-radius: var(--border-radius-md);
-        white-space: nowrap;
+        display: none;
       }
 
       @media (max-width: 768px) {
