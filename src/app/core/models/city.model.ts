@@ -8,6 +8,7 @@ import { WikipediaSummary } from '../services/api/wikipedia.service';
 import { CountryInfo } from '../services/api/country.service';
 import { UnsplashPhoto } from '../services/api/unsplash.service';
 import { CategorizedPlace } from '../services/api/opentripmap.service';
+import { PlaceWithPhotos } from '../services/api/foursquare.service';
 
 export interface City {
   id: string;
@@ -45,6 +46,9 @@ export interface CityLiveData {
   foodPhotos?: UnsplashPhoto[];
   attractions?: CategorizedPlace[];
   restaurants?: CategorizedPlace[];
+  // Foursquare real photos
+  foursquareAttractions?: PlaceWithPhotos[];
+  foursquareRestaurants?: PlaceWithPhotos[];
 }
 
 export interface CityDetails extends City {

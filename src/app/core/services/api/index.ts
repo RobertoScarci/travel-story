@@ -9,4 +9,5 @@ export * from './wikipedia.service';
 export * from './country.service';
 export * from './unsplash.service';
 export * from './opentripmap.service';
+export * from './foursquare.service';
 

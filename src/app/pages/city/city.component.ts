@@ -12,6 +12,7 @@ import { WikipediaService, WikipediaSummary } from '../../core/services/api/wiki
 import { CountryService, CountryInfo } from '../../core/services/api/country.service';
 import { UnsplashService, UnsplashPhoto } from '../../core/services/api/unsplash.service';
 import { OpenTripMapService, CategorizedPlace } from '../../core/services/api/opentripmap.service';
+import { FoursquareService, PlaceWithPhotos } from '../../core/services/api/foursquare.service';
 import { forkJoin } from 'rxjs';
 
 // Interface per i video di viaggio (YouTube)
@@ -617,6 +618,95 @@ export interface TravelVideo {
                   Unsplash
                 </a>
               </p>
+            </div>
+          </section>
+        }
+
+        <!-- Real Photos from Foursquare -->
+        @if (foursquareAttractions().length > 0 || foursquareRestaurants().length > 0) {
+          <section class="foursquare-section">
+            <div class="container">
+              <!-- Attractions with real photos -->
+              @if (foursquareAttractions().length > 0) {
+                <div class="foursquare-category">
+                  <div class="section-header">
+                    <span class="section-icon">🏛️</span>
+                    <h2>Attrazioni da Visitare</h2>
+                    <span class="powered-by">Foto reali da Foursquare</span>
+                  </div>
+                  <div class="foursquare-grid">
+                    @for (place of foursquareAttractions(); track place.fsq_id; let i = $index) {
+                      <div class="foursquare-card" [style.animation-delay.ms]="i * 80">
+                        @if (place.mainPhotoUrl) {
+                          <div class="foursquare-image">
+                            <img [src]="place.mainPhotoUrl" [alt]="place.name" loading="lazy">
+                          </div>
+                        } @else {
+                          <div class="foursquare-image placeholder">
+                            <span class="placeholder-icon">🏛️</span>
+                          </div>
+                        }
+                        <div class="foursquare-info">
+                          <h4>{{ place.name }}</h4>
+                          @if (place.location.formatted_address) {
+                            <p class="foursquare-address">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                              </svg>
+                              {{ place.location.formatted_address }}
+                            </p>
+                          }
+                          @if (place.categories.length > 0) {
+                            <span class="foursquare-category-tag">{{ place.categories[0].name }}</span>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Restaurants with real photos -->
+              @if (foursquareRestaurants().length > 0) {
+                <div class="foursquare-category">
+                  <div class="section-header">
+                    <span class="section-icon">🍽️</span>
+                    <h2>Dove Mangiare</h2>
+                    <span class="powered-by">Ristoranti reali da Foursquare</span>
+                  </div>
+                  <div class="foursquare-grid">
+                    @for (place of foursquareRestaurants(); track place.fsq_id; let i = $index) {
+                      <div class="foursquare-card" [style.animation-delay.ms]="i * 80">
+                        @if (place.mainPhotoUrl) {
+                          <div class="foursquare-image">
+                            <img [src]="place.mainPhotoUrl" [alt]="place.name" loading="lazy">
+                          </div>
+                        } @else {
+                          <div class="foursquare-image placeholder">
+                            <span class="placeholder-icon">🍽️</span>
+                          </div>
+                        }
+                        <div class="foursquare-info">
+                          <h4>{{ place.name }}</h4>
+                          @if (place.location.formatted_address) {
+                            <p class="foursquare-address">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                              </svg>
+                              {{ place.location.formatted_address }}
+                            </p>
+                          }
+                          @if (place.categories.length > 0) {
+                            <span class="foursquare-category-tag">{{ place.categories[0].name }}</span>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
             </div>
           </section>
         }
@@ -1653,6 +1743,144 @@ export interface TravelVideo {
       }
     }
 
+    // ===== FOURSQUARE REAL PHOTOS =====
+    .foursquare-section {
+      padding: var(--space-16) 0;
+      background: linear-gradient(180deg, #f9f8f6 0%, var(--color-off-white) 100%);
+    }
+
+    .foursquare-category {
+      margin-bottom: var(--space-12);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        margin-bottom: var(--space-6);
+        flex-wrap: wrap;
+
+        h2 {
+          margin: 0;
+          flex-grow: 1;
+        }
+      }
+
+      .powered-by {
+        font-size: var(--text-xs);
+        color: var(--color-gray-400);
+        background: rgba(0, 0, 0, 0.05);
+        padding: 4px 10px;
+        border-radius: var(--border-radius-full);
+      }
+    }
+
+    .foursquare-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+
+      @media (max-width: 992px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .foursquare-card {
+      background: var(--color-white);
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+      animation: fadeInUp 0.5s ease both;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+
+        .foursquare-image img {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    .foursquare-image {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-base);
+      }
+
+      &.placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-off-white) 100%);
+
+        .placeholder-icon {
+          font-size: 48px;
+          opacity: 0.4;
+        }
+      }
+    }
+
+    .foursquare-info {
+      padding: var(--space-3) var(--space-4);
+
+      h4 {
+        font-size: var(--text-sm);
+        font-weight: 600;
+        color: var(--color-primary);
+        margin: 0 0 var(--space-1);
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+
+    .foursquare-address {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      font-size: var(--text-xs);
+      color: var(--color-gray-400);
+      margin: 0 0 var(--space-2);
+      line-height: 1.4;
+
+      svg {
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+    }
+
+    .foursquare-category-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--color-accent);
+      background: rgba(233, 69, 96, 0.1);
+      padding: 2px 8px;
+      border-radius: var(--border-radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
     // ===== LIVE SECTIONS (OpenTripMap) =====
     .live-section {
       padding: var(--space-16) 0;
@@ -1803,6 +2031,7 @@ export class CityComponent implements OnInit, OnDestroy {
   private countryService = inject(CountryService);
   private unsplashService = inject(UnsplashService);
   private openTripMapService = inject(OpenTripMapService);
+  private foursquareService = inject(FoursquareService);
 
   // State
   loading = signal(true);
@@ -1820,6 +2049,7 @@ export class CityComponent implements OnInit, OnDestroy {
   photosLoading = signal(true);
   attractionsLoading = signal(true);
   restaurantsLoading = signal(true);
+  foursquareLoading = signal(true);
 
   // Computed
   isSaved = computed(() => {
@@ -1835,6 +2065,9 @@ export class CityComponent implements OnInit, OnDestroy {
   heroPhoto = computed(() => this.photos().length > 0 ? this.photos()[0] : null);
   attractions = computed(() => this.liveData().attractions || []);
   restaurants = computed(() => this.liveData().restaurants || []);
+  // Foursquare real photos
+  foursquareAttractions = computed(() => this.liveData().foursquareAttractions || []);
+  foursquareRestaurants = computed(() => this.liveData().foursquareRestaurants || []);
 
   // Travel Videos (YouTube)
   travelVideos = signal<TravelVideo[]>([]);
@@ -1971,6 +2204,29 @@ export class CityComponent implements OnInit, OnDestroy {
         this.restaurantsLoading.set(false);
       },
       error: () => this.restaurantsLoading.set(false)
+    });
+
+    // Load real photos from Foursquare
+    this.foursquareService.getAttractionPhotos(details.name, lat, lng, 8).subscribe({
+      next: (attractions) => {
+        if (attractions.length > 0) {
+          this.liveData.update(data => ({ ...data, foursquareAttractions: attractions }));
+        }
+      },
+      error: (err) => console.error('Foursquare attractions error:', err)
+    });
+
+    this.foursquareService.getRestaurantPhotos(details.name, lat, lng, 8).subscribe({
+      next: (restaurants) => {
+        if (restaurants.length > 0) {
+          this.liveData.update(data => ({ ...data, foursquareRestaurants: restaurants }));
+        }
+        this.foursquareLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Foursquare restaurants error:', err);
+        this.foursquareLoading.set(false);
+      }
     });
   }
 
