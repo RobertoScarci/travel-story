@@ -422,6 +422,8 @@ import { City } from '../../core/models/city.model';
       width: 100%;
       max-width: 600px;
       margin: 0 auto;
+      position: relative;
+      z-index: 10;
     }
 
     .search-bar {
@@ -481,6 +483,8 @@ import { City } from '../../core/models/city.model';
       flex-wrap: wrap;
       justify-content: center;
       gap: var(--space-2);
+      position: relative;
+      z-index: 10;
     }
 
     .filter-chip {
@@ -532,6 +536,15 @@ import { City } from '../../core/models/city.model';
       gap: var(--space-2);
       color: var(--color-gray-400);
       font-size: var(--text-sm);
+      z-index: 1;
+      pointer-events: none;
+
+      span {
+        background: var(--color-off-white);
+        padding: var(--space-1) var(--space-3);
+        border-radius: var(--border-radius-md);
+        white-space: nowrap;
+      }
 
       @media (max-width: 768px) {
         display: none;
