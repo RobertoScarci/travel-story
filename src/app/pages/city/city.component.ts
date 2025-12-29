@@ -150,23 +150,88 @@ export interface TravelVideo {
                 
                 <!-- Wikipedia Summary (live) -->
                 @if (wikipedia()) {
-                  <p class="story-wiki">{{ wikipedia()!.extract | slice:0:400 }}...</p>
+                  <p class="story-wiki">{{ wikipedia()!.extract | slice:0:500 }}...</p>
                   <a [href]="wikipedia()!.contentUrls.desktop" target="_blank" rel="noopener" class="wiki-link">
-                    Leggi di più su Wikipedia →
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    Leggi di più su Wikipedia
                   </a>
                 } @else {
                   <p class="story-atmosphere">{{ details()!.story.atmosphere }}</p>
                 }
                 
-                <p class="story-unique">
-                  <strong>Cosa la rende unica:</strong> {{ details()!.story.uniqueAspect }}
-                </p>
+                <!-- Unique Aspect Card -->
+                <div class="unique-card">
+                  <div class="unique-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                  </div>
+                  <div class="unique-content">
+                    <span class="unique-label">Cosa la rende unica</span>
+                    <p>{{ details()!.story.uniqueAspect }}</p>
+                  </div>
+                </div>
+
+                <!-- Atmosphere Card -->
+                @if (wikipedia()) {
+                  <div class="atmosphere-card">
+                    <div class="atmosphere-icon">✨</div>
+                    <div class="atmosphere-content">
+                      <span class="atmosphere-label">L'atmosfera</span>
+                      <p>{{ details()!.story.atmosphere }}</p>
+                    </div>
+                  </div>
+                }
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                  <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value">{{ city()!.rating }}</span>
+                    <span class="stat-label">Rating</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-icon">📅</span>
+                    <span class="stat-value">{{ city()!.suggestedDays.min }}-{{ city()!.suggestedDays.max }}</span>
+                    <span class="stat-label">Giorni ideali</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-icon">💰</span>
+                    <span class="stat-value">{{ '€'.repeat(city()!.priceLevel) }}</span>
+                    <span class="stat-label">Costo</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-icon">🌡️</span>
+                    <span class="stat-value">{{ city()!.bestPeriod[0] }}</span>
+                    <span class="stat-label">Periodo migliore</span>
+                  </div>
+                </div>
               </div>
+
               <div class="story-side animate-fade-in-up animate-delay-1">
                 <!-- Weather Forecast Card -->
                 @if (forecast() && forecast()!.daily.length > 0) {
                   <div class="weather-card">
-                    <h4>🌤️ Previsioni Meteo</h4>
+                    <div class="weather-header">
+                      <h4>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M17 18a5 5 0 0 0-10 0"/>
+                          <line x1="12" y1="9" x2="12" y2="2"/>
+                          <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
+                          <line x1="1" y1="18" x2="3" y2="18"/>
+                          <line x1="21" y1="18" x2="23" y2="18"/>
+                          <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
+                        </svg>
+                        Previsioni Meteo
+                      </h4>
+                      @if (weather()) {
+                        <span class="current-temp">{{ weather()!.temperature }}°C</span>
+                      }
+                    </div>
                     <div class="forecast-grid">
                       @for (day of forecast()!.daily.slice(0, 5); track day.date) {
                         <div class="forecast-day">
@@ -179,8 +244,15 @@ export interface TravelVideo {
                   </div>
                 }
 
+                <!-- Traveller Types -->
                 <div class="traveller-types">
-                  <h4>Perfetta per</h4>
+                  <h4>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Perfetta per
+                  </h4>
                   <div class="type-tags">
                     @for (type of details()!.story.travellerTypes; track type) {
                       <span class="type-tag">{{ type }}</span>
@@ -188,51 +260,121 @@ export interface TravelVideo {
                   </div>
                 </div>
 
-                <!-- Country Info (live) -->
-                <div class="quick-info">
-                  @if (countryInfo()) {
-                    <div class="info-item">
-                      <span class="info-icon">{{ countryInfo()!.flag }}</span>
-                      <span class="info-text">{{ countryInfo()!.name }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-icon">👥</span>
-                      <span class="info-text">{{ formatPopulation(countryInfo()!.population) }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-icon">💰</span>
-                      <span class="info-text">
-                        @if (countryInfo()!.currencies.length > 0) {
-                          {{ countryInfo()!.currencies[0].name }} ({{ countryInfo()!.currencies[0].symbol }})
-                        } @else {
-                          {{ city()!.currency }}
-                        }
-                      </span>
-                    </div>
-                  } @else {
-                    <div class="info-item">
-                      <span class="info-icon">🗣️</span>
-                      <span class="info-text">{{ city()!.language.join(', ') }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-icon">💱</span>
-                      <span class="info-text">{{ city()!.currency }}</span>
-                    </div>
-                  }
-                  <div class="info-item">
-                    <span class="info-icon">🕐</span>
-                    <span class="info-text">{{ city()!.timezone }}</span>
+                <!-- Country Info Card -->
+                <div class="country-card">
+                  <h4>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <line x1="2" y1="12" x2="22" y2="12"/>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    Informazioni Paese
+                  </h4>
+                  <div class="country-info-grid">
+                    @if (countryInfo()) {
+                      <div class="country-item">
+                        <span class="country-flag">{{ countryInfo()!.flag }}</span>
+                        <div class="country-detail">
+                          <span class="country-label">Paese</span>
+                          <span class="country-value">{{ countryInfo()!.name }}</span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">👥</span>
+                        <div class="country-detail">
+                          <span class="country-label">Popolazione</span>
+                          <span class="country-value">{{ formatPopulation(countryInfo()!.population) }}</span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">💰</span>
+                        <div class="country-detail">
+                          <span class="country-label">Valuta</span>
+                          <span class="country-value">
+                            @if (countryInfo()!.currencies.length > 0) {
+                              {{ countryInfo()!.currencies[0].symbol }} {{ countryInfo()!.currencies[0].name }}
+                            } @else {
+                              {{ city()!.currency }}
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">🗣️</span>
+                        <div class="country-detail">
+                          <span class="country-label">Lingue</span>
+                          <span class="country-value">{{ getLanguagesDisplay(countryInfo()!.languages) }}</span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">🕐</span>
+                        <div class="country-detail">
+                          <span class="country-label">Fuso orario</span>
+                          <span class="country-value">{{ city()!.timezone }}</span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">🚗</span>
+                        <div class="country-detail">
+                          <span class="country-label">Guida</span>
+                          <span class="country-value">{{ countryInfo()!.drivingSide === 'right' ? 'A destra' : 'A sinistra' }}</span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">📞</span>
+                        <div class="country-detail">
+                          <span class="country-label">Prefisso</span>
+                          <span class="country-value">{{ countryInfo()!.callingCode }}</span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">🚨</span>
+                        <div class="country-detail">
+                          <span class="country-label">Emergenze</span>
+                          <span class="country-value">{{ city()!.emergencyNumber }}</span>
+                        </div>
+                      </div>
+                    } @else {
+                      <div class="country-item">
+                        <span class="country-icon">🗣️</span>
+                        <div class="country-detail">
+                          <span class="country-label">Lingue</span>
+                          <span class="country-value">{{ city()!.language.join(', ') }}</span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">💱</span>
+                        <div class="country-detail">
+                          <span class="country-label">Valuta</span>
+                          <span class="country-value">{{ city()!.currency }}</span>
+                        </div>
+                      </div>
+                      <div class="country-item">
+                        <span class="country-icon">🕐</span>
+                        <div class="country-detail">
+                          <span class="country-label">Fuso orario</span>
+                          <span class="country-value">{{ city()!.timezone }}</span>
+                        </div>
+                      </div>
+                    }
                   </div>
-                  @if (countryInfo()) {
-                    <div class="info-item">
-                      <span class="info-icon">🚗</span>
-                      <span class="info-text">Guida a {{ countryInfo()!.drivingSide === 'right' ? 'destra' : 'sinistra' }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-icon">📞</span>
-                      <span class="info-text">{{ countryInfo()!.callingCode }}</span>
-                    </div>
-                  }
+                </div>
+
+                <!-- Safety Badge -->
+                <div class="safety-badge" [class]="details()!.safety.overallLevel">
+                  <span class="safety-icon">
+                    @switch (details()!.safety.overallLevel) {
+                      @case ('very-safe') { ✅ }
+                      @case ('safe') { ✅ }
+                      @case ('moderate') { ⚠️ }
+                      @case ('caution') { ⚠️ }
+                      @case ('avoid') { 🚫 }
+                    }
+                  </span>
+                  <div class="safety-content">
+                    <span class="safety-label">Sicurezza</span>
+                    <span class="safety-level">{{ getSafetyLabel() }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -970,11 +1112,127 @@ export interface TravelVideo {
         color: var(--color-gray-500);
         margin-bottom: var(--space-4);
       }
+    }
 
-      .story-unique {
-        color: var(--color-gray-400);
-        border-left: 3px solid var(--color-accent);
-        padding-left: var(--space-4);
+    // Unique Card
+    .unique-card {
+      display: flex;
+      gap: var(--space-4);
+      background: linear-gradient(135deg, rgba(233, 69, 96, 0.08) 0%, rgba(248, 181, 0, 0.05) 100%);
+      border-left: 4px solid var(--color-accent);
+      padding: var(--space-5);
+      border-radius: var(--border-radius-lg);
+      margin: var(--space-6) 0;
+
+      .unique-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-accent);
+        border-radius: 50%;
+        flex-shrink: 0;
+
+        svg {
+          stroke: white;
+          fill: white;
+        }
+      }
+
+      .unique-content {
+        .unique-label {
+          display: block;
+          font-size: var(--text-sm);
+          font-weight: 600;
+          color: var(--color-accent);
+          margin-bottom: var(--space-1);
+        }
+
+        p {
+          margin: 0;
+          color: var(--color-gray-600);
+          line-height: 1.6;
+        }
+      }
+    }
+
+    // Atmosphere Card
+    .atmosphere-card {
+      display: flex;
+      gap: var(--space-4);
+      background: var(--color-white);
+      padding: var(--space-5);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--space-6);
+
+      .atmosphere-icon {
+        font-size: 28px;
+      }
+
+      .atmosphere-content {
+        .atmosphere-label {
+          display: block;
+          font-size: var(--text-sm);
+          font-weight: 600;
+          color: var(--color-primary);
+          margin-bottom: var(--space-1);
+        }
+
+        p {
+          margin: 0;
+          color: var(--color-gray-500);
+          font-style: italic;
+          line-height: 1.6;
+        }
+      }
+    }
+
+    // Quick Stats
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-3);
+      margin-top: var(--space-2);
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: var(--space-4);
+        background: var(--color-white);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-sm);
+        transition: transform var(--transition-fast);
+
+        &:hover {
+          transform: translateY(-2px);
+        }
+
+        .stat-icon {
+          font-size: 24px;
+          margin-bottom: var(--space-2);
+        }
+
+        .stat-value {
+          font-size: var(--text-lg);
+          font-weight: 700;
+          color: var(--color-primary);
+          margin-bottom: 2px;
+        }
+
+        .stat-label {
+          font-size: var(--text-xs);
+          color: var(--color-gray-400);
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+        }
       }
     }
 
@@ -988,11 +1246,19 @@ export interface TravelVideo {
       background: var(--color-white);
       padding: var(--space-5);
       border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
 
       h4 {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
         font-size: var(--text-sm);
-        color: var(--color-gray-400);
+        color: var(--color-primary);
         margin-bottom: var(--space-3);
+
+        svg {
+          stroke: var(--color-accent);
+        }
       }
     }
 
@@ -1004,30 +1270,133 @@ export interface TravelVideo {
 
     .type-tag {
       padding: var(--space-2) var(--space-3);
-      background: var(--color-cream);
+      background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(248, 181, 0, 0.08) 100%);
       border-radius: var(--border-radius-full);
       font-size: var(--text-sm);
-      color: var(--color-gray-500);
+      color: var(--color-gray-600);
+      font-weight: 500;
     }
 
-    .quick-info {
-      display: flex;
-      flex-direction: column;
+    // Country Info Card
+    .country-card {
+      background: var(--color-white);
+      padding: var(--space-5);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+
+      h4 {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        font-size: var(--text-sm);
+        color: var(--color-primary);
+        margin-bottom: var(--space-4);
+
+        svg {
+          stroke: var(--color-accent);
+        }
+      }
+    }
+
+    .country-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: var(--space-3);
     }
 
-    .info-item {
+    .country-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+
+      .country-flag {
+        font-size: 24px;
+      }
+
+      .country-icon {
+        font-size: 18px;
+        width: 28px;
+        text-align: center;
+      }
+
+      .country-detail {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        min-width: 0;
+
+        .country-label {
+          font-size: 10px;
+          text-transform: uppercase;
+          color: var(--color-gray-400);
+          letter-spacing: 0.02em;
+        }
+
+        .country-value {
+          font-size: var(--text-sm);
+          color: var(--color-gray-600);
+          font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    // Safety Badge
+    .safety-badge {
       display: flex;
       align-items: center;
       gap: var(--space-3);
-      font-size: var(--text-sm);
+      padding: var(--space-4);
+      border-radius: var(--border-radius-lg);
+      background: var(--color-white);
+      box-shadow: var(--shadow-sm);
 
-      .info-icon {
-        font-size: 1.2em;
+      .safety-icon {
+        font-size: 28px;
       }
 
-      .info-text {
-        color: var(--color-gray-500);
+      .safety-content {
+        display: flex;
+        flex-direction: column;
+
+        .safety-label {
+          font-size: 10px;
+          text-transform: uppercase;
+          color: var(--color-gray-400);
+          letter-spacing: 0.02em;
+        }
+
+        .safety-level {
+          font-size: var(--text-sm);
+          font-weight: 600;
+          color: var(--color-gray-600);
+        }
+      }
+
+      &.very-safe, &.safe {
+        border-left: 4px solid #22c55e;
+        
+        .safety-level {
+          color: #16a34a;
+        }
+      }
+
+      &.moderate, &.caution {
+        border-left: 4px solid #f59e0b;
+        
+        .safety-level {
+          color: #d97706;
+        }
+      }
+
+      &.avoid {
+        border-left: 4px solid #ef4444;
+        
+        .safety-level {
+          color: #dc2626;
+        }
       }
     }
 
@@ -1062,13 +1431,23 @@ export interface TravelVideo {
     .wiki-link {
       display: inline-flex;
       align-items: center;
+      gap: var(--space-2);
       font-size: var(--text-sm);
       color: var(--color-accent);
       font-weight: 500;
       margin-bottom: var(--space-4);
+      padding: var(--space-2) var(--space-3);
+      background: rgba(233, 69, 96, 0.08);
+      border-radius: var(--border-radius-md);
+      transition: all var(--transition-fast);
       
+      svg {
+        stroke: var(--color-accent);
+      }
+
       &:hover {
-        text-decoration: underline;
+        background: rgba(233, 69, 96, 0.15);
+        transform: translateX(4px);
       }
     }
 
@@ -1078,12 +1457,31 @@ export interface TravelVideo {
       padding: var(--space-5);
       border-radius: var(--border-radius-lg);
       color: white;
-      margin-bottom: var(--space-4);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 
-      h4 {
-        font-size: var(--text-sm);
-        color: rgba(255,255,255,0.9);
+      .weather-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-bottom: var(--space-4);
+
+        h4 {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+          font-size: var(--text-sm);
+          color: rgba(255,255,255,0.9);
+          margin: 0;
+
+          svg {
+            stroke: rgba(255,255,255,0.9);
+          }
+        }
+
+        .current-temp {
+          font-size: var(--text-2xl);
+          font-weight: 700;
+        }
       }
     }
 
@@ -2322,6 +2720,12 @@ export class CityComponent implements OnInit, OnDestroy {
       return `${Math.round(population / 1_000)} mila`;
     }
     return population.toString();
+  }
+
+  getLanguagesDisplay(languages: Record<string, string>): string {
+    const langValues = Object.values(languages);
+    if (langValues.length === 0) return 'N/A';
+    return langValues.slice(0, 2).join(', ');
   }
 
   getPhotoAttributionLink(photo: UnsplashPhoto): string {
