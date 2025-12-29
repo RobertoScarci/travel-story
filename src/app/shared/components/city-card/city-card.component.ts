@@ -330,33 +330,38 @@ import { UserService } from '../../../core/services/user.service';
       color: var(--color-gray-600);
     }
 
-    // Recommendation Badge - positioned on the right to avoid overlap
+    // Recommendation Badge - compact version
     .recommendation-badge {
       position: absolute;
-      top: var(--space-3);
-      right: var(--space-3);
+      top: var(--space-2);
+      right: var(--space-2);
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 6px 12px;
+      gap: 3px;
+      padding: 4px 8px;
       background: linear-gradient(135deg, var(--color-accent), #ff6b6b);
       color: white;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
       border-radius: var(--border-radius-full);
-      box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+      box-shadow: 0 2px 8px rgba(233, 69, 96, 0.35);
       z-index: 10;
-      max-width: 55%;
+      max-width: 45%;
       text-align: center;
-      line-height: 1.2;
+      line-height: 1.1;
     }
 
     .badge-icon {
       display: flex;
       align-items: center;
       flex-shrink: 0;
+      
+      svg {
+        width: 10px;
+        height: 10px;
+      }
     }
   `]
 })

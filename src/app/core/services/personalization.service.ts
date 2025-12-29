@@ -245,19 +245,19 @@ export class PersonalizationService {
         .slice(0, 2);
 
       if (reasons.length > 0) {
-        return `Perfetta perché ${reasons.join(' e ')}`;
+        return `Per te`;
       }
     }
 
-    // Fallback to generic reasons
+    // Fallback to generic reasons - shortened
     if (city.popularityScore > 80) {
-      return 'Una delle mete più amate del momento';
+      return 'Top trend';
     }
     if (city.priceLevel <= 2) {
-      return 'Ottimo rapporto qualità-prezzo';
+      return 'Best value';
     }
 
-    return 'Potrebbe sorprenderti';
+    return 'Da scoprire';
   }
 
   /**
