@@ -197,16 +197,18 @@ import { UserService } from '../../../core/services/user.service';
     }
 
     .tag {
-      padding: 4px 10px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-radius: var(--border-radius-full);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
-      color: var(--color-gray-600);
+      color: var(--color-primary);
       text-transform: uppercase;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
       white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     // Save Button
@@ -252,29 +254,34 @@ import { UserService } from '../../../core/services/user.service';
     .location-badge {
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
+      gap: 5px;
+      padding: 5px 12px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-radius: var(--border-radius-full);
       font-size: 11px;
       font-weight: 500;
       color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
       svg {
-        opacity: 0.8;
+        opacity: 0.9;
+        stroke: white;
       }
     }
 
     .price-level {
-      padding: 4px 10px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-radius: var(--border-radius-full);
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--color-primary);
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     // Content Section
