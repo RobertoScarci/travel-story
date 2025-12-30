@@ -32,7 +32,9 @@ type PracticalInfo = CityDetails['practicalInfo'];
         <div class="selectors">
           <div class="selector">
             <label>Prima città</label>
-            <select [(ngModel)]="city1Id" (change)="updateComparison()">
+            <select 
+              [ngModel]="city1Id" 
+              (ngModelChange)="city1Id = $event; updateComparison()">
               <option value="">Seleziona una città</option>
               @for (city of allCities(); track city.id) {
                 <option [value]="city.id">{{ city.name }}, {{ city.country }}</option>
@@ -44,7 +46,9 @@ type PracticalInfo = CityDetails['practicalInfo'];
 
           <div class="selector">
             <label>Seconda città</label>
-            <select [(ngModel)]="city2Id" (change)="updateComparison()">
+            <select 
+              [ngModel]="city2Id" 
+              (ngModelChange)="city2Id = $event; updateComparison()">
               <option value="">Seleziona una città</option>
               @for (city of allCities(); track city.id) {
                 <option [value]="city.id">{{ city.name }}, {{ city.country }}</option>
