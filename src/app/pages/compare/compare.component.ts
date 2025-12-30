@@ -83,11 +83,13 @@ type PracticalInfo = CityDetails['practicalInfo'];
             <!-- Comparison Rows -->
             @for (row of comparisonData(); track row.label) {
               <div class="comparison-row" [class.highlight]="row.highlight">
-                <div class="value" [class.winner]="row.winner === 1">
-                  <span class="value-main">{{ row.value1 }}</span>
-                  @if (row.subValue1) {
-                    <span class="value-sub">{{ row.subValue1 }}</span>
-                  }
+                <div class="value value-left" [class.winner]="row.winner === 1">
+                  <div class="value-content">
+                    <span class="value-main">{{ row.value1 }}</span>
+                    @if (row.subValue1) {
+                      <span class="value-sub">{{ row.subValue1 }}</span>
+                    }
+                  </div>
                   @if (row.winner === 1) {
                     <span class="winner-badge">✓</span>
                   }
@@ -96,11 +98,13 @@ type PracticalInfo = CityDetails['practicalInfo'];
                   <div class="criteria-icon" [innerHTML]="getIconSvgSafe(row.iconKey || 'rating')"></div>
                   <span>{{ row.label }}</span>
                 </div>
-                <div class="value" [class.winner]="row.winner === 2">
-                  <span class="value-main">{{ row.value2 }}</span>
-                  @if (row.subValue2) {
-                    <span class="value-sub">{{ row.subValue2 }}</span>
-                  }
+                <div class="value value-right" [class.winner]="row.winner === 2">
+                  <div class="value-content">
+                    <span class="value-main">{{ row.value2 }}</span>
+                    @if (row.subValue2) {
+                      <span class="value-sub">{{ row.subValue2 }}</span>
+                    }
+                  </div>
                   @if (row.winner === 2) {
                     <span class="winner-badge">✓</span>
                   }
@@ -358,16 +362,39 @@ type PracticalInfo = CityDetails['practicalInfo'];
       gap: var(--space-2);
       font-weight: 500;
 
-      &:last-child {
+      &.winner {
+        color: var(--color-accent);
+      }
+
+      &.value-left {
+        justify-content: flex-start;
+
+        .value-content {
+          text-align: left;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      &.value-right {
         justify-content: flex-end;
 
         @media (max-width: 768px) {
           justify-content: flex-start;
         }
-      }
 
-      &.winner {
-        color: var(--color-accent);
+        .value-content {
+          text-align: right;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+
+          @media (max-width: 768px) {
+            text-align: left;
+            align-items: flex-start;
+          }
+        }
       }
     }
 
@@ -1763,10 +1790,10 @@ export class CompareComponent {
   // Beach
   getBeachRating(city: City): string {
     const tags = city.tags;
-    if (tags.includes('beach')) return '⭐⭐⭐⭐⭐';
+    if (tags.includes('beach')) return 'Eccellente';
     const continent = city.continent.toLowerCase();
-    if (continent === 'oceania' || continent === 'americhe') return '⭐⭐⭐⭐';
-    return '⭐⭐';
+    if (continent === 'oceania' || continent === 'americhe') return 'Buono';
+    return 'Discreto';
   }
 
   getBeachDescription(city: City): string {
@@ -1787,10 +1814,10 @@ export class CompareComponent {
   // Mountain
   getMountainRating(city: City): string {
     const tags = city.tags;
-    if (tags.includes('trekking') || tags.includes('adventure')) return '⭐⭐⭐⭐⭐';
+    if (tags.includes('trekking') || tags.includes('adventure')) return 'Eccellente';
     const continent = city.continent.toLowerCase();
-    if (continent === 'americhe' || continent === 'asia') return '⭐⭐⭐⭐';
-    return '⭐⭐';
+    if (continent === 'americhe' || continent === 'asia') return 'Buono';
+    return 'Discreto';
   }
 
   getMountainDescription(city: City): string {
@@ -1812,10 +1839,10 @@ export class CompareComponent {
   getCoffeeRating(city: City): string {
     const country = city.country.toLowerCase();
     const coffeeCountries = ['italia', 'portogallo', 'spagna', 'turchia', 'grecia', 'colombia', 'brasile', 'etiopia', 'vietnam'];
-    if (coffeeCountries.some(c => country.includes(c))) return '⭐⭐⭐⭐⭐';
+    if (coffeeCountries.some(c => country.includes(c))) return 'Eccellente';
     const continent = city.continent.toLowerCase();
-    if (continent === 'europa') return '⭐⭐⭐⭐';
-    return '⭐⭐⭐';
+    if (continent === 'europa') return 'Buono';
+    return 'Discreto';
   }
 
   getCoffeeDescription(city: City): string {
@@ -1842,11 +1869,11 @@ export class CompareComponent {
   // Wine
   getWineRating(city: City): string {
     const tags = city.tags;
-    if (tags.includes('wine')) return '⭐⭐⭐⭐⭐';
+    if (tags.includes('wine')) return 'Eccellente';
     const country = city.country.toLowerCase();
     const wineCountries = ['italia', 'francia', 'spagna', 'portogallo', 'argentina', 'cile', 'sudafrica', 'australia'];
-    if (wineCountries.some(c => country.includes(c))) return '⭐⭐⭐⭐';
-    return '⭐⭐';
+    if (wineCountries.some(c => country.includes(c))) return 'Buono';
+    return 'Discreto';
   }
 
   getWineDescription(city: City): string {
@@ -1874,9 +1901,9 @@ export class CompareComponent {
   // Family
   getFamilyRating(city: City): string {
     const tags = city.tags;
-    if (tags.includes('family')) return '⭐⭐⭐⭐⭐';
-    if (city.rating >= 4.3) return '⭐⭐⭐⭐';
-    return '⭐⭐⭐';
+    if (tags.includes('family')) return 'Eccellente';
+    if (city.rating >= 4.3) return 'Buono';
+    return 'Discreto';
   }
 
   getFamilyDescription(city: City): string {
@@ -1900,9 +1927,9 @@ export class CompareComponent {
   // LGBTQ+
   getLGBTQRating(city: City): string {
     const continent = city.continent.toLowerCase();
-    if (continent === 'europa' && city.rating >= 4.0) return '⭐⭐⭐⭐⭐';
-    if (city.popularityScore >= 80 && city.rating >= 4.0) return '⭐⭐⭐⭐';
-    return '⭐⭐⭐';
+    if (continent === 'europa' && city.rating >= 4.0) return 'Eccellente';
+    if (city.popularityScore >= 80 && city.rating >= 4.0) return 'Buono';
+    return 'Discreto';
   }
 
   getLGBTQDescription(city: City): string {
@@ -1927,9 +1954,9 @@ export class CompareComponent {
   // Water Quality
   getWaterQuality(city: City): string {
     const continent = city.continent.toLowerCase();
-    if (continent === 'europa' || continent === 'oceania') return '✅ Potabile';
-    if (city.rating >= 4.5) return '✅ Generalmente sicura';
-    return '⚠️ Bollire/comprare';
+    if (continent === 'europa' || continent === 'oceania') return 'Potabile';
+    if (city.rating >= 4.5) return 'Generalmente sicura';
+    return 'Bollire/comprare';
   }
 
   getWaterDescription(city: City): string {
@@ -1953,9 +1980,9 @@ export class CompareComponent {
 
   // WiFi
   getWiFIRating(city: City): string {
-    if (city.popularityScore >= 80) return '⭐⭐⭐⭐⭐';
-    if (city.popularityScore >= 60) return '⭐⭐⭐⭐';
-    return '⭐⭐⭐';
+    if (city.popularityScore >= 80) return 'Eccellente';
+    if (city.popularityScore >= 60) return 'Buono';
+    return 'Discreto';
   }
 
   getWiFIDescription(city: City): string {
@@ -1971,10 +1998,10 @@ export class CompareComponent {
   // Air Quality
   getAirQuality(city: City): string {
     const continent = city.continent.toLowerCase();
-    if (continent === 'oceania') return '⭐⭐⭐⭐⭐';
-    if (continent === 'europa' && city.popularityScore < 70) return '⭐⭐⭐⭐';
-    if (city.popularityScore >= 90) return '⭐⭐⭐';
-    return '⭐⭐';
+    if (continent === 'oceania') return 'Eccellente';
+    if (continent === 'europa' && city.popularityScore < 70) return 'Buono';
+    if (city.popularityScore >= 90) return 'Discreto';
+    return 'Moderata';
   }
 
   getAirQualityDescription(city: City): string {
@@ -2036,10 +2063,10 @@ export class CompareComponent {
   // Quality of Life
   getQualityOfLife(city: City): string {
     const score = (city.rating * 20) + (city.popularityScore * 0.3);
-    if (score >= 90) return '⭐⭐⭐⭐⭐';
-    if (score >= 80) return '⭐⭐⭐⭐';
-    if (score >= 70) return '⭐⭐⭐';
-    return '⭐⭐';
+    if (score >= 90) return 'Eccellente';
+    if (score >= 80) return 'Buono';
+    if (score >= 70) return 'Discreto';
+    return 'Moderata';
   }
 
   getQualityOfLifeDescription(city: City): string {
