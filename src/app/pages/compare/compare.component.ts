@@ -92,7 +92,7 @@ type PracticalInfo = CityDetails['practicalInfo'];
                   }
                 </div>
                 <div class="criteria">
-                  <span class="criteria-icon">{{ row.icon }}</span>
+                  <div class="criteria-icon" [innerHTML]="getIconSvg(row.iconKey || 'rating')"></div>
                   <span>{{ row.label }}</span>
                 </div>
                 <div class="value" [class.winner]="row.winner === 2">
@@ -402,14 +402,34 @@ type PracticalInfo = CityDetails['practicalInfo'];
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--space-1);
+      gap: var(--space-2);
       text-align: center;
       color: var(--color-gray-500);
       font-size: var(--text-sm);
+      min-width: 120px;
+      
+      span {
+        font-weight: 500;
+        line-height: 1.3;
+      }
     }
 
     .criteria-icon {
-      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--border-radius-md);
+      background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(15, 52, 96, 0.08) 100%);
+      color: var(--color-accent);
+      flex-shrink: 0;
+      
+      svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+      }
     }
 
     // Verdict Section
@@ -620,6 +640,7 @@ export class CompareComponent {
     return [
       {
         icon: '⭐',
+        iconKey: 'rating',
         label: 'Valutazione Complessiva',
         value1: `${c1.rating}/5`,
         value2: `${c2.rating}/5`,
@@ -631,6 +652,7 @@ export class CompareComponent {
       },
       {
         icon: '💰',
+        iconKey: 'budget',
         label: 'Budget Complessivo',
         value1: '€'.repeat(c1.priceLevel),
         value2: '€'.repeat(c2.priceLevel),
@@ -642,6 +664,7 @@ export class CompareComponent {
       },
       {
         icon: '🍽️',
+        iconKey: 'meal',
         label: 'Costo Pasti',
         value1: practical1?.averageCosts.meal || 'N/A',
         value2: practical2?.averageCosts.meal || 'N/A',
@@ -652,6 +675,7 @@ export class CompareComponent {
       },
       {
         icon: '🚗',
+        iconKey: 'transport',
         label: 'Costo Trasporti',
         value1: practical1?.averageCosts.transport || 'N/A',
         value2: practical2?.averageCosts.transport || 'N/A',
@@ -662,6 +686,7 @@ export class CompareComponent {
       },
       {
         icon: '🏨',
+        iconKey: 'accommodation',
         label: 'Costo Alloggio',
         value1: practical1?.averageCosts.accommodation || 'N/A',
         value2: practical2?.averageCosts.accommodation || 'N/A',
@@ -672,6 +697,7 @@ export class CompareComponent {
       },
       {
         icon: '🌃',
+        iconKey: 'nightlife',
         label: 'Vita Notturna',
         value1: this.getNightlifeRating(c1),
         value2: this.getNightlifeRating(c2),
@@ -682,6 +708,7 @@ export class CompareComponent {
       },
       {
         icon: '🎨',
+        iconKey: 'culture',
         label: 'Cultura & Arte',
         value1: this.getCultureRating(c1),
         value2: this.getCultureRating(c2),
@@ -692,6 +719,7 @@ export class CompareComponent {
       },
       {
         icon: '🏞️',
+        iconKey: 'landscape',
         label: 'Paesaggi & Natura',
         value1: this.getLandscapeRating(c1),
         value2: this.getLandscapeRating(c2),
@@ -702,6 +730,7 @@ export class CompareComponent {
       },
       {
         icon: '🍜',
+        iconKey: 'food',
         label: 'Cibo & Gastronomia',
         value1: this.getFoodRating(c1),
         value2: this.getFoodRating(c2),
@@ -713,6 +742,7 @@ export class CompareComponent {
       },
       {
         icon: '🚇',
+        iconKey: 'publicTransport',
         label: 'Trasporti Pubblici',
         value1: this.getPublicTransportRating(c1, practical1),
         value2: this.getPublicTransportRating(c2, practical2),
@@ -723,6 +753,7 @@ export class CompareComponent {
       },
       {
         icon: '🗣️',
+        iconKey: 'language',
         label: 'Lingue Parlate',
         value1: c1.language.join(', '),
         value2: c2.language.join(', '),
@@ -733,6 +764,7 @@ export class CompareComponent {
       },
       {
         icon: '✈️',
+        iconKey: 'accessibility',
         label: 'Facilità di Arrivo',
         value1: this.getAccessibility(c1),
         value2: this.getAccessibility(c2),
@@ -744,6 +776,7 @@ export class CompareComponent {
       },
       {
         icon: '🛒',
+        iconKey: 'shopping',
         label: 'Shopping',
         value1: this.getShoppingRating(c1),
         value2: this.getShoppingRating(c2),
@@ -754,6 +787,7 @@ export class CompareComponent {
       },
       {
         icon: '🎉',
+        iconKey: 'events',
         label: 'Eventi & Festival',
         value1: this.getEventsRating(c1),
         value2: this.getEventsRating(c2),
@@ -764,6 +798,7 @@ export class CompareComponent {
       },
       {
         icon: '❤️',
+        iconKey: 'hospitality',
         label: 'Accoglienza & Gentilezza',
         value1: this.getHospitalityRating(c1),
         value2: this.getHospitalityRating(c2),
@@ -774,6 +809,7 @@ export class CompareComponent {
       },
       {
         icon: '📅',
+        iconKey: 'duration',
         label: 'Durata Consigliata',
         value1: `${c1.suggestedDays.min}-${c1.suggestedDays.max} giorni`,
         value2: `${c2.suggestedDays.min}-${c2.suggestedDays.max} giorni`,
@@ -784,6 +820,7 @@ export class CompareComponent {
       },
       {
         icon: '☀️',
+        iconKey: 'season',
         label: 'Periodo Migliore',
         value1: c1.bestPeriod.slice(0, 2).join(' - '),
         value2: c2.bestPeriod.slice(0, 2).join(' - '),
@@ -794,6 +831,7 @@ export class CompareComponent {
       },
       {
         icon: '🌡️',
+        iconKey: 'climate',
         label: 'Clima',
         value1: this.getClimateType(c1),
         value2: this.getClimateType(c2),
@@ -804,6 +842,7 @@ export class CompareComponent {
       },
       {
         icon: '🕐',
+        iconKey: 'timezone',
         label: 'Fuso Orario',
         value1: c1.timezone,
         value2: c2.timezone,
@@ -814,6 +853,7 @@ export class CompareComponent {
       },
       {
         icon: '💱',
+        iconKey: 'currency',
         label: 'Valuta',
         value1: c1.currency,
         value2: c2.currency,
@@ -824,6 +864,7 @@ export class CompareComponent {
       },
       {
         icon: '🛡️',
+        iconKey: 'safety',
         label: 'Sicurezza',
         value1: this.getSafetyLevel(c1),
         value2: this.getSafetyLevel(c2),
@@ -834,6 +875,7 @@ export class CompareComponent {
       },
       {
         icon: '🔥',
+        iconKey: 'popularity',
         label: 'Popolarità',
         value1: `${c1.popularityScore}/100`,
         value2: `${c2.popularityScore}/100`,
@@ -844,6 +886,7 @@ export class CompareComponent {
       },
       {
         icon: '📞',
+        iconKey: 'emergency',
         label: 'Numero Emergenze',
         value1: c1.emergencyNumber,
         value2: c2.emergencyNumber,
@@ -1034,6 +1077,49 @@ export class CompareComponent {
 
   constructor(private cityService: CityService) {
     this.allCities.set(this.cityService.getAllCities());
+  }
+
+  // ===== ICON HELPER =====
+  getIconSvg(iconKey: string | undefined): string {
+    if (!iconKey) return '';
+    const icons: Record<string, string> = {
+      rating: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+      budget: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      meal: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/><path d="M21 15v7"/></svg>',
+      transport: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"/><path d="m12 15 5-5"/><path d="M17 10l-5 5"/></svg>',
+      accommodation: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      nightlife: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+      culture: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      landscape: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+      food: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/></svg>',
+      publicTransport: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17h16l-1-7H5z"/><path d="M8 10h8"/><path d="M8 21h8"/><circle cx="7" cy="21" r="1"/><circle cx="17" cy="21" r="1"/></svg>',
+      language: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+      accessibility: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+      shopping: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
+      events: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>',
+      hospitality: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      duration: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      season: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+      climate: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/></svg>',
+      timezone: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      currency: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      safety: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+      popularity: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+      emergency: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+      beach: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/><circle cx="12" cy="12" r="3"/></svg>',
+      mountain: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
+      coffee: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+      wine: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 22h8"/><path d="M7 10h10a5 5 0 0 1 5 5v2a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5v-2a5 5 0 0 1 5-5z"/><path d="M12 22V8"/><path d="M12 8V2a3 3 0 0 0-3-3"/></svg>',
+      family: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      lgbtq: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      water: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s2-3 10-3 10 3 10 3-2 3-10 3-10-3-10-3z"/><path d="M2 12s2 3 10 3 10-3 10-3"/></svg>',
+      wifi: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>',
+      airQuality: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/></svg>',
+      tipping: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      livingCost: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      qualityOfLife: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+    };
+    return icons[iconKey] || icons['rating'] || '';
   }
 
   // ===== COST COMPARISON HELPERS =====
