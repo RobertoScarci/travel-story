@@ -294,8 +294,8 @@ import { TravelStyle } from '../../core/models/user.model';
                     (click)="selectBudget(option.value)">
                     <span class="budget-icon">{{ option.icon }}</span>
                     <div class="budget-info">
-                      <span class="budget-label">{{ option.label }}</span>
-                      <span class="budget-desc">{{ option.description }}</span>
+                    <span class="budget-label">{{ option.label }}</span>
+                    <span class="budget-desc">{{ option.description }}</span>
                     </div>
                     @if (selectedBudget === option.value) {
                       <span class="check-icon">
@@ -947,12 +947,12 @@ export class RegisterComponent {
       Object.keys(form.controls).forEach(key => {
         form.controls[key].markAsTouched();
       });
-      return;
-    }
-    this.error.set('');
+        return;
+      }
+      this.error.set('');
     this.nextStep();
-  }
-
+    }
+    
   nextStep(): void {
     if (this.currentStep() < 3) {
       this.currentStep.update(v => v + 1);

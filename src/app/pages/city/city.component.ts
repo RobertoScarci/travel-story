@@ -160,7 +160,7 @@ export interface TravelVideo {
                     Leggi di più su Wikipedia
                   </a>
                 } @else {
-                  <p class="story-atmosphere">{{ details()!.story.atmosphere }}</p>
+                <p class="story-atmosphere">{{ details()!.story.atmosphere }}</p>
                 }
                 
                 <!-- Unique Aspect Card -->
@@ -169,7 +169,7 @@ export interface TravelVideo {
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                     </svg>
-                  </div>
+              </div>
                   <div class="unique-content">
                     <span class="unique-label">Cosa la rende unica</span>
                     <p>{{ details()!.story.uniqueAspect }}</p>
@@ -277,15 +277,15 @@ export interface TravelVideo {
                         <div class="country-detail">
                           <span class="country-label">Paese</span>
                           <span class="country-value">{{ countryInfo()!.name }}</span>
-                        </div>
-                      </div>
+                  </div>
+                  </div>
                       <div class="country-item">
                         <span class="country-icon">👥</span>
                         <div class="country-detail">
                           <span class="country-label">Popolazione</span>
                           <span class="country-value">{{ formatPopulation(countryInfo()!.population) }}</span>
-                        </div>
-                      </div>
+                  </div>
+                </div>
                       <div class="country-item">
                         <span class="country-icon">💰</span>
                         <div class="country-detail">
@@ -1229,7 +1229,7 @@ export interface TravelVideo {
 
         .stat-label {
           font-size: var(--text-xs);
-          color: var(--color-gray-400);
+        color: var(--color-gray-400);
           text-transform: uppercase;
           letter-spacing: 0.02em;
         }
@@ -1285,7 +1285,7 @@ export interface TravelVideo {
       box-shadow: var(--shadow-sm);
 
       h4 {
-        display: flex;
+      display: flex;
         align-items: center;
         gap: var(--space-2);
         font-size: var(--text-sm);
@@ -1369,7 +1369,7 @@ export interface TravelVideo {
         }
 
         .safety-level {
-          font-size: var(--text-sm);
+      font-size: var(--text-sm);
           font-weight: 600;
           color: var(--color-gray-600);
         }
@@ -1406,7 +1406,7 @@ export interface TravelVideo {
         font-size: 1.4em;
         margin-right: var(--space-1);
       }
-    }
+      }
 
     .skeleton-text {
       background: linear-gradient(90deg, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 75%);
@@ -1423,7 +1423,7 @@ export interface TravelVideo {
     // Wikipedia Link
     .story-wiki {
       font-size: var(--text-base);
-      color: var(--color-gray-500);
+        color: var(--color-gray-500);
       line-height: 1.7;
       margin-bottom: var(--space-3);
     }
@@ -2513,24 +2513,24 @@ export class CityComponent implements OnInit, OnDestroy {
     this.countryLoading.set(true);
     
     // Load static city data
-    const details = this.cityService.getCityDetails(cityId);
-    
-    if (details) {
-      this.city.set(details);
-      this.userService.trackCityVisit(cityId);
-      this.similarCities.set(this.personalization.getSimilarCities(cityId, 4));
+      const details = this.cityService.getCityDetails(cityId);
       
-      // Start tracking time spent
-      this.startTimeTracking(cityId);
+      if (details) {
+        this.city.set(details);
+        this.userService.trackCityVisit(cityId);
+        this.similarCities.set(this.personalization.getSimilarCities(cityId, 4));
+        
+        // Start tracking time spent
+        this.startTimeTracking(cityId);
       
       // Load live API data in parallel
       this.loadLiveData(details);
       
       // Load travel videos
       this.loadTravelVideos(details.name);
-    }
-    
-    this.loading.set(false);
+      }
+      
+      this.loading.set(false);
   }
 
   private loadLiveData(details: CityDetails): void {

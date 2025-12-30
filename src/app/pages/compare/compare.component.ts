@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CityService } from '../../core/services/city.service';
-import { City } from '../../core/models/city.model';
+import { City, CityDetails } from '../../core/models/city.model';
+
+type PracticalInfo = CityDetails['practicalInfo'];
 
 /**
  * CompareComponent - Side-by-side city comparison
@@ -601,6 +603,11 @@ export class CompareComponent {
     const c2 = this.city2();
     if (!c1 || !c2) return [];
 
+    const details1 = this.cityService.getCityDetails(c1.id);
+    const details2 = this.cityService.getCityDetails(c2.id);
+    const practical1 = details1?.practicalInfo;
+    const practical2 = details2?.practicalInfo;
+
     return [
       {
         icon: '⭐',
@@ -615,25 +622,146 @@ export class CompareComponent {
       },
       {
         icon: '💰',
-        label: 'Budget Giornaliero',
+        label: 'Budget Complessivo',
         value1: '€'.repeat(c1.priceLevel),
         value2: '€'.repeat(c2.priceLevel),
         subValue1: this.getDailyBudget(c1.priceLevel),
         subValue2: this.getDailyBudget(c2.priceLevel),
         winner: c1.priceLevel < c2.priceLevel ? 1 : c1.priceLevel > c2.priceLevel ? 2 : 0,
         highlight: true,
-        category: 'main'
+        category: 'cost'
       },
       {
-        icon: '🔥',
-        label: 'Popolarità',
-        value1: `${c1.popularityScore}/100`,
-        value2: `${c2.popularityScore}/100`,
-        subValue1: this.getPopularityLabel(c1.popularityScore),
-        subValue2: this.getPopularityLabel(c2.popularityScore),
-        winner: c1.popularityScore > c2.popularityScore ? 1 : c1.popularityScore < c2.popularityScore ? 2 : 0,
+        icon: '🍽️',
+        label: 'Costo Pasti',
+        value1: practical1?.averageCosts.meal || 'N/A',
+        value2: practical2?.averageCosts.meal || 'N/A',
+        subValue1: this.getCostComparison(practical1?.averageCosts.meal, practical2?.averageCosts.meal, 1),
+        subValue2: this.getCostComparison(practical2?.averageCosts.meal, practical1?.averageCosts.meal, 2),
+        winner: this.compareCosts(practical1?.averageCosts.meal, practical2?.averageCosts.meal),
+        category: 'cost'
+      },
+      {
+        icon: '🚗',
+        label: 'Costo Trasporti',
+        value1: practical1?.averageCosts.transport || 'N/A',
+        value2: practical2?.averageCosts.transport || 'N/A',
+        subValue1: this.getTransportCostLabel(practical1?.averageCosts.transport),
+        subValue2: this.getTransportCostLabel(practical2?.averageCosts.transport),
+        winner: this.compareCosts(practical1?.averageCosts.transport, practical2?.averageCosts.transport),
+        category: 'cost'
+      },
+      {
+        icon: '🏨',
+        label: 'Costo Alloggio',
+        value1: practical1?.averageCosts.accommodation || 'N/A',
+        value2: practical2?.averageCosts.accommodation || 'N/A',
+        subValue1: this.getAccommodationCostLabel(practical1?.averageCosts.accommodation),
+        subValue2: this.getAccommodationCostLabel(practical2?.averageCosts.accommodation),
+        winner: this.compareCosts(practical1?.averageCosts.accommodation, practical2?.averageCosts.accommodation),
+        category: 'cost'
+      },
+      {
+        icon: '🌃',
+        label: 'Vita Notturna',
+        value1: this.getNightlifeRating(c1),
+        value2: this.getNightlifeRating(c2),
+        subValue1: this.getNightlifeDescription(c1),
+        subValue2: this.getNightlifeDescription(c2),
+        winner: this.compareNightlife(c1, c2),
+        category: 'lifestyle'
+      },
+      {
+        icon: '🎨',
+        label: 'Cultura & Arte',
+        value1: this.getCultureRating(c1),
+        value2: this.getCultureRating(c2),
+        subValue1: this.getCultureDescription(c1),
+        subValue2: this.getCultureDescription(c2),
+        winner: this.compareCulture(c1, c2),
+        category: 'lifestyle'
+      },
+      {
+        icon: '🏞️',
+        label: 'Paesaggi & Natura',
+        value1: this.getLandscapeRating(c1),
+        value2: this.getLandscapeRating(c2),
+        subValue1: this.getLandscapeDescription(c1),
+        subValue2: this.getLandscapeDescription(c2),
+        winner: this.compareLandscapes(c1, c2),
+        category: 'lifestyle'
+      },
+      {
+        icon: '🍜',
+        label: 'Cibo & Gastronomia',
+        value1: this.getFoodRating(c1),
+        value2: this.getFoodRating(c2),
+        subValue1: this.getFoodDescription(c1, practical1),
+        subValue2: this.getFoodDescription(c2, practical2),
+        winner: this.compareFood(c1, c2),
         highlight: true,
-        category: 'main'
+        category: 'lifestyle'
+      },
+      {
+        icon: '🚇',
+        label: 'Trasporti Pubblici',
+        value1: this.getPublicTransportRating(c1, practical1),
+        value2: this.getPublicTransportRating(c2, practical2),
+        subValue1: this.getPublicTransportDescription(practical1),
+        subValue2: this.getPublicTransportDescription(practical2),
+        winner: this.comparePublicTransport(practical1, practical2),
+        category: 'practical'
+      },
+      {
+        icon: '🗣️',
+        label: 'Lingue Parlate',
+        value1: c1.language.join(', '),
+        value2: c2.language.join(', '),
+        subValue1: this.getLanguageDifficulty(c1.language),
+        subValue2: this.getLanguageDifficulty(c2.language),
+        winner: this.compareLanguageEase(c1.language, c2.language),
+        category: 'practical'
+      },
+      {
+        icon: '✈️',
+        label: 'Facilità di Arrivo',
+        value1: this.getAccessibility(c1),
+        value2: this.getAccessibility(c2),
+        subValue1: this.getFlightInfo(c1),
+        subValue2: this.getFlightInfo(c2),
+        winner: this.compareAccessibility(c1, c2),
+        highlight: true,
+        category: 'practical'
+      },
+      {
+        icon: '🛒',
+        label: 'Shopping',
+        value1: this.getShoppingRating(c1),
+        value2: this.getShoppingRating(c2),
+        subValue1: this.getShoppingDescription(c1),
+        subValue2: this.getShoppingDescription(c2),
+        winner: this.compareShopping(c1, c2),
+        category: 'lifestyle'
+      },
+      {
+        icon: '🎉',
+        label: 'Eventi & Festival',
+        value1: this.getEventsRating(c1),
+        value2: this.getEventsRating(c2),
+        subValue1: this.getEventsDescription(c1),
+        subValue2: this.getEventsDescription(c2),
+        winner: this.compareEvents(c1, c2),
+        category: 'lifestyle'
+      },
+      {
+        icon: '❤️',
+        label: 'Accoglienza & Gentilezza',
+        value1: this.getHospitalityRating(c1),
+        value2: this.getHospitalityRating(c2),
+        subValue1: this.getHospitalityDescription(c1),
+        subValue2: this.getHospitalityDescription(c2),
+        winner: this.compareHospitality(c1, c2),
+        category: 'lifestyle'
       },
       {
         icon: '📅',
@@ -672,7 +800,7 @@ export class CompareComponent {
         value2: c2.timezone,
         subValue1: this.getJetLagInfo(c1.timezone),
         subValue2: this.getJetLagInfo(c2.timezone),
-        winner: 0,
+        winner: this.compareTimezone(c1.timezone, c2.timezone),
         category: 'practical'
       },
       {
@@ -682,27 +810,7 @@ export class CompareComponent {
         value2: c2.currency,
         subValue1: this.getCurrencyTip(c1.currency),
         subValue2: this.getCurrencyTip(c2.currency),
-        winner: 0,
-        category: 'practical'
-      },
-      {
-        icon: '🗣️',
-        label: 'Lingua',
-        value1: c1.language.join(', '),
-        value2: c2.language.join(', '),
-        subValue1: this.getLanguageDifficulty(c1.language),
-        subValue2: this.getLanguageDifficulty(c2.language),
-        winner: 0,
-        category: 'practical'
-      },
-      {
-        icon: '✈️',
-        label: 'Accessibilità',
-        value1: this.getAccessibility(c1),
-        value2: this.getAccessibility(c2),
-        subValue1: this.getFlightInfo(c1),
-        subValue2: this.getFlightInfo(c2),
-        winner: 0,
+        winner: this.compareCurrency(c1.currency, c2.currency),
         category: 'practical'
       },
       {
@@ -712,12 +820,22 @@ export class CompareComponent {
         value2: this.getSafetyLevel(c2),
         subValue1: this.getSafetyTip(c1),
         subValue2: this.getSafetyTip(c2),
-        winner: 0,
+        winner: this.compareSafety(c1, c2),
         category: 'practical'
       },
       {
+        icon: '🔥',
+        label: 'Popolarità',
+        value1: `${c1.popularityScore}/100`,
+        value2: `${c2.popularityScore}/100`,
+        subValue1: this.getPopularityLabel(c1.popularityScore),
+        subValue2: this.getPopularityLabel(c2.popularityScore),
+        winner: c1.popularityScore > c2.popularityScore ? 1 : c1.popularityScore < c2.popularityScore ? 2 : 0,
+        category: 'main'
+      },
+      {
         icon: '📞',
-        label: 'Emergenze',
+        label: 'Numero Emergenze',
         value1: c1.emergencyNumber,
         value2: c2.emergencyNumber,
         winner: 0,
@@ -909,6 +1027,802 @@ export class CompareComponent {
     this.allCities.set(this.cityService.getAllCities());
   }
 
+  // ===== COST COMPARISON HELPERS =====
+  
+  getCostComparison(cost1: string | undefined, cost2: string | undefined, cityNum: 1 | 2): string {
+    if (!cost1 || !cost2) return '';
+    const avg1 = this.extractAverageCost(cost1);
+    const avg2 = this.extractAverageCost(cost2);
+    if (avg1 === 0 || avg2 === 0) return '';
+    if (cityNum === 1) {
+      if (avg1 < avg2) return 'Più economico';
+      if (avg1 > avg2) return 'Più costoso';
+    } else {
+      if (avg2 < avg1) return 'Più economico';
+      if (avg2 > avg1) return 'Più costoso';
+    }
+    return 'Simile';
+  }
+
+  extractAverageCost(costStr: string): number {
+    const match = costStr.match(/€(\d+)-(\d+)/);
+    if (!match) return 0;
+    return (parseInt(match[1]) + parseInt(match[2])) / 2;
+  }
+
+  compareCosts(cost1: string | undefined, cost2: string | undefined): number {
+    if (!cost1 || !cost2) return 0;
+    const avg1 = this.extractAverageCost(cost1);
+    const avg2 = this.extractAverageCost(cost2);
+    if (avg1 === 0 || avg2 === 0) return 0;
+    if (avg1 < avg2) return 1;
+    if (avg1 > avg2) return 2;
+    return 0;
+  }
+
+  getTransportCostLabel(transport: string | undefined): string {
+    if (!transport) return '';
+    const avg = this.extractAverageCost(transport);
+    if (avg <= 5) return 'Molto economico';
+    if (avg <= 10) return 'Economico';
+    if (avg <= 20) return 'Moderato';
+    if (avg <= 30) return 'Costoso';
+    return 'Molto costoso';
+  }
+
+  getAccommodationCostLabel(accommodation: string | undefined): string {
+    if (!accommodation) return '';
+    const avg = this.extractAverageCost(accommodation);
+    if (avg <= 50) return 'Budget';
+    if (avg <= 100) return 'Mid-range';
+    if (avg <= 200) return 'Comfort';
+    if (avg <= 300) return 'Lusso';
+    return 'Premium';
+  }
+
+  // ===== NIGHTLIFE HELPERS =====
+
+  getNightlifeRating(city: City): string {
+    if (city.tags.includes('nightlife')) {
+      const score = city.popularityScore;
+      if (score >= 80) return 'Eccellente';
+      if (score >= 60) return 'Molto buona';
+      return 'Buona';
+    }
+    if (city.tags.includes('romantic') || city.tags.includes('relaxation')) {
+      return 'Tranquilla';
+    }
+    return 'Moderata';
+  }
+
+  getNightlifeDescription(city: City): string {
+    if (city.tags.includes('nightlife')) {
+      return 'Vita notturna vivace';
+    }
+    if (city.tags.includes('romantic')) {
+      return 'Atmosfera romantica';
+    }
+    return 'Equilibrata';
+  }
+
+  compareNightlife(city1: City, city2: City): number {
+    const score1 = this.getNightlifeScore(city1);
+    const score2 = this.getNightlifeScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getNightlifeScore(city: City): number {
+    let score = 0;
+    if (city.tags.includes('nightlife')) score += 50;
+    if (city.popularityScore >= 80) score += 30;
+    if (city.popularityScore >= 60) score += 20;
+    return score;
+  }
+
+  // ===== CULTURE HELPERS =====
+
+  getCultureRating(city: City): string {
+    let score = 0;
+    if (city.tags.includes('cultural')) score += 30;
+    if (city.tags.includes('art')) score += 30;
+    if (city.tags.includes('historic')) score += 25;
+    if (city.tags.includes('architecture')) score += 15;
+    
+    if (score >= 60) return 'Eccellente';
+    if (score >= 40) return 'Molto ricca';
+    if (score >= 20) return 'Ricca';
+    return 'Moderata';
+  }
+
+  getCultureDescription(city: City): string {
+    const tags = [];
+    if (city.tags.includes('cultural')) tags.push('Cultura');
+    if (city.tags.includes('art')) tags.push('Arte');
+    if (city.tags.includes('historic')) tags.push('Storia');
+    if (city.tags.includes('architecture')) tags.push('Architettura');
+    return tags.slice(0, 2).join(', ') || 'Generale';
+  }
+
+  compareCulture(city1: City, city2: City): number {
+    const score1 = this.getCultureScore(city1);
+    const score2 = this.getCultureScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getCultureScore(city: City): number {
+    let score = 0;
+    if (city.tags.includes('cultural')) score += 30;
+    if (city.tags.includes('art')) score += 30;
+    if (city.tags.includes('historic')) score += 25;
+    if (city.tags.includes('architecture')) score += 15;
+    if (city.tags.includes('spiritual')) score += 10;
+    return score;
+  }
+
+  // ===== LANDSCAPE HELPERS =====
+
+  getLandscapeRating(city: City): string {
+    const score = this.getLandscapeScore(city);
+    if (score >= 70) return 'Stupendi';
+    if (score >= 50) return 'Bellissimi';
+    if (score >= 30) return 'Belli';
+    if (score >= 15) return 'Vari';
+    return 'Urbani';
+  }
+
+  getLandscapeDescription(city: City): string {
+    const features = [];
+    if (city.tags.includes('nature')) features.push('Natura');
+    if (city.tags.includes('beach')) features.push('Spiagge');
+    if (city.tags.includes('exotic')) features.push('Esotico');
+    if (city.continent.toLowerCase() === 'oceania' || city.name.toLowerCase().includes('reykjavik')) {
+      features.push('Paesaggi unici');
+    }
+    return features.slice(0, 2).join(', ') || 'Urbano';
+  }
+
+  compareLandscapes(city1: City, city2: City): number {
+    const score1 = this.getLandscapeScore(city1);
+    const score2 = this.getLandscapeScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getLandscapeScore(city: City): number {
+    let score = 0;
+    if (city.tags.includes('nature')) score += 30;
+    if (city.tags.includes('beach')) score += 25;
+    if (city.tags.includes('exotic')) score += 20;
+    if (city.tags.includes('wildlife')) score += 15;
+    if (city.continent.toLowerCase() === 'oceania') score += 20;
+    if (city.name.toLowerCase().includes('reykjavik')) score += 25;
+    return score;
+  }
+
+  // ===== FOOD HELPERS =====
+
+  getFoodRating(city: City): string {
+    let score = 0;
+    if (city.tags.includes('foodie')) score += 50;
+    const continent = city.continent.toLowerCase();
+    if (continent === 'asia') score += 30;
+    if (continent === 'europa' && ['italy', 'france', 'spain'].includes(city.country.toLowerCase())) {
+      score += 25;
+    }
+    
+    if (score >= 70) return 'Eccellente';
+    if (score >= 50) return 'Molto buona';
+    if (score >= 30) return 'Buona';
+    return 'Decente';
+  }
+
+  getFoodDescription(city: City, practical: any): string {
+    const desc = [];
+    if (city.tags.includes('foodie')) desc.push('Gastronomia');
+    if (practical?.averageCosts?.meal) {
+      const avg = this.extractAverageCost(practical.averageCosts.meal);
+      if (avg <= 8) desc.push('Street food');
+      if (avg > 8 && avg <= 20) desc.push('Variegato');
+      if (avg > 20) desc.push('Raffinato');
+    }
+    return desc.slice(0, 2).join(', ') || 'Locale';
+  }
+
+  compareFood(city1: City, city2: City): number {
+    const score1 = this.getFoodScore(city1);
+    const score2 = this.getFoodScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getFoodScore(city: City): number {
+    let score = 0;
+    if (city.tags.includes('foodie')) score += 50;
+    const continent = city.continent.toLowerCase();
+    if (continent === 'asia') score += 30;
+    if (continent === 'europa' && ['italy', 'france', 'spain'].includes(city.country.toLowerCase())) {
+      score += 25;
+    }
+    return score;
+  }
+
+  // ===== PUBLIC TRANSPORT HELPERS =====
+
+  getPublicTransportRating(city: City, practical: any): string {
+    if (!practical?.gettingAround) return 'Sconosciuto';
+    
+    const transport = practical.gettingAround.join(' ').toLowerCase();
+    let score = 0;
+    
+    if (transport.includes('metro') || transport.includes('subway') || transport.includes('mrt') || transport.includes('bts')) {
+      score += 30;
+    }
+    if (transport.includes('efficient') || transport.includes('capillare') || transport.includes('eccellente')) {
+      score += 25;
+    }
+    if (transport.includes('24/7') || transport.includes('24 ore')) {
+      score += 15;
+    }
+    if (transport.includes('piedi') || transport.includes('camminabile')) {
+      score += 10;
+    }
+    if (transport.includes('auto') && transport.includes('obbligator')) {
+      score -= 20;
+    }
+    
+    if (score >= 60) return 'Eccellente';
+    if (score >= 40) return 'Molto buono';
+    if (score >= 20) return 'Buono';
+    if (score >= 0) return 'Discreto';
+    return 'Limitato';
+  }
+
+  getPublicTransportDescription(practical: any): string {
+    if (!practical?.gettingAround) return '';
+    const transport = practical.gettingAround[0] || '';
+    return transport.length > 40 ? transport.substring(0, 37) + '...' : transport;
+  }
+
+  comparePublicTransport(practical1: any, practical2: any): number {
+    const score1 = this.getPublicTransportScore(practical1);
+    const score2 = this.getPublicTransportScore(practical2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getPublicTransportScore(practical: any): number {
+    if (!practical?.gettingAround) return 0;
+    
+    const transport = practical.gettingAround.join(' ').toLowerCase();
+    let score = 0;
+    
+    if (transport.includes('metro') || transport.includes('subway') || transport.includes('mrt') || transport.includes('bts')) {
+      score += 30;
+    }
+    if (transport.includes('efficient') || transport.includes('capillare') || transport.includes('eccellente')) {
+      score += 25;
+    }
+    if (transport.includes('24/7') || transport.includes('24 ore')) {
+      score += 15;
+    }
+    if (transport.includes('piedi') || transport.includes('camminabile')) {
+      score += 10;
+    }
+    if (transport.includes('auto') && transport.includes('obbligator')) {
+      score -= 20;
+    }
+    
+    return score;
+  }
+
+  // ===== LANGUAGE HELPERS =====
+
+  compareLanguageEase(languages1: string[], languages2: string[]): number {
+    const score1 = this.getLanguageEaseScore(languages1);
+    const score2 = this.getLanguageEaseScore(languages2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getLanguageEaseScore(languages: string[]): number {
+    const easyLanguages = ['Inglese', 'Spagnolo', 'Francese', 'Italiano', 'Portoghese'];
+    const hasEasy = languages.some(l => easyLanguages.includes(l));
+    return hasEasy ? 50 : 20;
+  }
+
+  // ===== ACCESSIBILITY HELPERS =====
+
+  compareAccessibility(city1: City, city2: City): number {
+    const score1 = this.getAccessibilityScore(city1);
+    const score2 = this.getAccessibilityScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getAccessibilityScore(city: City): number {
+    const continent = city.continent.toLowerCase();
+    let score = 0;
+    
+    if (continent === 'europa') {
+      score = 90;
+    } else if (city.popularityScore >= 80) {
+      score = 75;
+    } else if (city.popularityScore >= 60) {
+      score = 60;
+    } else if (city.popularityScore >= 40) {
+      score = 45;
+    } else {
+      score = 30;
+    }
+    
+    return score;
+  }
+
+  // ===== SHOPPING HELPERS =====
+
+  getShoppingRating(city: City): string {
+    if (city.tags.includes('shopping')) return 'Eccellente';
+    if (city.tags.includes('luxury')) return 'Alta gamma';
+    if (city.popularityScore >= 80) return 'Buono';
+    return 'Moderato';
+  }
+
+  getShoppingDescription(city: City): string {
+    if (city.tags.includes('luxury')) return 'Boutique di lusso';
+    if (city.tags.includes('shopping')) return 'Centri commerciali';
+    return 'Varietà locale';
+  }
+
+  compareShopping(city1: City, city2: City): number {
+    const score1 = this.getShoppingScore(city1);
+    const score2 = this.getShoppingScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getShoppingScore(city: City): number {
+    let score = 0;
+    if (city.tags.includes('shopping')) score += 40;
+    if (city.tags.includes('luxury')) score += 35;
+    if (city.popularityScore >= 80) score += 25;
+    return score;
+  }
+
+  // ===== EVENTS HELPERS =====
+
+  getEventsRating(city: City): string {
+    const score = this.getEventsScore(city);
+    if (score >= 50) return 'Ricco';
+    if (score >= 30) return 'Vari';
+    return 'Occasionali';
+  }
+
+  getEventsDescription(city: City): string {
+    if (city.tags.includes('music')) return 'Musica & Festival';
+    if (city.tags.includes('cultural')) return 'Eventi culturali';
+    return 'Tradizioni locali';
+  }
+
+  compareEvents(city1: City, city2: City): number {
+    const score1 = this.getEventsScore(city1);
+    const score2 = this.getEventsScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getEventsScore(city: City): number {
+    let score = 0;
+    if (city.tags.includes('music')) score += 30;
+    if (city.tags.includes('cultural')) score += 25;
+    if (city.popularityScore >= 80) score += 20;
+    return score;
+  }
+
+  // ===== HOSPITALITY HELPERS =====
+
+  getHospitalityRating(city: City): string {
+    const score = this.getHospitalityScore(city);
+    if (score >= 60) return 'Eccellente';
+    if (score >= 40) return 'Molto buona';
+    if (score >= 25) return 'Buona';
+    return 'Neutrale';
+  }
+
+  getHospitalityDescription(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'asia') return 'Ospitalità orientale';
+    if (continent === 'africa') return 'Accoglienza tradizionale';
+    if (continent === 'americhe') return 'Calorosa';
+    if (continent === 'oceania') return 'Informale';
+    return 'Cortese';
+  }
+
+  compareHospitality(city1: City, city2: City): number {
+    const score1 = this.getHospitalityScore(city1);
+    const score2 = this.getHospitalityScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getHospitalityScore(city: City): number {
+    let score = city.rating * 10; // Base score from rating
+    const continent = city.continent.toLowerCase();
+    
+    if (continent === 'asia') score += 15;
+    if (continent === 'africa') score += 10;
+    if (continent === 'oceania') score += 10;
+    if (city.tags.includes('romantic')) score += 5;
+    
+    return score;
+  }
+
+  // ===== TIMEZONE & CURRENCY HELPERS =====
+
+  compareTimezone(timezone1: string, timezone2: string): number {
+    const offset1 = this.parseTimezoneOffset(timezone1);
+    const offset2 = this.parseTimezoneOffset(timezone2);
+    const italyOffset = 1; // GMT+1
+    
+    const diff1 = Math.abs(offset1 - italyOffset);
+    const diff2 = Math.abs(offset2 - italyOffset);
+    
+    if (diff1 < diff2) return 1;
+    if (diff1 > diff2) return 2;
+    return 0;
+  }
+
+  private parseTimezoneOffset(timezone: string): number {
+    const match = timezone.match(/GMT([+-]\d+)/);
+    if (!match) return 0;
+    return parseInt(match[1]);
+  }
+
+  compareCurrency(currency1: string, currency2: string): number {
+    const score1 = this.getCurrencyEaseScore(currency1);
+    const score2 = this.getCurrencyEaseScore(currency2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getCurrencyEaseScore(currency: string): number {
+    if (currency === 'EUR') return 100; // No cambio needed
+    if (currency === 'USD' || currency === 'GBP') return 80; // Easy to exchange
+    return 50; // Standard
+  }
+
+  // ===== SAFETY HELPERS =====
+
+  compareSafety(city1: City, city2: City): number {
+    const score1 = this.getSafetyScore(city1);
+    const score2 = this.getSafetyScore(city2);
+    if (score1 > score2) return 1;
+    if (score1 < score2) return 2;
+    return 0;
+  }
+
+  private getSafetyScore(city: City): number {
+    let score = city.rating * 20;
+    const continent = city.continent.toLowerCase();
+    
+    if (continent === 'europa') score += 10;
+    if (continent === 'oceania') score += 10;
+    if (city.tags.includes('luxury')) score += 5;
+    
+    return score;
+  }
+
+  // ===== NEW COMPARISON HELPERS =====
+  
+  // Beach
+  getBeachRating(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('beach')) return '⭐⭐⭐⭐⭐';
+    const continent = city.continent.toLowerCase();
+    if (continent === 'oceania' || continent === 'americhe') return '⭐⭐⭐⭐';
+    return '⭐⭐';
+  }
+
+  getBeachDescription(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('beach')) return 'Spiagge paradisiache';
+    const continent = city.continent.toLowerCase();
+    if (continent === 'oceania') return 'Spiagge spettacolari';
+    if (continent === 'americhe') return 'Spiagge accessibili';
+    return 'Spiagge limitate';
+  }
+
+  compareBeaches(c1: City, c2: City): number {
+    const score1 = c1.tags.includes('beach') ? 5 : c1.continent.toLowerCase() === 'oceania' || c1.continent.toLowerCase() === 'americhe' ? 4 : 2;
+    const score2 = c2.tags.includes('beach') ? 5 : c2.continent.toLowerCase() === 'oceania' || c2.continent.toLowerCase() === 'americhe' ? 4 : 2;
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
+  // Mountain
+  getMountainRating(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('trekking') || tags.includes('adventure')) return '⭐⭐⭐⭐⭐';
+    const continent = city.continent.toLowerCase();
+    if (continent === 'americhe' || continent === 'asia') return '⭐⭐⭐⭐';
+    return '⭐⭐';
+  }
+
+  getMountainDescription(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('trekking')) return 'Trekking eccellente';
+    if (tags.includes('adventure')) return 'Avventure montane';
+    const continent = city.continent.toLowerCase();
+    if (continent === 'americhe') return 'Montagne accessibili';
+    return 'Montagne limitate';
+  }
+
+  compareMountains(c1: City, c2: City): number {
+    const score1 = c1.tags.includes('trekking') || c1.tags.includes('adventure') ? 5 : c1.continent.toLowerCase() === 'americhe' || c1.continent.toLowerCase() === 'asia' ? 4 : 2;
+    const score2 = c2.tags.includes('trekking') || c2.tags.includes('adventure') ? 5 : c2.continent.toLowerCase() === 'americhe' || c2.continent.toLowerCase() === 'asia' ? 4 : 2;
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
+  // Coffee
+  getCoffeeRating(city: City): string {
+    const country = city.country.toLowerCase();
+    const coffeeCountries = ['italia', 'portogallo', 'spagna', 'turchia', 'grecia', 'colombia', 'brasile', 'etiopia', 'vietnam'];
+    if (coffeeCountries.some(c => country.includes(c))) return '⭐⭐⭐⭐⭐';
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa') return '⭐⭐⭐⭐';
+    return '⭐⭐⭐';
+  }
+
+  getCoffeeDescription(city: City): string {
+    const country = city.country.toLowerCase();
+    if (country.includes('italia')) return 'Caffè italiano autentico';
+    const coffeeCountries = ['portogallo', 'spagna', 'turchia', 'grecia', 'colombia', 'brasile', 'etiopia', 'vietnam'];
+    if (coffeeCountries.some(c => country.includes(c))) return 'Tradizione caffè forte';
+    return 'Caffè disponibile';
+  }
+
+  compareCoffee(c1: City, c2: City): number {
+    const getScore = (city: City) => {
+      const country = city.country.toLowerCase();
+      const coffeeCountries = ['italia', 'portogallo', 'spagna', 'turchia', 'grecia', 'colombia', 'brasile', 'etiopia', 'vietnam'];
+      if (coffeeCountries.some(c => country.includes(c))) return 5;
+      if (city.continent.toLowerCase() === 'europa') return 4;
+      return 3;
+    };
+    const score1 = getScore(c1);
+    const score2 = getScore(c2);
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
+  // Wine
+  getWineRating(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('wine')) return '⭐⭐⭐⭐⭐';
+    const country = city.country.toLowerCase();
+    const wineCountries = ['italia', 'francia', 'spagna', 'portogallo', 'argentina', 'cile', 'sudafrica', 'australia'];
+    if (wineCountries.some(c => country.includes(c))) return '⭐⭐⭐⭐';
+    return '⭐⭐';
+  }
+
+  getWineDescription(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('wine')) return 'Regione vinicola';
+    const country = city.country.toLowerCase();
+    const wineCountries = ['italia', 'francia', 'spagna', 'portogallo', 'argentina', 'cile', 'sudafrica', 'australia'];
+    if (wineCountries.some(c => country.includes(c))) return 'Vini eccellenti';
+    return 'Vini disponibili';
+  }
+
+  compareWine(c1: City, c2: City): number {
+    const getScore = (city: City) => {
+      if (city.tags.includes('wine')) return 5;
+      const country = city.country.toLowerCase();
+      const wineCountries = ['italia', 'francia', 'spagna', 'portogallo', 'argentina', 'cile', 'sudafrica', 'australia'];
+      if (wineCountries.some(c => country.includes(c))) return 4;
+      return 2;
+    };
+    const score1 = getScore(c1);
+    const score2 = getScore(c2);
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
+  // Family
+  getFamilyRating(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('family')) return '⭐⭐⭐⭐⭐';
+    if (city.rating >= 4.3) return '⭐⭐⭐⭐';
+    return '⭐⭐⭐';
+  }
+
+  getFamilyDescription(city: City): string {
+    const tags = city.tags;
+    if (tags.includes('family')) return 'Perfetta per famiglie';
+    if (city.rating >= 4.3) return 'Adatta alle famiglie';
+    return 'Discreta per famiglie';
+  }
+
+  compareFamily(c1: City, c2: City): number {
+    const getScore = (city: City) => {
+      if (city.tags.includes('family')) return 5;
+      if (city.rating >= 4.3) return 4;
+      return 3;
+    };
+    const score1 = getScore(c1);
+    const score2 = getScore(c2);
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
+  // LGBTQ+
+  getLGBTQRating(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa' && city.rating >= 4.0) return '⭐⭐⭐⭐⭐';
+    if (city.popularityScore >= 80 && city.rating >= 4.0) return '⭐⭐⭐⭐';
+    return '⭐⭐⭐';
+  }
+
+  getLGBTQDescription(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa' && city.rating >= 4.0) return 'Molto inclusiva';
+    if (city.popularityScore >= 80) return 'Inclusiva';
+    return 'Discreta';
+  }
+
+  compareLGBTQ(c1: City, c2: City): number {
+    const getScore = (city: City) => {
+      const continent = city.continent.toLowerCase();
+      if (continent === 'europa' && city.rating >= 4.0) return 5;
+      if (city.popularityScore >= 80 && city.rating >= 4.0) return 4;
+      return 3;
+    };
+    const score1 = getScore(c1);
+    const score2 = getScore(c2);
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
+  // Water Quality
+  getWaterQuality(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa' || continent === 'oceania') return '✅ Potabile';
+    if (city.rating >= 4.5) return '✅ Generalmente sicura';
+    return '⚠️ Bollire/comprare';
+  }
+
+  getWaterDescription(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa' || continent === 'oceania') return 'Acqua del rubinetto sicura';
+    if (city.rating >= 4.5) return 'Acqua generalmente sicura';
+    return 'Acqua in bottiglia consigliata';
+  }
+
+  compareWaterQuality(c1: City, c2: City): number {
+    const getScore = (city: City) => {
+      const continent = city.continent.toLowerCase();
+      if (continent === 'europa' || continent === 'oceania') return 5;
+      if (city.rating >= 4.5) return 4;
+      return 2;
+    };
+    const score1 = getScore(c1);
+    const score2 = getScore(c2);
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
+  // WiFi
+  getWiFIRating(city: City): string {
+    if (city.popularityScore >= 80) return '⭐⭐⭐⭐⭐';
+    if (city.popularityScore >= 60) return '⭐⭐⭐⭐';
+    return '⭐⭐⭐';
+  }
+
+  getWiFIDescription(city: City): string {
+    if (city.popularityScore >= 80) return 'WiFi eccellente';
+    if (city.popularityScore >= 60) return 'WiFi buono';
+    return 'WiFi discreto';
+  }
+
+  compareWiFi(c1: City, c2: City): number {
+    return c1.popularityScore > c2.popularityScore ? 1 : c1.popularityScore < c2.popularityScore ? 2 : 0;
+  }
+
+  // Air Quality
+  getAirQuality(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'oceania') return '⭐⭐⭐⭐⭐';
+    if (continent === 'europa' && city.popularityScore < 70) return '⭐⭐⭐⭐';
+    if (city.popularityScore >= 90) return '⭐⭐⭐';
+    return '⭐⭐';
+  }
+
+  getAirQualityDescription(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'oceania') return 'Aria pulitissima';
+    if (continent === 'europa' && city.popularityScore < 70) return 'Aria buona';
+    if (city.popularityScore >= 90) return 'Aria discreta';
+    return 'Aria moderata';
+  }
+
+  compareAirQuality(c1: City, c2: City): number {
+    const getScore = (city: City) => {
+      const continent = city.continent.toLowerCase();
+      if (continent === 'oceania') return 5;
+      if (continent === 'europa' && city.popularityScore < 70) return 4;
+      if (city.popularityScore >= 90) return 3;
+      return 2;
+    };
+    const score1 = getScore(c1);
+    const score2 = getScore(c2);
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
+  // Tipping
+  getTippingInfo(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa') return 'Non obbligatorio';
+    if (continent === 'americhe') return '10-20% standard';
+    if (continent === 'asia') return 'Opzionale';
+    return 'Verificare usanze';
+  }
+
+  getTippingDescription(city: City): string {
+    const continent = city.continent.toLowerCase();
+    if (continent === 'europa') return 'Mance non obbligatorie';
+    if (continent === 'americhe') return 'Mance attese';
+    return 'Mance opzionali';
+  }
+
+  // Living Cost
+  getLivingCost(city: City): string {
+    const level = city.priceLevel;
+    if (level <= 2) return 'Molto economico';
+    if (level === 3) return 'Moderato';
+    return 'Costoso';
+  }
+
+  getLivingCostDescription(city: City): string {
+    const level = city.priceLevel;
+    if (level <= 2) return 'Costo vita basso';
+    if (level === 3) return 'Costo vita medio';
+    return 'Costo vita alto';
+  }
+
+  compareLivingCost(c1: City, c2: City): number {
+    return c1.priceLevel < c2.priceLevel ? 1 : c1.priceLevel > c2.priceLevel ? 2 : 0;
+  }
+
+  // Quality of Life
+  getQualityOfLife(city: City): string {
+    const score = (city.rating * 20) + (city.popularityScore * 0.3);
+    if (score >= 90) return '⭐⭐⭐⭐⭐';
+    if (score >= 80) return '⭐⭐⭐⭐';
+    if (score >= 70) return '⭐⭐⭐';
+    return '⭐⭐';
+  }
+
+  getQualityOfLifeDescription(city: City): string {
+    const score = (city.rating * 20) + (city.popularityScore * 0.3);
+    if (score >= 90) return 'Qualità vita eccellente';
+    if (score >= 80) return 'Qualità vita alta';
+    if (score >= 70) return 'Qualità vita buona';
+    return 'Qualità vita discreta';
+  }
+
+  compareQualityOfLife(c1: City, c2: City): number {
+    const getScore = (city: City) => (city.rating * 20) + (city.popularityScore * 0.3);
+    const score1 = getScore(c1);
+    const score2 = getScore(c2);
+    return score1 > score2 ? 1 : score1 < score2 ? 2 : 0;
+  }
+
   updateComparison(): void {
     // Comparison updates automatically via computed signals
   }
@@ -918,4 +1832,3 @@ export class CompareComponent {
     this.city2Id = city2;
   }
 }
-

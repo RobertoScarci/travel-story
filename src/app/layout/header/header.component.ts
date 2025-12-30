@@ -127,10 +127,10 @@ import { City } from '../../core/models/city.model';
                 <circle cx="11" cy="11" r="8"/>
                 <path d="M21 21l-4.35-4.35"/>
               </svg>
-              <input 
-                type="text" 
-                placeholder="Cerca una destinazione..."
-                class="search-input"
+            <input 
+              type="text" 
+              placeholder="Cerca una destinazione..."
+              class="search-input"
                 [(ngModel)]="searchQuery"
                 (input)="onSearch()"
                 (keyup.escape)="closeSearch()"

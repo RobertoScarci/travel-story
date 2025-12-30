@@ -19,11 +19,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
   imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
   template: `
     @if (!isAuthPage()) {
-      <app-header />
+    <app-header />
     }
     <router-outlet />
     @if (!isAuthPage()) {
-      <app-footer />
+    <app-footer />
     }
   `,
   styles: [`
