@@ -33,8 +33,8 @@ type PracticalInfo = CityDetails['practicalInfo'];
           <div class="selector">
             <label>Prima città</label>
             <select 
-              [ngModel]="city1Id" 
-              (ngModelChange)="city1Id = $event; updateComparison()">
+              [ngModel]="city1Id()" 
+              (ngModelChange)="city1Id.set($event); updateComparison()">
               <option value="">Seleziona una città</option>
               @for (city of allCities(); track city.id) {
                 <option [value]="city.id">{{ city.name }}, {{ city.country }}</option>
@@ -47,8 +47,8 @@ type PracticalInfo = CityDetails['practicalInfo'];
           <div class="selector">
             <label>Seconda città</label>
             <select 
-              [ngModel]="city2Id" 
-              (ngModelChange)="city2Id = $event; updateComparison()">
+              [ngModel]="city2Id()" 
+              (ngModelChange)="city2Id.set($event); updateComparison()">
               <option value="">Seleziona una città</option>
               @for (city of allCities(); track city.id) {
                 <option [value]="city.id">{{ city.name }}, {{ city.country }}</option>
@@ -592,15 +592,20 @@ type PracticalInfo = CityDetails['practicalInfo'];
 })
 export class CompareComponent {
   allCities = signal<City[]>([]);
-  city1Id = '';
-  city2Id = '';
+  city1Id = signal<string>('');
+  city2Id = signal<string>('');
 
-  city1 = computed(() => 
-    this.allCities().find(c => c.id === this.city1Id) || null
-  );
-  city2 = computed(() => 
-    this.allCities().find(c => c.id === this.city2Id) || null
-  );
+  city1 = computed(() => {
+    const id = this.city1Id();
+    if (!id) return null;
+    return this.allCities().find(c => c.id === id) || null;
+  });
+  
+  city2 = computed(() => {
+    const id = this.city2Id();
+    if (!id) return null;
+    return this.allCities().find(c => c.id === id) || null;
+  });
 
   comparisonData = computed(() => {
     const c1 = this.city1();
@@ -1832,7 +1837,7 @@ export class CompareComponent {
   }
 
   setComparison(city1: string, city2: string): void {
-    this.city1Id = city1;
-    this.city2Id = city2;
+    this.city1Id.set(city1);
+    this.city2Id.set(city2);
   }
 }
