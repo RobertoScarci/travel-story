@@ -83,31 +83,27 @@ type PracticalInfo = CityDetails['practicalInfo'];
             <!-- Comparison Rows -->
             @for (row of comparisonData(); track row.label) {
               <div class="comparison-row" [class.highlight]="row.highlight">
-                <div class="value value-left" [class.winner]="row.winner === 1">
+                <div class="value" [class.winner]="row.winner === 1">
+                  <span class="value-main">{{ row.value1 }}</span>
+                  @if (row.subValue1) {
+                    <span class="value-sub">{{ row.subValue1 }}</span>
+                  }
                   @if (row.winner === 1) {
                     <span class="winner-badge">✓</span>
                   }
-                  <div class="value-content">
-                    <span class="value-main">{{ row.value1 }}</span>
-                    @if (row.subValue1) {
-                      <span class="value-sub">{{ row.subValue1 }}</span>
-                    }
-                  </div>
                 </div>
                 <div class="criteria">
                   <div class="criteria-icon" [innerHTML]="getIconSvgSafe(row.iconKey || 'rating')"></div>
                   <span>{{ row.label }}</span>
                 </div>
-                <div class="value value-right" [class.winner]="row.winner === 2">
+                <div class="value" [class.winner]="row.winner === 2">
+                  <span class="value-main">{{ row.value2 }}</span>
+                  @if (row.subValue2) {
+                    <span class="value-sub">{{ row.subValue2 }}</span>
+                  }
                   @if (row.winner === 2) {
                     <span class="winner-badge">✓</span>
                   }
-                  <div class="value-content">
-                    <span class="value-main">{{ row.value2 }}</span>
-                    @if (row.subValue2) {
-                      <span class="value-sub">{{ row.subValue2 }}</span>
-                    }
-                  </div>
                 </div>
               </div>
             }
@@ -362,41 +358,16 @@ type PracticalInfo = CityDetails['practicalInfo'];
       gap: var(--space-2);
       font-weight: 500;
 
-      &.winner {
-        color: var(--color-accent);
-      }
-
-      &.value-left {
-        justify-content: flex-start;
-
-        .value-content {
-          text-align: left;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-        }
-      }
-
-      &.value-right {
+      &:last-child {
         justify-content: flex-end;
-        flex-direction: row-reverse;
 
         @media (max-width: 768px) {
           justify-content: flex-start;
-          flex-direction: row;
         }
+      }
 
-        .value-content {
-          text-align: right;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-
-          @media (max-width: 768px) {
-            text-align: left;
-            align-items: flex-start;
-          }
-        }
+      &.winner {
+        color: var(--color-accent);
       }
     }
 
