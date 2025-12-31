@@ -28,13 +28,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
   `,
   styles: [`
     :host {
-      display: block;
-      height: 100%;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     router-outlet + * {
-      display: block;
-      height: 100%;
+      flex: 1;
     }
   `]
 })

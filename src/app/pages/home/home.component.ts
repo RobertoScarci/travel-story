@@ -98,7 +98,7 @@ import { City } from '../../core/models/city.model';
         <div class="scroll-indicator animate-fade-in animate-delay-3">
           <span>Scorri per esplorare</span>
           <div class="scroll-arrow">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 5v14M19 12l-7 7-7-7"/>
             </svg>
           </div>
@@ -352,25 +352,12 @@ import { City } from '../../core/models/city.model';
   styles: [`
     .home {
       overflow-x: hidden;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
-      height: 100vh;
-      overflow-y: auto;
-      
-      // Nascondi scrollbar ma mantieni funzionalità
-      scrollbar-width: none; // Firefox
-      -ms-overflow-style: none; // IE/Edge
-      
-      &::-webkit-scrollbar {
-        display: none; // Chrome/Safari
-      }
     }
 
     // ===== HERO SECTION =====
     .hero {
       position: relative;
       min-height: 100vh;
-      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -378,8 +365,6 @@ import { City } from '../../core/models/city.model';
       padding: var(--header-height) var(--space-6) var(--space-16);
       text-align: center;
       overflow: hidden;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
     }
 
     .hero-background {
@@ -542,34 +527,25 @@ import { City } from '../../core/models/city.model';
     // Scroll Indicator
     .scroll-indicator {
       position: absolute;
-      bottom: var(--space-6);
+      bottom: var(--space-4);
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--space-2);
+      gap: var(--space-1);
       color: var(--color-gray-400);
       font-size: var(--text-xs);
       z-index: 1;
       pointer-events: none;
-      animation: fadeInOut 3s ease-in-out infinite;
 
       span {
-        display: block;
-        font-weight: 500;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
+        display: none;
       }
 
       @media (max-width: 768px) {
         display: none;
       }
-    }
-    
-    @keyframes fadeInOut {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
     }
 
     .scroll-arrow {
@@ -584,38 +560,12 @@ import { City } from '../../core/models/city.model';
 
     // ===== SECTIONS =====
     .section {
-      min-height: 100vh;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: var(--header-height) var(--space-6) var(--space-8);
+      padding: var(--space-20) 0;
       position: relative;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      overflow-y: auto;
-      
-      // Permetti scroll interno se il contenuto supera l'altezza
+
       @media (max-width: 768px) {
-        padding: var(--header-height) var(--space-4) var(--space-6);
+        padding: var(--space-12) 0;
       }
-      
-      // Se il contenuto è troppo grande, rimuovi l'altezza fissa
-      &.has-overflow {
-        height: auto;
-        min-height: 100vh;
-      }
-    }
-    
-    // Container interno per centrare il contenuto
-    .section > .container {
-      width: 100%;
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      flex: 1;
     }
 
     // Alternating section backgrounds for visual separation
@@ -637,7 +587,6 @@ import { City } from '../../core/models/city.model';
       justify-content: space-between;
       margin-bottom: var(--space-8);
       gap: var(--space-4);
-      flex-shrink: 0;
 
       @media (max-width: 576px) {
         flex-direction: column;
@@ -726,32 +675,8 @@ import { City } from '../../core/models/city.model';
     // City Grids
     .city-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: var(--space-6);
-      flex: 1;
-      overflow-y: auto;
-      padding-bottom: var(--space-4);
-      
-      // Nascondi scrollbar ma mantieni funzionalità
-      scrollbar-width: thin;
-      scrollbar-color: var(--color-gray-300) transparent;
-      
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-      
-      &::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      
-      &::-webkit-scrollbar-thumb {
-        background: var(--color-gray-300);
-        border-radius: 3px;
-        
-        &:hover {
-          background: var(--color-gray-400);
-        }
-      }
 
       &.featured {
         grid-template-columns: repeat(3, 1fr);
@@ -803,8 +728,6 @@ import { City } from '../../core/models/city.model';
       gap: var(--space-4);
       margin: 0 calc(-1 * var(--space-6));
       padding: 0 var(--space-6) var(--space-4);
-      flex: 1;
-      min-height: 0;
 
       &::-webkit-scrollbar {
         display: none;
@@ -871,6 +794,7 @@ import { City } from '../../core/models/city.model';
 
     // ===== CTA SECTION =====
     .cta-section {
+      padding: var(--space-16) 0;
       background: var(--color-off-white);
     }
 
@@ -973,6 +897,7 @@ import { City } from '../../core/models/city.model';
 
     // ===== COMPARE SECTION =====
     .compare-section {
+      padding-bottom: var(--space-24);
       background: linear-gradient(180deg, #f5f4f2 0%, var(--color-off-white) 100%);
     }
 
