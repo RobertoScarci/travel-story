@@ -179,7 +179,12 @@ export interface TravelVideo {
                 <!-- Atmosphere Card -->
                 @if (wikipedia()) {
                   <div class="atmosphere-card">
-                    <div class="atmosphere-icon">✨</div>
+                    <div class="atmosphere-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-highlight)" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        <circle cx="12" cy="12" r="1" fill="var(--color-highlight)"/>
+                      </svg>
+                    </div>
                     <div class="atmosphere-content">
                       <span class="atmosphere-label">L'atmosfera</span>
                       <p>{{ details()!.story.atmosphere }}</p>
@@ -190,22 +195,42 @@ export interface TravelVideo {
                 <!-- Quick Stats -->
                 <div class="quick-stats">
                   <div class="stat-item">
-                    <span class="stat-icon">⭐</span>
+                    <span class="stat-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--color-highlight)" stroke="none">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                    </span>
                     <span class="stat-value">{{ city()!.rating }}</span>
                     <span class="stat-label">Rating</span>
                   </div>
                   <div class="stat-item">
-                    <span class="stat-icon">📅</span>
+                    <span class="stat-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                      </svg>
+                    </span>
                     <span class="stat-value">{{ city()!.suggestedDays.min }}-{{ city()!.suggestedDays.max }}</span>
                     <span class="stat-label">Giorni ideali</span>
                   </div>
                   <div class="stat-item">
-                    <span class="stat-icon">💰</span>
+                    <span class="stat-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                      </svg>
+                    </span>
                     <span class="stat-value">{{ '€'.repeat(city()!.priceLevel) }}</span>
                     <span class="stat-label">Costo</span>
                   </div>
                   <div class="stat-item">
-                    <span class="stat-icon">🌡️</span>
+                    <span class="stat-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                        <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>
+                      </svg>
+                    </span>
                     <span class="stat-value">{{ city()!.bestPeriod[0] }}</span>
                     <span class="stat-label">Periodo migliore</span>
                   </div>
@@ -280,14 +305,25 @@ export interface TravelVideo {
                   </div>
                   </div>
                       <div class="country-item">
-                        <span class="country-icon">👥</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Popolazione</span>
                           <span class="country-value">{{ formatPopulation(countryInfo()!.population) }}</span>
                   </div>
                 </div>
                       <div class="country-item">
-                        <span class="country-icon">💰</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Valuta</span>
                           <span class="country-value">
@@ -300,35 +336,62 @@ export interface TravelVideo {
                         </div>
                       </div>
                       <div class="country-item">
-                        <span class="country-icon">🗣️</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                            <path d="M9 11h6"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Lingue</span>
                           <span class="country-value">{{ getLanguagesDisplay(countryInfo()!.languages) }}</span>
                         </div>
                       </div>
                       <div class="country-item">
-                        <span class="country-icon">🕐</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Fuso orario</span>
                           <span class="country-value">{{ city()!.timezone }}</span>
                         </div>
                       </div>
                       <div class="country-item">
-                        <span class="country-icon">🚗</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2M19 18h2a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2M7 8h10M7 12h10M7 16h10"/>
+                            <path d="M9 18v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Guida</span>
                           <span class="country-value">{{ countryInfo()!.drivingSide === 'right' ? 'A destra' : 'A sinistra' }}</span>
                         </div>
                       </div>
                       <div class="country-item">
-                        <span class="country-icon">📞</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Prefisso</span>
                           <span class="country-value">{{ countryInfo()!.callingCode }}</span>
                         </div>
                       </div>
                       <div class="country-item">
-                        <span class="country-icon">🚨</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-error)" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Emergenze</span>
                           <span class="country-value">{{ city()!.emergencyNumber }}</span>
@@ -336,21 +399,38 @@ export interface TravelVideo {
                       </div>
                     } @else {
                       <div class="country-item">
-                        <span class="country-icon">🗣️</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                            <path d="M9 11h6"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Lingue</span>
                           <span class="country-value">{{ city()!.language.join(', ') }}</span>
                         </div>
                       </div>
                       <div class="country-item">
-                        <span class="country-icon">💱</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Valuta</span>
                           <span class="country-value">{{ city()!.currency }}</span>
                         </div>
                       </div>
                       <div class="country-item">
-                        <span class="country-icon">🕐</span>
+                        <span class="country-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                          </svg>
+                        </span>
                         <div class="country-detail">
                           <span class="country-label">Fuso orario</span>
                           <span class="country-value">{{ city()!.timezone }}</span>
@@ -364,11 +444,37 @@ export interface TravelVideo {
                 <div class="safety-badge" [class]="details()!.safety.overallLevel">
                   <span class="safety-icon">
                     @switch (details()!.safety.overallLevel) {
-                      @case ('very-safe') { ✅ }
-                      @case ('safe') { ✅ }
-                      @case ('moderate') { ⚠️ }
-                      @case ('caution') { ⚠️ }
-                      @case ('avoid') { 🚫 }
+                      @case ('very-safe') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      }
+                      @case ('safe') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      }
+                      @case ('moderate') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5">
+                          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                          <line x1="12" y1="9" x2="12" y2="13"/>
+                          <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                      }
+                      @case ('caution') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5">
+                          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                          <line x1="12" y1="9" x2="12" y2="13"/>
+                          <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                      }
+                      @case ('avoid') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5">
+                          <circle cx="12" cy="12" r="10"/>
+                          <line x1="15" y1="9" x2="9" y2="15"/>
+                          <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                      }
                     }
                   </span>
                   <div class="safety-content">
@@ -433,17 +539,29 @@ export interface TravelVideo {
                         <div class="item-meta">
                           @if (item.duration) {
                             <span class="meta-tag">
-                              <span>⏱️</span> {{ item.duration }}
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                              </svg>
+                              {{ item.duration }}
                             </span>
                           }
                           @if (item.priceRange) {
                             <span class="meta-tag">
-                              <span>💰</span> {{ item.priceRange }}
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"/>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                              </svg>
+                              {{ item.priceRange }}
                             </span>
                           }
                           @if (item.location) {
                             <span class="meta-tag">
-                              <span>📍</span> {{ item.location }}
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                              </svg>
+                              {{ item.location }}
                             </span>
                           }
                         </div>
@@ -462,23 +580,59 @@ export interface TravelVideo {
             [class.active]="activeSection() === 'practical'">
             <div class="container">
               <div class="section-header">
-                <span class="section-icon">📋</span>
+                <span class="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </span>
                 <h2>Informazioni Pratiche</h2>
               </div>
 
               <div class="practical-grid">
                 <div class="practical-card animate-fade-in-up">
-                  <h3>📄 Documenti</h3>
+                  <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                      <line x1="16" y1="13" x2="8" y2="13"/>
+                      <line x1="16" y1="17" x2="8" y2="17"/>
+                      <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    Documenti
+                  </h3>
                   <p>{{ details()!.practicalInfo.documents }}</p>
                 </div>
 
                 <div class="practical-card animate-fade-in-up animate-delay-1">
-                  <h3>☀️ Periodo Migliore</h3>
+                  <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-highlight)" stroke-width="2">
+                      <circle cx="12" cy="12" r="5"/>
+                      <line x1="12" y1="1" x2="12" y2="3"/>
+                      <line x1="12" y1="21" x2="12" y2="23"/>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                      <line x1="1" y1="12" x2="3" y2="12"/>
+                      <line x1="21" y1="12" x2="23" y2="12"/>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    Periodo Migliore
+                  </h3>
                   <p>{{ details()!.practicalInfo.bestTimeToVisit }}</p>
                 </div>
 
                 <div class="practical-card animate-fade-in-up animate-delay-2">
-                  <h3>💰 Costi Medi</h3>
+                  <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                      <line x1="12" y1="1" x2="12" y2="23"/>
+                      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    Costi Medi
+                  </h3>
                   <ul class="cost-list">
                     <li><span>Pasto:</span> {{ details()!.practicalInfo.averageCosts.meal }}</li>
                     <li><span>Trasporti:</span> {{ details()!.practicalInfo.averageCosts.transport }}</li>
@@ -487,7 +641,14 @@ export interface TravelVideo {
                 </div>
 
                 <div class="practical-card animate-fade-in-up animate-delay-3">
-                  <h3>🚌 Come Muoversi</h3>
+                  <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                      <path d="M19 17h2l.64-2.54A6 6 0 0 0 20 10a6 6 0 0 0-6-6h-1.26a6 6 0 0 0-4.48 2L5 8a6 6 0 0 0-6 6v3h2"/>
+                      <circle cx="7" cy="17" r="2"/>
+                      <circle cx="17" cy="17" r="2"/>
+                    </svg>
+                    Come Muoversi
+                  </h3>
                   <ul>
                     @for (tip of details()!.practicalInfo.gettingAround; track tip) {
                       <li>{{ tip }}</li>
@@ -496,11 +657,22 @@ export interface TravelVideo {
                 </div>
 
                 <div class="practical-card full-width animate-fade-in-up animate-delay-4">
-                  <h3>💡 Consigli dai Locali</h3>
+                  <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-highlight)" stroke-width="2">
+                      <path d="M9 11a3 3 0 1 0 6 0 3 3 0 0 0-6 0z"/>
+                      <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 0 1-2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0z"/>
+                      <path d="M15 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    </svg>
+                    Consigli dai Locali
+                  </h3>
                   <div class="tips-grid">
                     @for (tip of details()!.practicalInfo.tipsFromLocals; track tip) {
                       <div class="tip-item">
-                        <span class="tip-icon">✨</span>
+                        <span class="tip-icon">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-highlight)" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                          </svg>
+                        </span>
                         <span>{{ tip }}</span>
                       </div>
                     }
@@ -518,13 +690,25 @@ export interface TravelVideo {
                   <span class="safety-level" [attr.data-level]="details()!.safety.overallLevel">
                     {{ getSafetyLabel() }}
                   </span>
-                  <h3>🛡️ Sicurezza</h3>
+                  <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Sicurezza
+                  </h3>
                 </div>
                 
                 @if (details()!.safety.currentAlerts.length > 0) {
                   <div class="alerts">
                     @for (alert of details()!.safety.currentAlerts; track alert) {
-                      <div class="alert-item">⚠️ {{ alert }}</div>
+                      <div class="alert-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5">
+                          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                          <line x1="12" y1="9" x2="12" y2="13"/>
+                          <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        {{ alert }}
+                      </div>
                     }
                   </div>
                 }
@@ -1168,7 +1352,17 @@ export interface TravelVideo {
       margin-bottom: var(--space-6);
 
       .atmosphere-icon {
-        font-size: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        
+        svg {
+          width: 28px;
+          height: 28px;
+        }
       }
 
       .atmosphere-content {
@@ -1216,8 +1410,15 @@ export interface TravelVideo {
         }
 
         .stat-icon {
-          font-size: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           margin-bottom: var(--space-2);
+          
+          svg {
+            width: 24px;
+            height: 24px;
+          }
         }
 
         .stat-value {
@@ -1314,9 +1515,16 @@ export interface TravelVideo {
       }
 
       .country-icon {
-        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 28px;
-        text-align: center;
+        flex-shrink: 0;
+        
+        svg {
+          width: 18px;
+          height: 18px;
+        }
       }
 
       .country-detail {
@@ -1354,7 +1562,15 @@ export interface TravelVideo {
       box-shadow: var(--shadow-sm);
 
       .safety-icon {
-        font-size: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        
+        svg {
+          width: 24px;
+          height: 24px;
+        }
       }
 
       .safety-content {
@@ -1668,6 +1884,13 @@ export interface TravelVideo {
       border-radius: var(--border-radius-sm);
       font-size: var(--text-xs);
       color: var(--color-gray-500);
+      
+      svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        stroke: var(--color-accent);
+      }
     }
 
     // ===== PRACTICAL SECTION =====
@@ -1691,8 +1914,15 @@ export interface TravelVideo {
       }
 
       h3 {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
         font-size: var(--text-lg);
         margin-bottom: var(--space-3);
+        
+        svg {
+          flex-shrink: 0;
+        }
       }
 
       ul {
@@ -1732,7 +1962,15 @@ export interface TravelVideo {
       color: var(--color-gray-500);
 
       .tip-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         flex-shrink: 0;
+        
+        svg {
+          width: 16px;
+          height: 16px;
+        }
       }
     }
 
@@ -1754,7 +1992,14 @@ export interface TravelVideo {
       margin-bottom: var(--space-6);
 
       h3 {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
         margin: 0;
+        
+        svg {
+          flex-shrink: 0;
+        }
       }
     }
 
@@ -1786,11 +2031,18 @@ export interface TravelVideo {
       margin-bottom: var(--space-6);
 
       .alert-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
         padding: var(--space-3);
         background: rgba(241, 196, 15, 0.1);
         border-radius: var(--border-radius-sm);
         font-size: var(--text-sm);
         color: #856404;
+        
+        svg {
+          flex-shrink: 0;
+        }
       }
     }
 
