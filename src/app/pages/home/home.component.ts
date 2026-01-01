@@ -6,7 +6,7 @@ import { CityCardComponent } from '../../shared/components/city-card/city-card.c
 import { CityService } from '../../core/services/city.service';
 import { UserService } from '../../core/services/user.service';
 import { PersonalizationService } from '../../core/services/personalization.service';
-import { City } from '../../core/models/city.model';
+import { City, HiddenGemInfo } from '../../core/models/city.model';
 
 /**
  * HomeComponent - The heart of TravelStory
@@ -217,7 +217,7 @@ import { City } from '../../core/models/city.model';
         </section>
       }
 
-      <!-- Emerging Destinations -->
+      <!-- Emerging Destinations / Hidden Gems -->
       @if (!searchQuery()) {
         <section class="section emerging-section">
           <div class="container">
@@ -231,16 +231,70 @@ import { City } from '../../core/models/city.model';
                   </svg>
                   Gemme nascoste
                 </span>
-                <h2>Mete emergenti</h2>
-                <p class="section-subtitle">Scopri prima degli altri</p>
+                <h2>Mete nascoste</h2>
+                <p class="section-subtitle">Destinazioni autentiche che meritano di essere scoperte</p>
               </div>
             </div>
-            <div class="city-grid horizontal">
+            <div class="hidden-gems-grid">
               @for (city of emergingCities(); track city.id; let i = $index) {
-                <app-city-card 
-                  [city]="city"
-                  class="animate-fade-in-up"
-                  [style.animation-delay.ms]="i * 100"/>
+                @if (hiddenGemsInfo().has(city.id)) {
+                  <div class="hidden-gem-card animate-fade-in-up" [style.animation-delay.ms]="i * 100">
+                    <app-city-card 
+                      [city]="city"
+                      class="gem-city-card"/>
+                    <div class="gem-info">
+                      <p class="gem-description">{{ hiddenGemsInfo().get(city.id)!.description }}</p>
+                      <div class="gem-reasons">
+                        @for (reason of hiddenGemsInfo().get(city.id)!.reasons.slice(0, 3); track reason.type) {
+                          <span class="gem-reason-badge">
+                            @switch (reason.icon) {
+                              @case ('users') {
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                  <circle cx="9" cy="7" r="4"/>
+                                  <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                              }
+                              @case ('wallet') {
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <line x1="12" y1="1" x2="12" y2="23"/>
+                                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                              }
+                              @case ('heart') {
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                              }
+                              @case ('sparkles') {
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                              }
+                              @case ('trending-up') {
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                  <polyline points="17 6 23 6 23 12"/>
+                                </svg>
+                              }
+                              @default {
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                </svg>
+                              }
+                            }
+                            {{ reason.label }}
+                          </span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                } @else {
+                  <app-city-card 
+                    [city]="city"
+                    class="animate-fade-in-up"
+                    [style.animation-delay.ms]="i * 100"/>
+                }
               }
             </div>
           </div>
@@ -579,6 +633,74 @@ import { City } from '../../core/models/city.model';
 
     .emerging-section {
       background: linear-gradient(180deg, #f8f6f3 0%, #f5f3f0 100%);
+    }
+
+    // Hidden Gems Grid
+    .hidden-gems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: var(--space-6);
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hidden-gem-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      background: var(--color-white);
+      border-radius: var(--border-radius-xl);
+      padding: var(--space-4);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+
+      &:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+    }
+
+    .gem-city-card {
+      flex: 1;
+    }
+
+    .gem-info {
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-gray-100);
+    }
+
+    .gem-description {
+      font-size: var(--text-sm);
+      color: var(--color-gray-600);
+      line-height: 1.6;
+      margin-bottom: var(--space-3);
+      font-style: italic;
+    }
+
+    .gem-reasons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .gem-reason-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-3);
+      background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(248, 181, 0, 0.08) 100%);
+      border-radius: var(--border-radius-full);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--color-accent);
+
+      svg {
+        width: 14px;
+        height: 14px;
+        stroke: var(--color-accent);
+      }
     }
 
     .section-header {
@@ -949,6 +1071,7 @@ export class HomeComponent implements OnInit {
   // City data
   trendingCities = signal<City[]>([]);
   emergingCities = signal<City[]>([]);
+  hiddenGemsInfo = signal<Map<string, HiddenGemInfo>>(new Map());
   budgetCities = signal<City[]>([]);
   recommendedCities = signal<City[]>([]);
   recentCities = signal<City[]>([]);
@@ -978,7 +1101,19 @@ export class HomeComponent implements OnInit {
 
   private loadCities(): void {
     this.trendingCities.set(this.cityService.getTrendingCities(6));
-    this.emergingCities.set(this.cityService.getEmergingDestinations(4));
+    const emerging = this.cityService.getEmergingDestinations(4);
+    this.emergingCities.set(emerging);
+    
+    // Load hidden gem info for emerging cities
+    const hiddenGemsMap = new Map<string, HiddenGemInfo>();
+    emerging.forEach(city => {
+      const info = this.cityService.getHiddenGemInfo(city.id);
+      if (info) {
+        hiddenGemsMap.set(city.id, info);
+      }
+    });
+    this.hiddenGemsInfo.set(hiddenGemsMap);
+    
     this.budgetCities.set(this.cityService.getBudgetFriendlyCities(4));
     
     // Load personalized content

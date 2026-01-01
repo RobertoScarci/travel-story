@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { City, CityDetails, CitySection, SectionItem, ViralContent, FlightDeal } from '../models/city.model';
+import { City, CityDetails, CitySection, SectionItem, ViralContent, FlightDeal, HiddenGemInfo, HiddenGemReason } from '../models/city.model';
 
 /**
  * CityService - Data provider for city information
@@ -75,13 +75,154 @@ export class CityService {
   }
 
   /**
-   * Get emerging destinations (hidden gems)
+   * Get emerging destinations (hidden gems) with improved selection logic
+   * Uses multiple criteria: popularity, rating, cost, authenticity, unique experiences
    */
   getEmergingDestinations(limit: number = 4): City[] {
     return [...this.citiesSignal()]
-      .filter(city => city.popularityScore < 70 && city.rating >= 4.2)
-      .sort((a, b) => b.rating - a.rating)
-      .slice(0, limit);
+      .map(city => ({
+        city,
+        hiddenGemInfo: this.calculateHiddenGemScore(city)
+      }))
+      .filter(item => {
+        const { city, hiddenGemInfo } = item;
+        // Must have at least 2 reasons to be a hidden gem
+        return hiddenGemInfo.reasons.length >= 2 && 
+               hiddenGemInfo.score >= 50 &&
+               city.rating >= 4.0; // Minimum rating threshold
+      })
+      .sort((a, b) => b.hiddenGemInfo.score - a.hiddenGemInfo.score)
+      .slice(0, limit)
+      .map(item => item.city);
+  }
+
+  /**
+   * Calculate hidden gem score and reasons for a city
+   */
+  calculateHiddenGemScore(city: City): HiddenGemInfo {
+    const reasons: HiddenGemReason[] = [];
+    let score = 0;
+
+    // 1. Low popularity (but still good rating)
+    if (city.popularityScore < 60 && city.rating >= 4.2) {
+      reasons.push({
+        type: 'low-popularity',
+        label: 'Poco turistica',
+        description: `Con un punteggio di popolarità di ${city.popularityScore}, questa destinazione offre un'esperienza autentica lontana dalle folle.`,
+        icon: 'users'
+      });
+      score += 30;
+    } else if (city.popularityScore < 70 && city.rating >= 4.0) {
+      reasons.push({
+        type: 'underrated',
+        label: 'Sottovalutata',
+        description: 'Una destinazione che merita più attenzione di quanta ne riceva.',
+        icon: 'star'
+      });
+      score += 20;
+    }
+
+    // 2. Budget-friendly
+    if (city.priceLevel <= 2) {
+      reasons.push({
+        type: 'budget-friendly',
+        label: 'Accessibile',
+        description: `Con un costo medio di ${'€'.repeat(city.priceLevel)}, offre un ottimo rapporto qualità-prezzo.`,
+        icon: 'wallet'
+      });
+      score += 25;
+    }
+
+    // 3. Authentic experiences (based on tags)
+    const authenticTags = ['cultura', 'storia', 'locale', 'tradizionale', 'autentico'];
+    const hasAuthenticTags = city.tags.some(tag => 
+      authenticTags.some(authTag => tag.toLowerCase().includes(authTag))
+    );
+    if (hasAuthenticTags) {
+      reasons.push({
+        type: 'authentic',
+        label: 'Autentica',
+        description: 'Un\'esperienza genuina lontana dai percorsi turistici più battuti.',
+        icon: 'heart'
+      });
+      score += 20;
+    }
+
+    // 4. Unique experiences (based on tags)
+    const uniqueTags = ['natura', 'avventura', 'spirituale', 'artistica', 'culinaria'];
+    const hasUniqueTags = city.tags.some(tag => 
+      uniqueTags.some(uniqueTag => tag.toLowerCase().includes(uniqueTag))
+    );
+    if (hasUniqueTags && city.rating >= 4.3) {
+      reasons.push({
+        type: 'unique-experience',
+        label: 'Esperienza unica',
+        description: 'Offre qualcosa di speciale che non troverai altrove.',
+        icon: 'sparkles'
+      });
+      score += 25;
+    }
+
+    // 5. Emerging destination (low popularity but high rating)
+    if (city.popularityScore < 50 && city.rating >= 4.5) {
+      reasons.push({
+        type: 'emerging',
+        label: 'In crescita',
+        description: 'Una destinazione emergente che sta guadagnando popolarità tra i viaggiatori esperti.',
+        icon: 'trending-up'
+      });
+      score += 15;
+    }
+
+    // Generate description
+    const description = this.generateHiddenGemDescription(city, reasons);
+
+    return {
+      reasons,
+      score: Math.min(100, score),
+      description
+    };
+  }
+
+  /**
+   * Generate a human-readable description of why a city is a hidden gem
+   */
+  private generateHiddenGemDescription(city: City, reasons: HiddenGemReason[]): string {
+    if (reasons.length === 0) return '';
+
+    const primaryReason = reasons[0];
+    
+    switch (primaryReason.type) {
+      case 'low-popularity':
+        return `Una destinazione poco conosciuta ma con un rating di ${city.rating}/5, perfetta per chi cerca autenticità.`;
+      case 'budget-friendly':
+        return `Offre un'esperienza straordinaria a un prezzo accessibile (${'€'.repeat(city.priceLevel)}), ideale per viaggiatori attenti al budget.`;
+      case 'authentic':
+        return `Un'esperienza autentica e genuina, lontana dai percorsi turistici più battuti.`;
+      case 'unique-experience':
+        return `Offre esperienze uniche e indimenticabili che non troverai in altre destinazioni.`;
+      case 'underrated':
+        return `Sottovalutata ma con un potenziale enorme, merita sicuramente una visita.`;
+      case 'emerging':
+        return `Una destinazione emergente che sta guadagnando popolarità tra i viaggiatori esperti.`;
+      default:
+        return `Una gemma nascosta che vale la pena scoprire.`;
+    }
+  }
+
+  /**
+   * Get hidden gem information for a specific city
+   */
+  getHiddenGemInfo(cityId: string): HiddenGemInfo | null {
+    const city = this.getCityById(cityId);
+    if (!city) return null;
+    
+    const info = this.calculateHiddenGemScore(city);
+    // Only return if it's actually a hidden gem
+    if (info.reasons.length >= 2 && info.score >= 50) {
+      return info;
+    }
+    return null;
   }
 
   /**

@@ -142,3 +142,19 @@ export interface ComparisonCriteria {
   icon: string;
 }
 
+/**
+ * Hidden Gem information - why a city is considered a hidden gem
+ */
+export interface HiddenGemInfo {
+  reasons: HiddenGemReason[];
+  score: number; // 0-100, higher = more hidden gem
+  description: string; // Short description explaining why it's hidden
+}
+
+export interface HiddenGemReason {
+  type: 'low-popularity' | 'budget-friendly' | 'authentic' | 'unique-experience' | 'underrated' | 'emerging';
+  label: string;
+  description: string;
+  icon: string;
+}
+
