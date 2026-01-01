@@ -28,7 +28,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
   template: `
     <main class="home">
       <!-- Hero Section -->
-      <section class="hero" (mousemove)="onHeroMouseMove($event)">
+      <section class="hero">
         <div class="hero-background">
           <div class="hero-gradient"></div>
           <div class="hero-pattern"></div>
@@ -55,7 +55,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
           </div>
         </div>
         
-        <div class="hero-content" [style.transform]="heroTransform()">
+        <div class="hero-content">
           <div class="hero-title-wrapper">
             @if (greeting(); as greetingData) {
               <div class="greeting-line">
@@ -630,8 +630,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     .hero-content {
       max-width: 800px;
       z-index: 1;
-      transition: transform 0.1s ease-out;
-      will-change: transform;
     }
 
     .hero-title-wrapper {
@@ -1533,7 +1531,6 @@ export class HomeComponent implements OnInit {
   showPersonalized = signal(false);
   
   // Hero animations
-  heroTransform = signal('translate(0, 0)');
   searchFocused = signal(false);
   greeting = signal(this.personalization.getPersonalizedGreeting());
   particles = Array.from({ length: 12 }, (_, i) => ({
@@ -1629,14 +1626,6 @@ export class HomeComponent implements OnInit {
 
   getRecommendationReason(city: City): string {
     return this.personalization.getRecommendationReason(city);
-  }
-
-  onHeroMouseMove(event: MouseEvent): void {
-    const hero = event.currentTarget as HTMLElement;
-    const rect = hero.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 20;
-    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 20;
-    this.heroTransform.set(`translate(${x}px, ${y}px)`);
   }
 }
 
