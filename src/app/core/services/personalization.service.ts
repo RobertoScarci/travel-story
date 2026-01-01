@@ -262,27 +262,39 @@ export class PersonalizationService {
 
   /**
    * Get greeting message based on user state and time
+   * Returns object with greeting parts for flexible display
    */
-  getPersonalizedGreeting(): string {
+  getPersonalizedGreeting(): { greeting: string; name?: string; tagline?: string } {
     const user = this.userService.user();
     const hour = new Date().getHours();
     
     let timeGreeting: string;
-    if (hour < 12) timeGreeting = 'Buongiorno';
-    else if (hour < 18) timeGreeting = 'Buon pomeriggio';
-    else timeGreeting = 'Buonasera';
+    if (hour < 12) timeGreeting = 'Ciao';
+    else if (hour < 18) timeGreeting = 'Ciao';
+    else timeGreeting = 'Ciao';
 
     if (user?.type === 'registered') {
       const name = this.userService.userName();
-      return `${timeGreeting}, ${name}! Pronto per una nuova avventura?`;
+      return {
+        greeting: timeGreeting,
+        name: name,
+        tagline: 'pronto a partire?'
+      };
     }
 
     const history = this.userService.getTravelHistory();
     if (history.length > 0) {
-      return `${timeGreeting}! Bentornato, esploratore.`;
+      return {
+        greeting: timeGreeting,
+        name: 'esploratore',
+        tagline: 'bentornato'
+      };
     }
 
-    return `${timeGreeting}! Dove ti porterà il prossimo viaggio?`;
+    return {
+      greeting: timeGreeting,
+      tagline: 'dove andiamo?'
+    };
   }
 
   /**

@@ -57,8 +57,15 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         
         <div class="hero-content" [style.transform]="heroTransform()">
           <h1 class="hero-title">
-            <span class="typing-text">{{ personalization.getPersonalizedGreeting() }}</span>
-            <span class="cursor-blink">|</span>
+            @if (greeting(); as greetingData) {
+              <span class="greeting-word">{{ greetingData.greeting }}</span>
+              @if (greetingData.name) {
+                <span class="greeting-name">{{ greetingData.name }}</span>
+              }
+              @if (greetingData.tagline) {
+                <span class="greeting-tagline">{{ greetingData.tagline }}</span>
+              }
+            }
           </h1>
           <p class="hero-subtitle">
             <span class="subtitle-line">Scopri destinazioni che raccontano storie.</span><br>
@@ -612,31 +619,84 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
 
     .hero-title {
-      font-size: var(--text-4xl);
-      font-weight: 500;
-      color: var(--color-primary);
+      font-family: var(--font-body);
+      font-size: clamp(2.5rem, 4vw + 1rem, 5.5rem);
+      font-weight: 700;
+      line-height: 1.1;
       margin-bottom: var(--space-4);
-      min-height: 1.2em;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 4px;
+      gap: 0.2em;
+      letter-spacing: -0.03em;
       
       @media (min-width: 768px) {
-        font-size: var(--text-5xl);
+        font-size: clamp(3.5rem, 6vw + 1rem, 7rem);
       }
     }
 
-    .typing-text {
-      display: inline-block;
-      animation: fadeInScale 1s ease-out;
-      overflow: hidden;
+    .greeting-word {
+      display: block;
+      font-weight: 300;
+      color: var(--color-gray-400);
+      font-size: 0.5em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: fadeInDown 0.8s ease-out;
+      margin-bottom: 0.1em;
+    }
+
+    .greeting-name {
+      display: block;
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+      animation: fadeInScale 1s ease-out 0.2s both;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0.05em;
+        left: 0;
+        width: 100%;
+        height: 0.08em;
+        background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+        opacity: 0.2;
+        border-radius: 2px;
+        animation: underlineExpand 0.8s ease-out 0.5s both;
+      }
+    }
+
+    .greeting-tagline {
+      display: block;
+      font-weight: 400;
+      color: var(--color-gray-500);
+      font-size: 0.35em;
+      letter-spacing: 0.05em;
+      text-transform: lowercase;
+      font-style: italic;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+      margin-top: 0.2em;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes fadeInScale {
       from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: scale(0.9);
       }
       to {
         opacity: 1;
@@ -644,19 +704,14 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       }
     }
 
-    .cursor-blink {
-      display: inline-block;
-      animation: blink 1s infinite;
-      color: var(--color-accent);
-      font-weight: 300;
-    }
-
-    @keyframes blink {
-      0%, 50% {
-        opacity: 1;
-      }
-      51%, 100% {
+    @keyframes underlineExpand {
+      from {
+        width: 0;
         opacity: 0;
+      }
+      to {
+        width: 100%;
+        opacity: 0.2;
       }
     }
 
@@ -1371,6 +1426,7 @@ export class HomeComponent implements OnInit {
   // Hero animations
   heroTransform = signal('translate(0, 0)');
   searchFocused = signal(false);
+  greeting = signal(this.personalization.getPersonalizedGreeting());
   particles = Array.from({ length: 12 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -1397,6 +1453,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadCities();
     this.checkPersonalization();
+    this.greeting.set(this.personalization.getPersonalizedGreeting());
   }
 
   private loadCities(): void {
