@@ -28,24 +28,46 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
   template: `
     <main class="home">
       <!-- Hero Section -->
-      <section class="hero">
+      <section class="hero" (mousemove)="onHeroMouseMove($event)">
         <div class="hero-background">
           <div class="hero-gradient"></div>
           <div class="hero-pattern"></div>
+          <!-- Animated decorative elements -->
+          <div class="hero-particles">
+            @for (particle of particles; track particle.id) {
+              <div 
+                class="particle" 
+                [style.left.%]="particle.x"
+                [style.top.%]="particle.y"
+                [style.animation-delay.s]="particle.delay"
+                [style.animation-duration.s]="particle.duration">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5" opacity="0.3">
+                  <circle cx="12" cy="12" r="2"/>
+                </svg>
+              </div>
+            }
+          </div>
+          <!-- Floating shapes -->
+          <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+          </div>
         </div>
         
-        <div class="hero-content">
-          <h1 class="hero-title animate-fade-in-up">
-            {{ personalization.getPersonalizedGreeting() }}
+        <div class="hero-content" [style.transform]="heroTransform()">
+          <h1 class="hero-title">
+            <span class="typing-text">{{ personalization.getPersonalizedGreeting() }}</span>
+            <span class="cursor-blink">|</span>
           </h1>
-          <p class="hero-subtitle animate-fade-in-up animate-delay-1">
-            Scopri destinazioni che raccontano storie.<br>
-            <span class="highlight">Trova la tua prossima avventura.</span>
+          <p class="hero-subtitle">
+            <span class="subtitle-line">Scopri destinazioni che raccontano storie.</span><br>
+            <span class="highlight animated-highlight">Trova la tua prossima avventura.</span>
           </p>
 
           <!-- Search Bar -->
-          <div class="search-wrapper animate-fade-in-up animate-delay-2">
-            <div class="search-bar">
+          <div class="search-wrapper">
+            <div class="search-bar" [class.focused]="searchFocused()">
               <svg class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="11" cy="11" r="8"/>
                 <path d="M21 21l-4.35-4.35"/>
@@ -55,7 +77,9 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 placeholder="Dove vuoi andare?"
                 class="search-input"
                 [(ngModel)]="searchQuery"
-                (input)="onSearch()">
+                (input)="onSearch()"
+                (focus)="searchFocused.set(true)"
+                (blur)="searchFocused.set(false)">
               @if (searchQuery()) {
                 <button class="search-clear" (click)="clearSearch()">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -67,11 +91,13 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
             <!-- Quick Filters -->
             <div class="quick-filters">
-              @for (filter of quickFilters; track filter.id) {
+              @for (filter of quickFilters; track filter.id; let i = $index) {
                 <button 
                   class="filter-chip"
                   [class.active]="activeFilter() === filter.id"
-                  (click)="setFilter(filter.id)">
+                  (click)="setFilter(filter.id)"
+                  [style.--index]="i"
+                  [style.animation-delay]="(1.2 + i * 0.1) + 's'">
                   <span class="filter-icon">
                     @if (filter.icon === 'mountain') {
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3l4 8 5-5 5 5V3H8z"/><path d="M2 21l6-6 4 4 4-4 6 6H2z"/></svg>
@@ -434,6 +460,22 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         radial-gradient(ellipse at 30% 20%, rgba(233, 69, 96, 0.08) 0%, transparent 50%),
         radial-gradient(ellipse at 70% 60%, rgba(248, 181, 0, 0.06) 0%, transparent 50%),
         linear-gradient(180deg, var(--color-off-white) 0%, var(--color-cream) 100%);
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% {
+        background: 
+          radial-gradient(ellipse at 30% 20%, rgba(233, 69, 96, 0.08) 0%, transparent 50%),
+          radial-gradient(ellipse at 70% 60%, rgba(248, 181, 0, 0.06) 0%, transparent 50%),
+          linear-gradient(180deg, var(--color-off-white) 0%, var(--color-cream) 100%);
+      }
+      50% {
+        background: 
+          radial-gradient(ellipse at 70% 30%, rgba(233, 69, 96, 0.12) 0%, transparent 50%),
+          radial-gradient(ellipse at 30% 70%, rgba(248, 181, 0, 0.1) 0%, transparent 50%),
+          linear-gradient(180deg, var(--color-cream) 0%, var(--color-off-white) 100%);
+      }
     }
 
     .hero-pattern {
@@ -441,11 +483,132 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       opacity: 0.5;
+      animation: patternMove 20s linear infinite;
+    }
+
+    @keyframes patternMove {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 60px 60px;
+      }
+    }
+
+    // Animated particles
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      animation: floatParticle infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes floatParticle {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+      }
+      25% {
+        transform: translate(10px, -15px) scale(1.2);
+        opacity: 0.5;
+      }
+      50% {
+        transform: translate(-5px, -25px) scale(0.8);
+        opacity: 0.4;
+      }
+      75% {
+        transform: translate(-15px, -10px) scale(1.1);
+        opacity: 0.6;
+      }
+    }
+
+    // Floating shapes
+    .floating-shapes {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.1;
+      filter: blur(40px);
+    }
+
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--color-accent);
+      top: 10%;
+      left: 10%;
+      animation: floatShape1 20s ease-in-out infinite;
+    }
+
+    .shape-2 {
+      width: 200px;
+      height: 200px;
+      background: var(--color-highlight);
+      bottom: 20%;
+      right: 15%;
+      animation: floatShape2 15s ease-in-out infinite;
+    }
+
+    .shape-3 {
+      width: 250px;
+      height: 250px;
+      background: var(--color-accent);
+      top: 60%;
+      left: 60%;
+      animation: floatShape3 25s ease-in-out infinite;
+    }
+
+    @keyframes floatShape1 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      33% {
+        transform: translate(50px, -30px) scale(1.1);
+      }
+      66% {
+        transform: translate(-30px, 50px) scale(0.9);
+      }
+    }
+
+    @keyframes floatShape2 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(-40px, -50px) scale(1.2);
+      }
+    }
+
+    @keyframes floatShape3 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      25% {
+        transform: translate(60px, 30px) scale(0.8);
+      }
+      75% {
+        transform: translate(-40px, -60px) scale(1.1);
+      }
     }
 
     .hero-content {
       max-width: 800px;
       z-index: 1;
+      transition: transform 0.1s ease-out;
+      will-change: transform;
     }
 
     .hero-title {
@@ -453,9 +616,47 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       font-weight: 500;
       color: var(--color-primary);
       margin-bottom: var(--space-4);
+      min-height: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
       
       @media (min-width: 768px) {
         font-size: var(--text-5xl);
+      }
+    }
+
+    .typing-text {
+      display: inline-block;
+      animation: fadeInScale 1s ease-out;
+      overflow: hidden;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .cursor-blink {
+      display: inline-block;
+      animation: blink 1s infinite;
+      color: var(--color-accent);
+      font-weight: 300;
+    }
+
+    @keyframes blink {
+      0%, 50% {
+        opacity: 1;
+      }
+      51%, 100% {
+        opacity: 0;
       }
     }
 
@@ -464,10 +665,57 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       color: var(--color-gray-500);
       margin-bottom: var(--space-10);
       line-height: 1.6;
+      animation: fadeInUp 0.8s ease-out 0.5s both;
+
+      .subtitle-line {
+        display: inline-block;
+        animation: fadeInUp 0.8s ease-out 0.7s both;
+      }
 
       .highlight {
         color: var(--color-accent);
         font-weight: 500;
+        display: inline-block;
+        position: relative;
+        animation: fadeInUp 0.8s ease-out 0.9s both;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: var(--color-accent);
+          animation: underlineExpand 0.6s ease-out 1.2s forwards;
+        }
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes underlineExpand {
+      to {
+        width: 100%;
+      }
+    }
+
+    .animated-highlight {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      
+      &:hover {
+        transform: scale(1.05);
+        color: var(--color-highlight);
       }
     }
 
@@ -489,6 +737,31 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       box-shadow: var(--shadow-lg);
       padding: var(--space-2);
       margin-bottom: var(--space-4);
+      transition: all 0.3s ease;
+      animation: searchSlideIn 0.8s ease-out 1s both;
+      transform-origin: center;
+
+      &:hover {
+        box-shadow: 0 10px 40px rgba(233, 69, 96, 0.15);
+        transform: translateY(-2px);
+      }
+
+      &.focused {
+        box-shadow: 0 10px 40px rgba(233, 69, 96, 0.25);
+        transform: translateY(-4px) scale(1.02);
+        border: 2px solid var(--color-accent);
+      }
+    }
+
+    @keyframes searchSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .search-icon {
@@ -553,17 +826,33 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       font-size: var(--text-sm);
       color: var(--color-gray-500);
       cursor: pointer;
-      transition: all var(--transition-fast);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: filterFadeIn 0.6s ease-out both;
 
       &:hover {
         border-color: var(--color-accent);
         color: var(--color-accent);
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 4px 12px rgba(233, 69, 96, 0.2);
       }
 
       &.active {
         background: var(--color-accent);
         border-color: var(--color-accent);
         color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 16px rgba(233, 69, 96, 0.3);
+      }
+    }
+
+    @keyframes filterFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
     }
 
@@ -1078,6 +1367,17 @@ export class HomeComponent implements OnInit {
 
   // Display logic
   showPersonalized = signal(false);
+  
+  // Hero animations
+  heroTransform = signal('translate(0, 0)');
+  searchFocused = signal(false);
+  particles = Array.from({ length: 12 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    delay: Math.random() * 3,
+    duration: 4 + Math.random() * 2
+  }));
 
   quickFilters = [
     { id: 'adventure', icon: 'mountain', label: 'Avventura' },
@@ -1163,6 +1463,14 @@ export class HomeComponent implements OnInit {
 
   getRecommendationReason(city: City): string {
     return this.personalization.getRecommendationReason(city);
+  }
+
+  onHeroMouseMove(event: MouseEvent): void {
+    const hero = event.currentTarget as HTMLElement;
+    const rect = hero.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 20;
+    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 20;
+    this.heroTransform.set(`translate(${x}px, ${y}px)`);
   }
 }
 
