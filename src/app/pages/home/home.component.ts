@@ -56,17 +56,33 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         </div>
         
         <div class="hero-content" [style.transform]="heroTransform()">
-          <h1 class="hero-title">
+          <div class="hero-title-wrapper">
             @if (greeting(); as greetingData) {
-              <span class="greeting-word">{{ greetingData.greeting }}</span>
-              @if (greetingData.name) {
-                <span class="greeting-name">{{ greetingData.name }}</span>
-              }
+              <div class="greeting-line">
+                <span class="greeting-word">{{ greetingData.greeting }}</span>
+                <span class="greeting-decorator">
+                  <svg width="40" height="2" viewBox="0 0 40 2" fill="none">
+                    <line x1="0" y1="1" x2="40" y2="1" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="greeting-main">
+                @if (greetingData.name) {
+                  <span class="greeting-name">{{ greetingData.name }}</span>
+                } @else {
+                  <span class="greeting-name">viaggiatore</span>
+                }
+                <span class="greeting-accent-dot"></span>
+              </div>
               @if (greetingData.tagline) {
-                <span class="greeting-tagline">{{ greetingData.tagline }}</span>
+                <div class="greeting-tagline-wrapper">
+                  <span class="tagline-bracket">[</span>
+                  <span class="greeting-tagline">{{ greetingData.tagline }}</span>
+                  <span class="tagline-bracket">]</span>
+                </div>
               }
             }
-          </h1>
+          </div>
           <p class="hero-subtitle">
             <span class="subtitle-line">Scopri destinazioni che raccontano storie.</span><br>
             <span class="highlight animated-highlight">Trova la tua prossima avventura.</span>
@@ -618,85 +634,178 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       will-change: transform;
     }
 
-    .hero-title {
+    .hero-title-wrapper {
       font-family: var(--font-body);
-      font-size: clamp(2.5rem, 4vw + 1rem, 5.5rem);
-      font-weight: 700;
-      line-height: 1.1;
       margin-bottom: var(--space-4);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 0.2em;
-      letter-spacing: -0.03em;
+      align-items: flex-start;
+      gap: 0.15em;
+      position: relative;
+      padding-left: var(--space-6);
       
       @media (min-width: 768px) {
-        font-size: clamp(3.5rem, 6vw + 1rem, 7rem);
+        padding-left: var(--space-8);
       }
+    }
+
+    .greeting-line {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: 0.1em;
+      animation: slideInLeft 0.8s ease-out;
     }
 
     .greeting-word {
-      display: block;
-      font-weight: 300;
-      color: var(--color-gray-400);
-      font-size: 0.5em;
-      letter-spacing: 0.1em;
+      font-size: clamp(0.875rem, 1.5vw + 0.5rem, 1.25rem);
+      font-weight: 600;
+      color: var(--color-accent);
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      animation: fadeInDown 0.8s ease-out;
-      margin-bottom: 0.1em;
+      position: relative;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: -0.5em;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 4px;
+        background: var(--color-accent);
+        border-radius: 50%;
+        animation: pulseDot 2s ease-in-out infinite;
+      }
+    }
+
+    .greeting-decorator {
+      display: flex;
+      align-items: center;
+      animation: lineExpand 0.8s ease-out 0.3s both;
+      
+      svg {
+        stroke: var(--color-accent);
+        opacity: 0.6;
+      }
+    }
+
+    .greeting-main {
+      display: flex;
+      align-items: baseline;
+      gap: 0.15em;
+      position: relative;
+      animation: slideInLeft 1s ease-out 0.2s both;
     }
 
     .greeting-name {
-      display: block;
-      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+      font-size: clamp(3.5rem, 8vw + 1rem, 8rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      font-weight: 800;
-      animation: fadeInScale 1s ease-out 0.2s both;
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite, slideInLeft 1s ease-out 0.2s both;
       position: relative;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 0.05em;
-        left: 0;
-        width: 100%;
-        height: 0.08em;
-        background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
-        opacity: 0.2;
-        border-radius: 2px;
-        animation: underlineExpand 0.8s ease-out 0.5s both;
-      }
+      display: inline-block;
+      text-shadow: 0 0 40px rgba(233, 69, 96, 0.2);
+    }
+
+    .greeting-accent-dot {
+      width: clamp(12px, 2vw, 20px);
+      height: clamp(12px, 2vw, 20px);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+      border-radius: 50%;
+      display: inline-block;
+      animation: dotPulse 2s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
+    }
+
+    .greeting-tagline-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+      margin-top: 0.3em;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
+      font-family: var(--font-mono);
+    }
+
+    .tagline-bracket {
+      font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem);
+      color: var(--color-gray-300);
+      font-weight: 300;
+      animation: bracketFade 0.8s ease-out 0.6s both;
     }
 
     .greeting-tagline {
-      display: block;
+      font-size: clamp(0.875rem, 1.5vw + 0.5rem, 1.125rem);
       font-weight: 400;
       color: var(--color-gray-500);
-      font-size: 0.35em;
       letter-spacing: 0.05em;
       text-transform: lowercase;
-      font-style: italic;
-      animation: fadeInUp 0.8s ease-out 0.4s both;
-      margin-top: 0.2em;
+      font-style: normal;
     }
 
-    @keyframes fadeInDown {
+    @keyframes slideInLeft {
       from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateX(-30px);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
       }
     }
 
-    @keyframes fadeInScale {
+    @keyframes lineExpand {
+      from {
+        width: 0;
+        opacity: 0;
+      }
+      to {
+        width: 40px;
+        opacity: 0.6;
+      }
+    }
+
+    @keyframes pulseDot {
+      0%, 100% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+      }
+      50% {
+        opacity: 0.5;
+        transform: translateY(-50%) scale(1.3);
+      }
+    }
+
+    @keyframes gradientShift {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    @keyframes dotPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes bracketFade {
       from {
         opacity: 0;
-        transform: scale(0.9);
+        transform: scale(0.8);
       }
       to {
         opacity: 1;
@@ -704,14 +813,14 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       }
     }
 
-    @keyframes underlineExpand {
+    @keyframes fadeInUp {
       from {
-        width: 0;
         opacity: 0;
+        transform: translateY(20px);
       }
       to {
-        width: 100%;
-        opacity: 0.2;
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
@@ -1530,4 +1639,5 @@ export class HomeComponent implements OnInit {
     this.heroTransform.set(`translate(${x}px, ${y}px)`);
   }
 }
+
 
