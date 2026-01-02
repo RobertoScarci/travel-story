@@ -50,19 +50,10 @@ export interface TravelVideo {
         <section class="hero">
           <div class="hero-image">
             <img 
-              [src]="heroPhoto() ? heroPhoto()!.urls.regular : city()!.heroImage" 
-              [alt]="heroPhoto()?.altDescription || city()!.name"
-              [style.background-color]="heroPhoto()?.color || '#1a1a2e'">
+              [src]="city()!.thumbnailImage || city()!.heroImage" 
+              [alt]="city()!.name"
+              loading="eager">
             <div class="hero-overlay"></div>
-            @if (heroPhoto()) {
-              <a 
-                class="photo-credit" 
-                [href]="getPhotoAttributionLink(heroPhoto()!)" 
-                target="_blank" 
-                rel="noopener">
-                📸 {{ heroPhoto()!.user.name }} / Unsplash
-              </a>
-            }
           </div>
           
           <div class="hero-content">
