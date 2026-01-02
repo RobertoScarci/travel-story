@@ -621,7 +621,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
     .hero-title-wrapper {
       font-family: var(--font-body);
-      margin-bottom: var(--space-4);
+      margin-bottom: var(--space-12);
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -631,6 +631,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       
       @media (min-width: 768px) {
         padding-left: var(--space-8);
+        margin-bottom: var(--space-16);
       }
     }
 
@@ -742,9 +743,13 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     .hero-subtitle {
       font-size: var(--text-lg);
       color: var(--color-gray-500);
-      margin-bottom: var(--space-10);
+      margin-bottom: var(--space-12);
       line-height: 1.6;
       animation: fadeInUp 0.8s ease-out 0.5s both;
+      
+      @media (min-width: 768px) {
+        margin-bottom: var(--space-16);
+      }
 
       .subtitle-line {
         display: inline-block;
