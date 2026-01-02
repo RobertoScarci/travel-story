@@ -66,7 +66,7 @@ export interface TravelVideo {
             </div>
 
             <div class="hero-text animate-fade-in-up">
-              <h1>{{ city()!.name }}</h1>
+              <h1 class="city-title">{{ city()!.name }}</h1>
               <p class="location">
                 <span class="flag">🌍</span>
                 {{ city()!.country }}
@@ -1164,14 +1164,21 @@ export interface TravelVideo {
     .hero-text {
       margin-bottom: var(--space-8);
 
-      h1 {
-        font-size: var(--text-5xl);
-        color: white;
-        margin-bottom: var(--space-2);
-
-        @media (min-width: 768px) {
-          font-size: 4rem;
-        }
+      .city-title {
+        font-size: clamp(3rem, 7vw + 1rem, 6rem);
+        font-weight: 900;
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+        background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.95) 40%, rgba(248, 181, 0, 0.9) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 200%;
+        animation: gradientShift 3s ease infinite, slideInLeft 0.8s ease-out 0.2s both;
+        position: relative;
+        display: inline-block;
+        text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+        margin-bottom: var(--space-3);
       }
 
       .location {
@@ -1181,6 +1188,7 @@ export interface TravelVideo {
         font-size: var(--text-lg);
         opacity: 0.9;
         margin-bottom: var(--space-4);
+        animation: fadeInUp 0.8s ease-out 0.4s both;
       }
 
       .tagline {
@@ -1188,36 +1196,75 @@ export interface TravelVideo {
         font-style: italic;
         opacity: 0.85;
         max-width: 600px;
+        animation: fadeInUp 0.8s ease-out 0.5s both;
+      }
+    }
+    
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
     .hero-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-6);
+      gap: var(--space-4);
       margin-bottom: var(--space-8);
-      padding: var(--space-4);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: var(--border-radius-lg);
+      padding: var(--space-5);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      border-radius: var(--border-radius-xl);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       width: fit-content;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
 
     .meta-item {
       display: flex;
       flex-direction: column;
       gap: var(--space-1);
+      padding: var(--space-3);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--border-radius-md);
+      transition: all var(--transition-fast);
+      min-width: 100px;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
 
       .meta-value {
         font-size: var(--text-lg);
-        font-weight: 600;
+        font-weight: 700;
+        color: white;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       }
 
       .meta-label {
         font-size: var(--text-xs);
-        opacity: 0.7;
+        opacity: 0.85;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
       }
     }
 

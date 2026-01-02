@@ -1,7 +1,8 @@
 import { Component, HostListener, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { filter } from 'rxjs/operators';
 import { UserService } from '../../core/services/user.service';
 import { CityService } from '../../core/services/city.service';
 import { City } from '../../core/models/city.model';
@@ -20,7 +21,7 @@ import { City } from '../../core/models/city.model';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   template: `
-    <header class="header" [class.scrolled]="isScrolled()" [class.menu-open]="mobileMenuOpen()">
+    <header class="header" [class.scrolled]="isScrolled()" [class.menu-open]="mobileMenuOpen()" [class.city-page]="isCityPage()">
       <div class="header-inner">
         <!-- Logo -->
         <a routerLink="/" class="logo">
@@ -212,6 +213,108 @@ import { City } from '../../core/models/city.model';
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         box-shadow: var(--shadow-sm);
+      }
+
+      &.city-page {
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        
+        .logo {
+          color: white;
+          
+          .logo-travel {
+            color: white;
+          }
+          
+          .logo-story {
+            color: var(--color-highlight);
+          }
+        }
+        
+        .nav-desktop a {
+          color: rgba(255, 255, 255, 0.9);
+          
+          &:hover, &.active {
+            color: white;
+            
+            &::after {
+              background: var(--color-highlight);
+            }
+          }
+        }
+        
+        .search-btn {
+          color: rgba(255, 255, 255, 0.9);
+          
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+          }
+        }
+        
+        .btn-ghost {
+          color: rgba(255, 255, 255, 0.9);
+          border-color: rgba(255, 255, 255, 0.3);
+          
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+          }
+        }
+        
+        .hamburger span {
+          background: white;
+        }
+        
+        &.scrolled {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          
+          .logo {
+            color: var(--color-primary);
+            
+            .logo-travel {
+              color: var(--color-primary);
+            }
+            
+            .logo-story {
+              color: var(--color-accent);
+            }
+          }
+          
+          .nav-desktop a {
+            color: var(--color-gray-500);
+            
+            &:hover, &.active {
+              color: var(--color-primary);
+            }
+          }
+          
+          .search-btn {
+            color: var(--color-gray-500);
+            
+            &:hover {
+              background: var(--color-cream);
+              color: var(--color-primary);
+            }
+          }
+          
+          .btn-ghost {
+            color: var(--color-gray-500);
+            border-color: var(--color-gray-200);
+            
+            &:hover {
+              background: var(--color-cream);
+              color: var(--color-primary);
+              border-color: var(--color-gray-300);
+            }
+          }
+          
+          .hamburger span {
+            background: var(--color-primary);
+          }
+        }
       }
     }
 
@@ -715,11 +818,22 @@ export class HeaderComponent {
   searchQuery = signal('');
   searchResults = signal<City[]>([]);
 
+  isCityPage = signal(false);
+
   constructor(
     public userService: UserService,
     private cityService: CityService,
     private router: Router
-  ) {}
+  ) {
+    // Check if we're on a city page
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.isCityPage.set(this.router.url.startsWith('/city/'));
+    });
+    // Initial check
+    this.isCityPage.set(this.router.url.startsWith('/city/'));
+  }
 
   @HostListener('window:scroll')
   onScroll(): void {
