@@ -60,11 +60,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
             @if (greeting(); as greetingData) {
               <div class="greeting-line">
                 <span class="greeting-word">{{ greetingData.greeting }}</span>
-                <span class="greeting-decorator">
-                  <svg width="40" height="2" viewBox="0 0 40 2" fill="none">
-                    <line x1="0" y1="1" x2="40" y2="1" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                </span>
+                <span class="greeting-accent-dot"></span>
               </div>
               <div class="greeting-main">
                 @if (greetingData.name) {
@@ -72,13 +68,10 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 } @else {
                   <span class="greeting-name">viaggiatore</span>
                 }
-                <span class="greeting-accent-dot"></span>
               </div>
               @if (greetingData.tagline) {
                 <div class="greeting-tagline-wrapper">
-                  <span class="tagline-bracket">[</span>
                   <span class="greeting-tagline">{{ greetingData.tagline }}</span>
-                  <span class="tagline-bracket">]</span>
                 </div>
               }
             }
@@ -649,43 +642,36 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
     .greeting-line {
       display: flex;
-      align-items: center;
-      gap: var(--space-3);
+      align-items: baseline;
+      gap: 0.15em;
       margin-bottom: 0.1em;
       animation: slideInLeft 0.8s ease-out;
     }
 
     .greeting-word {
-      font-size: clamp(0.875rem, 1.5vw + 0.5rem, 1.25rem);
-      font-weight: 600;
-      color: var(--color-accent);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
+      font-size: clamp(3.5rem, 8vw + 1rem, 8rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite, slideInLeft 1s ease-out 0.2s both;
       position: relative;
-      
-      &::before {
-        content: '';
-        position: absolute;
-        left: -0.5em;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 4px;
-        height: 4px;
-        background: var(--color-accent);
-        border-radius: 50%;
-        animation: pulseDot 2s ease-in-out infinite;
-      }
+      display: inline-block;
+      text-shadow: 0 0 40px rgba(233, 69, 96, 0.2);
     }
 
-    .greeting-decorator {
-      display: flex;
-      align-items: center;
-      animation: lineExpand 0.8s ease-out 0.3s both;
-      
-      svg {
-        stroke: var(--color-accent);
-        opacity: 0.6;
-      }
+    .greeting-line .greeting-accent-dot {
+      width: clamp(12px, 2vw, 20px);
+      height: clamp(12px, 2vw, 20px);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+      border-radius: 50%;
+      display: inline-block;
+      animation: dotPulse 2s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
     }
 
     .greeting-main {
@@ -723,28 +709,27 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
 
     .greeting-tagline-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.3em;
-      margin-top: 0.3em;
+      margin-top: 0.5em;
       animation: fadeInUp 0.8s ease-out 0.6s both;
-      font-family: var(--font-mono);
-    }
-
-    .tagline-bracket {
-      font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem);
-      color: var(--color-gray-300);
-      font-weight: 300;
-      animation: bracketFade 0.8s ease-out 0.6s both;
     }
 
     .greeting-tagline {
-      font-size: clamp(0.875rem, 1.5vw + 0.5rem, 1.125rem);
-      font-weight: 400;
-      color: var(--color-gray-500);
-      letter-spacing: 0.05em;
+      font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem);
+      font-weight: 300;
+      color: var(--color-gray-400);
+      letter-spacing: 0.1em;
       text-transform: lowercase;
-      font-style: normal;
+      font-style: italic;
+      position: relative;
+      padding-left: 1em;
+      
+      &::before {
+        content: '—';
+        position: absolute;
+        left: 0;
+        color: var(--color-gray-300);
+        font-style: normal;
+      }
     }
 
     @keyframes slideInLeft {
@@ -758,27 +743,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       }
     }
 
-    @keyframes lineExpand {
-      from {
-        width: 0;
-        opacity: 0;
-      }
-      to {
-        width: 40px;
-        opacity: 0.6;
-      }
-    }
-
-    @keyframes pulseDot {
-      0%, 100% {
-        opacity: 1;
-        transform: translateY(-50%) scale(1);
-      }
-      50% {
-        opacity: 0.5;
-        transform: translateY(-50%) scale(1.3);
-      }
-    }
 
     @keyframes gradientShift {
       0%, 100% {
@@ -800,16 +764,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       }
     }
 
-    @keyframes bracketFade {
-      from {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
 
     @keyframes fadeInUp {
       from {
