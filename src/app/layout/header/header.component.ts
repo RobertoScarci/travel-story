@@ -216,13 +216,14 @@ import { City } from '../../core/models/city.model';
     }
 
     .header-inner {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
       max-width: var(--max-width);
       margin: 0 auto;
       padding: var(--space-4) var(--space-6);
       height: var(--header-height);
+      gap: var(--space-4);
     }
 
     // Logo
@@ -235,6 +236,7 @@ import { City } from '../../core/models/city.model';
       font-weight: 600;
       color: var(--color-primary);
       transition: transform var(--transition-fast);
+      justify-self: start;
 
       &:hover {
         transform: scale(1.02);
@@ -264,6 +266,7 @@ import { City } from '../../core/models/city.model';
     .nav-desktop {
       display: flex;
       gap: var(--space-8);
+      justify-self: center;
 
       @media (max-width: 768px) {
         display: none;
@@ -301,6 +304,7 @@ import { City } from '../../core/models/city.model';
       display: flex;
       align-items: center;
       gap: var(--space-3);
+      justify-self: end;
     }
 
     .search-btn {
