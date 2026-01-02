@@ -649,10 +649,10 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
 
     .greeting-word {
-      font-size: clamp(3.5rem, 8vw + 1rem, 8rem);
+      font-size: clamp(1.5rem, 3vw + 0.5rem, 2.5rem);
       font-weight: 900;
-      line-height: 0.9;
-      letter-spacing: -0.05em;
+      line-height: 1;
+      letter-spacing: -0.02em;
       background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -665,8 +665,8 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
 
     .greeting-line .greeting-accent-dot {
-      width: clamp(12px, 2vw, 20px);
-      height: clamp(12px, 2vw, 20px);
+      width: clamp(8px, 1.5vw, 14px);
+      height: clamp(8px, 1.5vw, 14px);
       background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
       border-radius: 50%;
       display: inline-block;
