@@ -68,7 +68,6 @@ export interface TravelVideo {
             <div class="hero-text animate-fade-in-up">
               <h1 class="city-title">{{ city()!.name }}</h1>
               <p class="location">
-                <span class="flag">🌍</span>
                 {{ city()!.country }}
               </p>
               <p class="tagline">{{ city()!.tagline }}</p>
@@ -1180,9 +1179,13 @@ export interface TravelVideo {
         animation: slideInLeft 0.8s ease-out 0.2s both;
         position: relative;
         display: inline-block;
-        margin-bottom: var(--space-3);
+        margin-bottom: var(--space-8);
         text-transform: none;
         font-style: normal;
+        
+        @media (min-width: 768px) {
+          margin-bottom: var(--space-12);
+        }
         
         // Decorative underline
         &::after {
@@ -1199,13 +1202,11 @@ export interface TravelVideo {
       }
 
       .location {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
         font-size: var(--text-lg);
         opacity: 0.9;
         margin-bottom: var(--space-4);
         animation: fadeInUp 0.8s ease-out 0.4s both;
+        font-weight: 400;
       }
 
       .tagline {
