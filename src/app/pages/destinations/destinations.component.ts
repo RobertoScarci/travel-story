@@ -160,7 +160,19 @@ import { City } from '../../core/models/city.model';
       text-align: center;
 
       h1 {
-        font-size: var(--text-4xl);
+        font-size: clamp(2.5rem, 6vw + 1rem, 5rem);
+        font-weight: 900;
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 200%;
+        animation: gradientShift 3s ease infinite;
+        position: relative;
+        display: inline-block;
+        text-shadow: 0 0 40px rgba(233, 69, 96, 0.2);
         margin-bottom: var(--space-2);
       }
 
