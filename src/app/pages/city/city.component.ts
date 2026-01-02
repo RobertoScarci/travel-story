@@ -1165,20 +1165,37 @@ export interface TravelVideo {
       margin-bottom: var(--space-8);
 
       .city-title {
-        font-size: clamp(3rem, 7vw + 1rem, 6rem);
-        font-weight: 900;
-        line-height: 0.9;
-        letter-spacing: -0.05em;
-        background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.95) 40%, rgba(248, 181, 0, 0.9) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        background-size: 200% 200%;
-        animation: gradientShift 3s ease infinite, slideInLeft 0.8s ease-out 0.2s both;
+        font-family: var(--font-display);
+        font-size: clamp(3.5rem, 8vw + 1rem, 7rem);
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: 0.02em;
+        color: #ffffff;
+        text-shadow: 
+          0 0 20px rgba(0, 0, 0, 0.8),
+          0 0 40px rgba(0, 0, 0, 0.6),
+          0 2px 4px rgba(0, 0, 0, 0.9),
+          0 4px 8px rgba(0, 0, 0, 0.7),
+          0 8px 16px rgba(0, 0, 0, 0.5);
+        animation: slideInLeft 0.8s ease-out 0.2s both;
         position: relative;
         display: inline-block;
-        text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
         margin-bottom: var(--space-3);
+        text-transform: none;
+        font-style: normal;
+        
+        // Decorative underline
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -0.15em;
+          left: 0;
+          width: 0;
+          height: 3px;
+          background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 100%);
+          animation: underlineExpand 0.8s ease-out 0.6s forwards;
+          box-shadow: 0 0 10px rgba(248, 181, 0, 0.6);
+        }
       }
 
       .location {
@@ -1219,6 +1236,15 @@ export interface TravelVideo {
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+    
+    @keyframes underlineExpand {
+      from {
+        width: 0;
+      }
+      to {
+        width: 100%;
       }
     }
 
