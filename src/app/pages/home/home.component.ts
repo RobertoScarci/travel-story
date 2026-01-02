@@ -60,7 +60,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
             @if (greeting(); as greetingData) {
               <div class="greeting-line">
                 <span class="greeting-word">{{ greetingData.greeting }}</span>
-                <span class="greeting-accent-dot"></span>
               </div>
               <div class="greeting-main">
                 @if (greetingData.name) {
@@ -69,11 +68,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                   <span class="greeting-name">viaggiatore</span>
                 }
               </div>
-              @if (greetingData.tagline) {
-                <div class="greeting-tagline-wrapper">
-                  <span class="greeting-tagline">{{ greetingData.tagline }}</span>
-                </div>
-              }
             }
           </div>
           <p class="hero-subtitle">
@@ -642,8 +636,9 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
     .greeting-line {
       display: flex;
-      align-items: baseline;
-      gap: 0.15em;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
       margin-bottom: 0.1em;
       animation: slideInLeft 0.8s ease-out;
     }
@@ -664,15 +659,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       text-shadow: 0 0 40px rgba(233, 69, 96, 0.2);
     }
 
-    .greeting-line .greeting-accent-dot {
-      width: clamp(8px, 1.5vw, 14px);
-      height: clamp(8px, 1.5vw, 14px);
-      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
-      border-radius: 50%;
-      display: inline-block;
-      animation: dotPulse 2s ease-in-out infinite;
-      box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
-    }
 
     .greeting-main {
       display: flex;
@@ -708,29 +694,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
     }
 
-    .greeting-tagline-wrapper {
-      margin-top: 0.5em;
-      animation: fadeInUp 0.8s ease-out 0.6s both;
-    }
-
-    .greeting-tagline {
-      font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem);
-      font-weight: 300;
-      color: var(--color-gray-400);
-      letter-spacing: 0.1em;
-      text-transform: lowercase;
-      font-style: italic;
-      position: relative;
-      padding-left: 1em;
-      
-      &::before {
-        content: '—';
-        position: absolute;
-        left: 0;
-        color: var(--color-gray-300);
-        font-style: normal;
-      }
-    }
 
     @keyframes slideInLeft {
       from {
