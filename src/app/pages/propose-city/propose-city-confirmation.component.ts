@@ -81,7 +81,7 @@ import { RouterModule, Router, ActivatedRoute } from '@angular/router';
     .confirmation-page {
       min-height: 100vh;
       background: linear-gradient(180deg, var(--color-off-white) 0%, var(--color-cream) 100%);
-      padding: var(--space-8) var(--space-6);
+      padding: calc(var(--header-height) + var(--space-8)) var(--space-6) var(--space-8);
       display: flex;
       align-items: center;
       justify-content: center;
