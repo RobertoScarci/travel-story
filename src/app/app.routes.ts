@@ -45,6 +45,16 @@ export const routes: Routes = [
     title: 'Admin Panel - TravelStory'
   },
   {
+    path: 'propose-city',
+    loadComponent: () => import('./pages/propose-city/propose-city-form.component').then(m => m.ProposeCityFormComponent),
+    title: 'Proponi una Città - TravelStory'
+  },
+  {
+    path: 'propose-city/confirmation',
+    loadComponent: () => import('./pages/propose-city/propose-city-confirmation.component').then(m => m.ProposeCityConfirmationComponent),
+    title: 'Proposta Inviata - TravelStory'
+  },
+  {
     path: '**',
     redirectTo: ''
   }
