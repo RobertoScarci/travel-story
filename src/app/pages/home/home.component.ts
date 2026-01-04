@@ -253,85 +253,86 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         </section>
       }
 
-      <!-- Emerging Destinations / Hidden Gems -->
+      <!-- Propose City Section -->
       @if (!searchQuery()) {
-        <section class="section emerging-section">
+        <section class="section propose-section">
           <div class="container">
-            <div class="section-header">
-              <div class="section-title-group">
+            <div class="propose-card">
+              <div class="propose-content">
+                <div class="propose-icon">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                    <path d="M12 7v6M9 10h6"/>
+                  </svg>
+                </div>
                 <span class="section-badge">
                   <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/>
-                    <path d="M5 19l.5 1.5L7 21l-1.5.5L5 23l-.5-1.5L3 21l1.5-.5L5 19z"/>
-                    <path d="M19 5l.5 1.5L21 7l-1.5.5L19 9l-.5-1.5L17 7l1.5-.5L19 5z"/>
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
                   </svg>
-                  Gemme nascoste
+                  Fai parte della community
                 </span>
-                <h2>Mete nascoste</h2>
-                <p class="section-subtitle">Destinazioni autentiche che meritano di essere scoperte</p>
-              </div>
-            </div>
-            <div class="hidden-gems-grid">
-              @for (city of emergingCities(); track city.id; let i = $index) {
-                @if (hiddenGemsInfo().has(city.id)) {
-                  <div class="hidden-gem-card animate-fade-in-up" [style.animation-delay.ms]="i * 100">
-                    <app-city-card 
-                      [city]="city"
-                      class="gem-city-card"/>
-                    <div class="gem-info">
-                      <p class="gem-description">{{ hiddenGemsInfo().get(city.id)!.description }}</p>
-                      <div class="gem-reasons">
-                        @for (reason of hiddenGemsInfo().get(city.id)!.reasons.slice(0, 3); track reason.type) {
-                          <span class="gem-reason-badge">
-                            @switch (reason.icon) {
-                              @case ('users') {
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                  <circle cx="9" cy="7" r="4"/>
-                                  <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                                </svg>
-                              }
-                              @case ('wallet') {
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                  <line x1="12" y1="1" x2="12" y2="23"/>
-                                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                                </svg>
-                              }
-                              @case ('heart') {
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                                </svg>
-                              }
-                              @case ('sparkles') {
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                </svg>
-                              }
-                              @case ('trending-up') {
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                                  <polyline points="17 6 23 6 23 12"/>
-                                </svg>
-                              }
-                              @default {
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                                </svg>
-                              }
-                            }
-                            {{ reason.label }}
-                          </span>
-                        }
-                      </div>
-                    </div>
+                <h2>Proponi una Città</h2>
+                <p class="propose-description">
+                  Conosci una destinazione che merita di essere scoperta? 
+                  Condividila con noi! Non deve essere per forza una meta incredibile o con un aeroporto internazionale. 
+                  Se pensi che una città possa essere turistica e interessante, proponila.
+                </p>
+                <div class="propose-features">
+                  <div class="feature-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                      <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <span>Form semplice e completo</span>
                   </div>
-                } @else {
-                  <app-city-card 
-                    [city]="city"
-                    class="animate-fade-in-up"
-                    [style.animation-delay.ms]="i * 100"/>
-                }
-              }
+                  <div class="feature-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Valutazione da parte del team</span>
+                  </div>
+                  <div class="feature-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>Aiuti a far crescere TravelStory</span>
+                  </div>
+                </div>
+                <a routerLink="/propose-city" class="btn btn-primary btn-lg">
+                  Inizia a Proporre
+                </a>
+              </div>
+              <div class="propose-visual">
+                <div class="visual-elements">
+                  <div class="visual-card card-1">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>La tua città</span>
+                  </div>
+                  <div class="visual-card card-2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                      <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <span>Valutazione</span>
+                  </div>
+                  <div class="visual-card card-3">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>Su TravelStory</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1004,75 +1005,215 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       background: var(--color-white);
     }
 
-    .emerging-section {
+    .propose-section {
       background: linear-gradient(180deg, #f8f6f3 0%, #f5f3f0 100%);
     }
 
-    // Hidden Gems Grid
-    .hidden-gems-grid {
+    .propose-card {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: var(--space-6);
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-12);
+      background: var(--color-white);
+      border-radius: var(--border-radius-xl);
+      padding: var(--space-12);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
 
-      @media (max-width: 768px) {
+      @media (max-width: 992px) {
         grid-template-columns: 1fr;
+        gap: var(--space-8);
+        padding: var(--space-8);
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-highlight) 100%);
       }
     }
 
-    .hidden-gem-card {
+    .propose-content {
       display: flex;
       flex-direction: column;
       gap: var(--space-4);
-      background: var(--color-white);
-      border-radius: var(--border-radius-xl);
-      padding: var(--space-4);
-      box-shadow: var(--shadow-sm);
-      transition: all var(--transition-base);
 
-      &:hover {
-        box-shadow: var(--shadow-md);
-        transform: translateY(-2px);
+      .propose-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+        border-radius: var(--border-radius-lg);
+        color: white;
+        margin-bottom: var(--space-2);
+        box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3);
+        animation: floatIcon 3s ease-in-out infinite;
+
+        svg {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      @keyframes floatIcon {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      h2 {
+        font-size: clamp(2rem, 4vw, 2.5rem);
+        font-weight: 900;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+      }
+
+      .propose-description {
+        font-size: var(--text-base);
+        color: var(--color-gray-600);
+        line-height: 1.7;
+        margin: 0;
+      }
+
+      .propose-features {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+        margin: var(--space-4) 0;
+
+        .feature-item {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+          font-size: var(--text-sm);
+          color: var(--color-gray-600);
+
+          svg {
+            flex-shrink: 0;
+            stroke: var(--color-accent);
+          }
+        }
+      }
+
+      .btn {
+        align-self: flex-start;
+        margin-top: var(--space-2);
       }
     }
 
-    .gem-city-card {
-      flex: 1;
-    }
-
-    .gem-info {
-      padding-top: var(--space-3);
-      border-top: 1px solid var(--color-gray-100);
-    }
-
-    .gem-description {
-      font-size: var(--text-sm);
-      color: var(--color-gray-600);
-      line-height: 1.6;
-      margin-bottom: var(--space-3);
-      font-style: italic;
-    }
-
-    .gem-reasons {
+    .propose-visual {
       display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 300px;
+
+      @media (max-width: 992px) {
+        min-height: 200px;
+      }
     }
 
-    .gem-reason-badge {
-      display: inline-flex;
+    .visual-elements {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .visual-card {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: var(--space-1);
-      padding: var(--space-1) var(--space-3);
-      background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(248, 181, 0, 0.08) 100%);
-      border-radius: var(--border-radius-full);
-      font-size: var(--text-xs);
-      font-weight: 500;
-      color: var(--color-accent);
+      gap: var(--space-2);
+      padding: var(--space-4);
+      background: var(--color-white);
+      border: 2px solid var(--color-gray-200);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+      animation: floatCard 4s ease-in-out infinite;
 
       svg {
-        width: 14px;
-        height: 14px;
         stroke: var(--color-accent);
+      }
+
+      span {
+        font-size: var(--text-xs);
+        font-weight: 500;
+        color: var(--color-gray-600);
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--color-accent);
+      }
+
+      &.card-1 {
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+
+      &.card-2 {
+        top: 50%;
+        right: 10%;
+        transform: translateY(-50%);
+        animation-delay: 1.3s;
+      }
+
+      &.card-3 {
+        bottom: 10%;
+        left: 20%;
+        animation-delay: 2.6s;
+      }
+
+      @media (max-width: 992px) {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        transform: none;
+        margin-bottom: var(--space-3);
+        animation: none;
+
+        &:hover {
+          transform: translateY(-2px);
+        }
+      }
+    }
+
+    @keyframes floatCard {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-15px) rotate(2deg);
+      }
+    }
+
+    @media (max-width: 992px) {
+      .visual-elements {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+      }
+
+      .visual-card {
+        position: relative;
       }
     }
 
@@ -1112,7 +1253,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
 
     .trending-section::before,
-    .emerging-section::before,
+    .propose-section::before,
     .compare-section::before {
       opacity: 1;
     }
