@@ -113,7 +113,17 @@ export interface TravelVideo {
                   class="btn btn-primary btn-lg"
                   [class.saved]="isSaved()"
                   (click)="toggleSave()">
-                  {{ isSaved() ? '❤️ Salvata' : '🤍 Salva' }}
+                  @if (isSaved()) {
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    Salvata
+                  } @else {
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    Salva
+                  }
                 </button>
               }
               <button class="btn btn-secondary btn-lg" (click)="scrollToSection('overview')">
@@ -485,7 +495,12 @@ export interface TravelVideo {
                 class="nav-tab nav-tab-start"
                 (click)="scrollToTop()"
                 title="Torna all'inizio">
-                <span class="tab-icon">🏠</span>
+                <span class="tab-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
+                </span>
                 <span class="tab-label">Inizio</span>
               </button>
               @for (section of details()!.sections; track section.id) {
@@ -493,7 +508,7 @@ export interface TravelVideo {
                   class="nav-tab"
                   [class.active]="activeSection() === section.id"
                   (click)="setActiveSection(section.id)">
-                  <span class="tab-icon">{{ section.icon }}</span>
+                  <span class="tab-icon" [innerHTML]="getSectionIcon(section.icon)"></span>
                   <span class="tab-label">{{ section.title }}</span>
                 </button>
               }
@@ -519,7 +534,7 @@ export interface TravelVideo {
               [class.active]="activeSection() === section.id">
               <div class="container">
                 <div class="section-header">
-                  <span class="section-icon">{{ section.icon }}</span>
+                  <span class="section-icon" [innerHTML]="getSectionIcon(section.icon)"></span>
                   <h2>{{ section.title }}</h2>
                 </div>
                 
@@ -753,10 +768,22 @@ export interface TravelVideo {
           <section class="live-section attractions-section">
             <div class="container">
               <div class="section-header">
-                <span class="section-icon">🎯</span>
+                <span class="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="6"/>
+                    <circle cx="12" cy="12" r="2"/>
+                  </svg>
+                </span>
                 <div>
                   <h2>Attrazioni da non perdere</h2>
-                  <span class="live-badge">📍 Dati in tempo reale</span>
+                  <span class="live-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Dati in tempo reale
+                  </span>
                 </div>
               </div>
               <div class="places-grid">
@@ -786,16 +813,30 @@ export interface TravelVideo {
           <section class="live-section restaurants-section">
             <div class="container">
               <div class="section-header">
-                <span class="section-icon">🍽️</span>
+                <span class="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                    <path d="M6 13h12M6 13c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2M6 13v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-4M9 5V3a1 1 0 0 1 1h4a1 1 0 0 1 1v2"/>
+                  </svg>
+                </span>
                 <div>
                   <h2>Dove mangiare</h2>
-                  <span class="live-badge">📍 Dati in tempo reale</span>
+                  <span class="live-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Dati in tempo reale
+                  </span>
                 </div>
               </div>
               <div class="places-grid restaurants-grid">
                 @for (place of restaurants().slice(0, 6); track place.id; let i = $index) {
                   <div class="place-card restaurant-card" [style.animation-delay.ms]="i * 50">
-                    <div class="place-icon">🍴</div>
+                    <div class="place-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                        <path d="M6 13h12M6 13c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2M6 13v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-4M9 5V3a1 1 0 0 1 1h4a1 1 0 0 1 1v2"/>
+                      </svg>
+                    </div>
                     <div class="place-info">
                       <h4>{{ place.name }}</h4>
                       <div class="place-meta">
@@ -818,7 +859,12 @@ export interface TravelVideo {
           <section class="viral-section">
             <div class="container">
               <div class="section-header">
-                <span class="section-icon">🎬</span>
+                <span class="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="23 7 16 12 23 17 23 7"/>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                  </svg>
+                </span>
                 <div>
                   <h2>Video da {{ city()!.name }}</h2>
                   <span class="viral-subtitle">Scopri la città attraverso gli occhi dei viaggiatori</span>
@@ -862,7 +908,13 @@ export interface TravelVideo {
           <section class="viral-section">
             <div class="container">
               <div class="section-header">
-                <span class="section-icon">📱</span>
+                <span class="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                  </svg>
+                </span>
                 <h2>Trending sui Social</h2>
               </div>
               <div class="viral-grid">
@@ -873,7 +925,7 @@ export interface TravelVideo {
                     rel="noopener"
                     class="viral-card"
                     (click)="trackExternalClick('viral', content.platform)">
-                    <div class="viral-badge">{{ getPlatformIcon(content.platform) }}</div>
+                    <div class="viral-badge" [innerHTML]="getPlatformIcon(content.platform)"></div>
                     <div class="viral-info">
                       <span class="viral-title">{{ content.title }}</span>
                       <span class="viral-meta">{{ content.creator }} · {{ content.views }} views</span>
@@ -890,7 +942,11 @@ export interface TravelVideo {
           <section class="deals-section">
             <div class="container">
               <div class="section-header">
-                <span class="section-icon">✈️</span>
+                <span class="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                    <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                  </svg>
+                </span>
                 <h2>Offerte Voli</h2>
               </div>
               <div class="deals-grid">
@@ -922,7 +978,14 @@ export interface TravelVideo {
           <section class="gallery-section">
             <div class="container">
               <div class="section-header">
-                <span class="section-icon">📸</span>
+                <span class="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                    <circle cx="7" cy="7" r="1"/>
+                    <line x1="16" y1="13" x2="12" y2="9"/>
+                    <line x1="12" y1="9" x2="8" y2="13"/>
+                  </svg>
+                </span>
                 <h2>Galleria Fotografica</h2>
               </div>
               <div class="gallery-grid">
@@ -939,7 +1002,15 @@ export interface TravelVideo {
                       [alt]="photo.altDescription || city()!.name"
                       loading="lazy">
                     <div class="gallery-overlay">
-                      <span class="gallery-credit">📷 {{ photo.user.name }}</span>
+                      <span class="gallery-credit">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                          <circle cx="7" cy="7" r="1"/>
+                          <line x1="16" y1="13" x2="12" y2="9"/>
+                          <line x1="12" y1="9" x2="8" y2="13"/>
+                        </svg>
+                        {{ photo.user.name }}
+                      </span>
                     </div>
                   </a>
                 }
@@ -962,7 +1033,12 @@ export interface TravelVideo {
               @if (foursquareAttractions().length > 0) {
                 <div class="foursquare-category">
                   <div class="section-header">
-                    <span class="section-icon">🏛️</span>
+                    <span class="section-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                        <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>
+                        <path d="M9 9v0M9 12v0M9 15v0M9 18v0"/>
+                      </svg>
+                    </span>
                     <h2>Attrazioni da Visitare</h2>
                     <span class="powered-by">Foto reali da Foursquare</span>
                   </div>
@@ -975,7 +1051,10 @@ export interface TravelVideo {
                           </div>
                         } @else {
                           <div class="foursquare-image placeholder">
-                            <span class="placeholder-icon">🏛️</span>
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-gray-300)" stroke-width="1.5">
+                              <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>
+                              <path d="M9 9v0M9 12v0M9 15v0M9 18v0"/>
+                            </svg>
                           </div>
                         }
                         <div class="foursquare-info">
@@ -1003,7 +1082,11 @@ export interface TravelVideo {
               @if (foursquareRestaurants().length > 0) {
                 <div class="foursquare-category">
                   <div class="section-header">
-                    <span class="section-icon">🍽️</span>
+                    <span class="section-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                        <path d="M6 13h12M6 13c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2M6 13v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-4M9 5V3a1 1 0 0 1 1h4a1 1 0 0 1 1v2"/>
+                      </svg>
+                    </span>
                     <h2>Dove Mangiare</h2>
                     <span class="powered-by">Ristoranti reali da Foursquare</span>
                   </div>
@@ -1016,7 +1099,9 @@ export interface TravelVideo {
                           </div>
                         } @else {
                           <div class="foursquare-image placeholder">
-                            <span class="placeholder-icon">🍽️</span>
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-gray-300)" stroke-width="1.5">
+                              <path d="M6 13h12M6 13c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2M6 13v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-4M9 5V3a1 1 0 0 1 1h4a1 1 0 0 1 1v2"/>
+                            </svg>
                           </div>
                         }
                         <div class="foursquare-info">
@@ -1945,7 +2030,17 @@ export interface TravelVideo {
       margin-bottom: var(--space-8);
 
       .section-icon {
-        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        
+        svg {
+          width: 24px;
+          height: 24px;
+        }
       }
 
       h2 {
@@ -2360,7 +2455,11 @@ export interface TravelVideo {
       justify-content: center;
       background: rgba(255, 255, 255, 0.2);
       border-radius: var(--border-radius-md);
-      font-size: 1.5rem;
+      
+      svg {
+        width: 24px;
+        height: 24px;
+      }
     }
 
     .viral-info {
@@ -2515,8 +2614,15 @@ export interface TravelVideo {
     }
 
     .gallery-credit {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
       font-size: var(--text-xs);
       color: white;
+      
+      svg {
+        flex-shrink: 0;
+      }
     }
 
     .gallery-attribution {
@@ -2623,8 +2729,15 @@ export interface TravelVideo {
         background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-off-white) 100%);
 
         .placeholder-icon {
-          font-size: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           opacity: 0.4;
+          
+          svg {
+            width: 48px;
+            height: 48px;
+          }
         }
       }
     }
@@ -2751,8 +2864,12 @@ export interface TravelVideo {
       height: 48px;
       background: var(--color-cream);
       border-radius: var(--border-radius-md);
-      font-size: 1.5rem;
       flex-shrink: 0;
+      
+      svg {
+        width: 24px;
+        height: 24px;
+      }
     }
 
     .place-info {
@@ -3048,11 +3165,22 @@ export class CityComponent implements OnInit, OnDestroy {
 
   getPlatformIcon(platform: string): string {
     const icons: Record<string, string> = {
-      'tiktok': '📱',
-      'instagram': '📸',
-      'youtube': '▶️'
+      'tiktok': '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>',
+      'instagram': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>',
+      'youtube': '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>'
     };
-    return icons[platform] || '🔗';
+    return icons[platform] || '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+  }
+
+  getSectionIcon(emoji: string): string {
+    const iconMap: Record<string, string> = {
+      '👁️': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+      '🍴': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13h12M6 13c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2M6 13v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-4M9 5V3a1 1 0 0 1 1h4a1 1 0 0 1 1v2"/></svg>',
+      '📜': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+      '📄': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+      '🏛️': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9v0M9 12v0M9 15v0M9 18v0"/></svg>'
+    };
+    return iconMap[emoji] || emoji;
   }
 
   setActiveSection(sectionId: string): void {
