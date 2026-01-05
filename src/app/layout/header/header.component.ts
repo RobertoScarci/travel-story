@@ -831,6 +831,7 @@ export class HeaderComponent {
   searchResults = signal<City[]>([]);
 
   isCityPage = signal(false);
+  hideOnCityPage = signal(false);
 
   constructor(
     public userService: UserService,
