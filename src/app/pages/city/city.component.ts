@@ -3046,6 +3046,10 @@ export class CityComponent implements OnInit, OnDestroy {
 
   scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Reset navStuck to ensure navbar reappears
+    setTimeout(() => {
+      this.navStuck.set(false);
+    }, 100);
   }
 
   toggleSave(): void {
