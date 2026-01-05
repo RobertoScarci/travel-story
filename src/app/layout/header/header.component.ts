@@ -21,7 +21,11 @@ import { City } from '../../core/models/city.model';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   template: `
-    <header class="header" [class.scrolled]="isScrolled()" [class.menu-open]="mobileMenuOpen()" [class.city-page]="isCityPage()">
+    <header class="header" 
+      [class.scrolled]="isScrolled()" 
+      [class.menu-open]="mobileMenuOpen()" 
+      [class.city-page]="isCityPage()"
+      [class.hidden]="hideOnCityPage()">
       <div class="header-inner">
         <!-- Logo -->
         <a routerLink="/" class="logo">
@@ -218,6 +222,14 @@ import { City } from '../../core/models/city.model';
       &.city-page {
         background: rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(10px);
+        transform: translateY(0);
+        transition: transform var(--transition-base), opacity var(--transition-base);
+        
+        &.hidden {
+          transform: translateY(-100%);
+          opacity: 0;
+          pointer-events: none;
+        }
         
         .logo {
           color: white;
@@ -838,6 +850,10 @@ export class HeaderComponent {
   @HostListener('window:scroll')
   onScroll(): void {
     this.isScrolled.set(window.scrollY > 20);
+    // Hide navbar when scrolled past hero section on city pages
+    if (this.isCityPage()) {
+      this.hideOnCityPage.set(window.scrollY > 600);
+    }
   }
 
   @HostListener('document:click', ['$event'])

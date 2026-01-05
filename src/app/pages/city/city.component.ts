@@ -494,6 +494,15 @@ export interface TravelVideo {
           </div>
         </nav>
 
+        <!-- Back to Top Button -->
+        @if (navStuck()) {
+          <button class="back-to-top" (click)="scrollToTop()" aria-label="Torna all'inizio">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 15l-6-6-6 6"/>
+            </svg>
+          </button>
+        }
+
         <!-- Content Sections -->
         <div class="sections-container">
           @for (section of details()!.sections; track section.id) {
@@ -1801,13 +1810,55 @@ export interface TravelVideo {
     .section-nav {
       position: sticky;
       top: 0;
-      z-index: var(--z-sticky);
+      z-index: calc(var(--z-sticky) - 1);
       background: var(--color-white);
       border-bottom: 1px solid var(--color-gray-100);
       transition: box-shadow var(--transition-base);
 
       &.stuck {
         box-shadow: var(--shadow-md);
+      }
+    }
+
+    // ===== BACK TO TOP BUTTON =====
+    .back-to-top {
+      position: fixed;
+      bottom: var(--space-6);
+      right: var(--space-6);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-full);
+      box-shadow: var(--shadow-lg);
+      cursor: pointer;
+      z-index: var(--z-dropdown);
+      transition: all var(--transition-base);
+      animation: fadeInUp 0.3s ease-out;
+
+      &:hover {
+        background: var(--color-primary);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+      }
+
+      &:active {
+        transform: translateY(-2px);
+      }
+
+      svg {
+        stroke: white;
+      }
+
+      @media (max-width: 768px) {
+        bottom: var(--space-4);
+        right: var(--space-4);
+        width: 44px;
+        height: 44px;
       }
     }
 
@@ -2991,6 +3042,10 @@ export class CityComponent implements OnInit, OnDestroy {
       const top = element.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: 'smooth' });
     }
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   toggleSave(): void {
