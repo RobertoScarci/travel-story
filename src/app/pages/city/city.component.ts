@@ -481,6 +481,13 @@ export interface TravelVideo {
         <nav class="section-nav" [class.stuck]="navStuck()">
           <div class="container">
             <div class="nav-scroll">
+              <button 
+                class="nav-tab nav-tab-start"
+                (click)="scrollToTop()"
+                title="Torna all'inizio">
+                <span class="tab-icon">🏠</span>
+                <span class="tab-label">Inizio</span>
+              </button>
               @for (section of details()!.sections; track section.id) {
                 <button 
                   class="nav-tab"
@@ -1897,6 +1904,24 @@ export interface TravelVideo {
       &.active {
         background: var(--color-primary);
         color: white;
+      }
+
+      &.nav-tab-start {
+        background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+        color: white;
+        font-weight: 600;
+        margin-right: var(--space-2);
+        box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2);
+
+        &:hover {
+          background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+        }
+
+        .tab-icon {
+          font-size: 1.1em;
+        }
       }
     }
 
