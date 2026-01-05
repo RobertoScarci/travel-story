@@ -2005,13 +2005,16 @@ export interface TravelVideo {
         }
 
         .tab-icon {
-          font-size: 1.1em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          
+          svg {
+            width: 18px;
+            height: 18px;
+          }
         }
       }
-    }
-
-    .tab-icon {
-      font-size: 1.1em;
     }
 
     // ===== CONTENT SECTIONS =====
