@@ -508,7 +508,48 @@ export interface TravelVideo {
                   class="nav-tab"
                   [class.active]="activeSection() === section.id"
                   (click)="setActiveSection(section.id)">
-                  <span class="tab-icon" [innerHTML]="getSectionIcon(section.icon)"></span>
+                  <span class="tab-icon">
+                    @switch (section.icon) {
+                      @case ('👁️') {
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      }
+                      @case ('🍴') {
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M6 13h12M6 13c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2M6 13v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-4M9 5V3a1 1 0 0 1 1h4a1 1 0 0 1 1v2"/>
+                        </svg>
+                      }
+                      @case ('📜') {
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                          <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                      }
+                      @case ('📄') {
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                          <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                      }
+                      @case ('🏛️') {
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>
+                          <path d="M9 9v0M9 12v0M9 15v0M9 18v0"/>
+                        </svg>
+                      }
+                      @default {
+                        <span>{{ section.icon }}</span>
+                      }
+                    }
+                  </span>
                   <span class="tab-label">{{ section.title }}</span>
                 </button>
               }
@@ -534,7 +575,48 @@ export interface TravelVideo {
               [class.active]="activeSection() === section.id">
               <div class="container">
                 <div class="section-header">
-                  <span class="section-icon" [innerHTML]="getSectionIcon(section.icon)"></span>
+                  <span class="section-icon">
+                    @switch (section.icon) {
+                      @case ('👁️') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      }
+                      @case ('🍴') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                          <path d="M6 13h12M6 13c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2M6 13v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-4M9 5V3a1 1 0 0 1 1h4a1 1 0 0 1 1v2"/>
+                        </svg>
+                      }
+                      @case ('📜') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                          <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                      }
+                      @case ('📄') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                          <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                      }
+                      @case ('🏛️') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                          <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>
+                          <path d="M9 9v0M9 12v0M9 15v0M9 18v0"/>
+                        </svg>
+                      }
+                      @default {
+                        <span>{{ section.icon }}</span>
+                      }
+                    }
+                  </span>
                   <h2>{{ section.title }}</h2>
                 </div>
                 
@@ -925,7 +1007,33 @@ export interface TravelVideo {
                     rel="noopener"
                     class="viral-card"
                     (click)="trackExternalClick('viral', content.platform)">
-                    <div class="viral-badge" [innerHTML]="getPlatformIcon(content.platform)"></div>
+                    <div class="viral-badge">
+                      @switch (content.platform) {
+                        @case ('tiktok') {
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                          </svg>
+                        }
+                        @case ('instagram') {
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                          </svg>
+                        }
+                        @case ('youtube') {
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                          </svg>
+                        }
+                        @default {
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                          </svg>
+                        }
+                      }
+                    </div>
                     <div class="viral-info">
                       <span class="viral-title">{{ content.title }}</span>
                       <span class="viral-meta">{{ content.creator }} · {{ content.views }} views</span>
