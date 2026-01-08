@@ -188,9 +188,13 @@ import { City } from '../../core/models/city.model';
 
       h1 {
         font-size: clamp(2rem, 4vw, 2.5rem);
-        font-weight: 700;
-        color: var(--color-primary);
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         margin: 0 0 var(--space-2) 0;
+        letter-spacing: -0.02em;
       }
 
       .results-count {
