@@ -206,11 +206,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 <h2>Hai visitato di recente</h2>
               </div>
             </div>
-            <div class="city-grid">
+            <div class="scroll-row">
               @for (city of recentCities(); track city.id; let i = $index) {
                 <app-city-card 
                   [city]="city"
-                  class="animate-fade-in-up"
+                  class="animate-slide-in"
                   [style.animation-delay.ms]="i * 80"/>
               }
             </div>
@@ -1377,6 +1377,47 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     .recent-section {
       background: var(--color-white);
       border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      
+      .scroll-row {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: var(--space-4);
+        margin: 0 calc(-1 * var(--space-6));
+        padding: 0 var(--space-6) var(--space-4);
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-gray-300) var(--color-gray-100);
+        
+        // Custom scrollbar for webkit browsers
+        &::-webkit-scrollbar {
+          height: 8px;
+        }
+        
+        &::-webkit-scrollbar-track {
+          background: var(--color-gray-100);
+          border-radius: var(--border-radius-full);
+        }
+        
+        &::-webkit-scrollbar-thumb {
+          background: var(--color-gray-300);
+          border-radius: var(--border-radius-full);
+          transition: background var(--transition-fast);
+          
+          &:hover {
+            background: var(--color-gray-400);
+          }
+        }
+        
+        app-city-card {
+          flex: 0 0 320px;
+          scroll-snap-align: start;
+          
+          @media (max-width: 768px) {
+            flex: 0 0 280px;
+          }
+        }
+      }
     }
 
     // ===== BUDGET SECTION =====
