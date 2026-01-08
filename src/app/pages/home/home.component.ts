@@ -205,15 +205,12 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 </span>
                 <h2>Hai visitato di recente</h2>
               </div>
-              <a routerLink="/history" class="section-link">
-                Vedi cronologia →
-              </a>
             </div>
-            <div class="scroll-row">
+            <div class="city-grid">
               @for (city of recentCities(); track city.id; let i = $index) {
                 <app-city-card 
                   [city]="city"
-                  class="animate-slide-in"
+                  class="animate-fade-in-up"
                   [style.animation-delay.ms]="i * 80"/>
               }
             </div>
