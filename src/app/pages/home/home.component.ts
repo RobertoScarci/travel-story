@@ -256,78 +256,20 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
             <div class="propose-card">
               <div class="propose-content">
                 <div class="propose-icon">
-                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                     <circle cx="12" cy="10" r="3"/>
                     <path d="M12 7v6M9 10h6"/>
                   </svg>
                 </div>
-                <span class="section-badge">
-                  <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                  Fai parte della community
-                </span>
                 <h2>Proponi una Città</h2>
                 <p class="propose-description">
-                  Conosci una destinazione che merita di essere scoperta? 
-                  Condividila con noi! Non deve essere per forza una meta incredibile o con un aeroporto internazionale. 
-                  Se pensi che una città possa essere turistica e interessante, proponila.
+                  Conosci una destinazione che merita di essere scoperta?<br>
+                  Condividila con noi e aiutaci a far crescere TravelStory.
                 </p>
-                <div class="propose-features">
-                  <div class="feature-item">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                      <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                    <span>Form semplice e completo</span>
-                  </div>
-                  <div class="feature-item">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                      <circle cx="9" cy="7" r="4"/>
-                      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                    <span>Valutazione da parte del team</span>
-                  </div>
-                  <div class="feature-item">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                      <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                    <span>Aiuti a far crescere TravelStory</span>
-                  </div>
-                </div>
                 <a routerLink="/propose-city" class="btn btn-primary btn-lg">
-                  Inizia a Proporre
+                  Proponi una Città
                 </a>
-              </div>
-              <div class="propose-visual">
-                <div class="visual-elements">
-                  <div class="visual-card card-1">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                      <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                    <span>La tua città</span>
-                  </div>
-                  <div class="visual-card card-2">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                      <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                    <span>Valutazione</span>
-                  </div>
-                  <div class="visual-card card-3">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                      <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                    <span>Su TravelStory</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -1006,210 +948,100 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
 
     .propose-card {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: var(--space-12);
-      background: var(--color-white);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
       border-radius: var(--border-radius-xl);
-      padding: var(--space-12);
+      padding: var(--space-8);
       box-shadow: var(--shadow-lg);
+      text-align: center;
+      color: white;
       position: relative;
       overflow: hidden;
 
-      @media (max-width: 992px) {
-        grid-template-columns: 1fr;
-        gap: var(--space-8);
-        padding: var(--space-8);
+      @media (max-width: 768px) {
+        padding: var(--space-6);
       }
 
       &::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: pulse 4s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 0.5;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.3;
+        }
       }
     }
 
     .propose-content {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: var(--space-4);
+      max-width: 600px;
+      margin: 0 auto;
 
       .propose-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+        width: 64px;
+        height: 64px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
         border-radius: var(--border-radius-lg);
         color: white;
         margin-bottom: var(--space-2);
-        box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3);
-        animation: floatIcon 3s ease-in-out infinite;
 
         svg {
-          width: 40px;
-          height: 40px;
-        }
-      }
-
-      @keyframes floatIcon {
-        0%, 100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-10px);
+          width: 32px;
+          height: 32px;
+          stroke: white;
         }
       }
 
       h2 {
-        font-size: clamp(2rem, 4vw, 2.5rem);
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
         font-weight: 900;
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: white;
         margin: 0;
+        line-height: 1.2;
       }
 
       .propose-description {
-        font-size: var(--text-base);
-        color: var(--color-gray-600);
-        line-height: 1.7;
+        font-size: var(--text-lg);
+        color: rgba(255, 255, 255, 0.95);
+        line-height: 1.6;
         margin: 0;
       }
 
-      .propose-features {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-3);
-        margin: var(--space-4) 0;
-
-        .feature-item {
-          display: flex;
-          align-items: center;
-          gap: var(--space-3);
-          font-size: var(--text-sm);
-          color: var(--color-gray-600);
-
-          svg {
-            flex-shrink: 0;
-            stroke: var(--color-accent);
-          }
-        }
-      }
-
       .btn {
-        align-self: flex-start;
         margin-top: var(--space-2);
-      }
-    }
-
-    .propose-visual {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      min-height: 300px;
-
-      @media (max-width: 992px) {
-        min-height: 200px;
-      }
-    }
-
-    .visual-elements {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .visual-card {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-4);
-      background: var(--color-white);
-      border: 2px solid var(--color-gray-200);
-      border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow-sm);
-      transition: all var(--transition-base);
-      animation: floatCard 4s ease-in-out infinite;
-
-      svg {
-        stroke: var(--color-accent);
-      }
-
-      span {
-        font-size: var(--text-xs);
-        font-weight: 500;
-        color: var(--color-gray-600);
-      }
-
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-md);
-        border-color: var(--color-accent);
-      }
-
-      &.card-1 {
-        top: 10%;
-        left: 10%;
-        animation-delay: 0s;
-      }
-
-      &.card-2 {
-        top: 50%;
-        right: 10%;
-        transform: translateY(-50%);
-        animation-delay: 1.3s;
-      }
-
-      &.card-3 {
-        bottom: 10%;
-        left: 20%;
-        animation-delay: 2.6s;
-      }
-
-      @media (max-width: 992px) {
-        position: relative;
-        top: auto;
-        left: auto;
-        right: auto;
-        bottom: auto;
-        transform: none;
-        margin-bottom: var(--space-3);
-        animation: none;
+        background: white;
+        color: var(--color-accent);
+        font-weight: 600;
+        padding: var(--space-4) var(--space-8);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        transition: all var(--transition-base);
 
         &:hover {
           transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+          background: rgba(255, 255, 255, 0.95);
         }
-      }
-    }
-
-    @keyframes floatCard {
-      0%, 100% {
-        transform: translateY(0) rotate(0deg);
-      }
-      50% {
-        transform: translateY(-15px) rotate(2deg);
-      }
-    }
-
-    @media (max-width: 992px) {
-      .visual-elements {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-3);
-      }
-
-      .visual-card {
-        position: relative;
       }
     }
 
