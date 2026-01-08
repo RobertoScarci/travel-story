@@ -129,7 +129,15 @@ type PracticalInfo = CityDetails['practicalInfo'];
 
             <!-- Verdict Section -->
             <div class="verdict-section">
-              <h3>📊 Il Nostro Verdetto</h3>
+              <div class="verdict-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                </svg>
+                <h3>Il Nostro Verdetto</h3>
+              </div>
               <div class="verdict-grid">
                 <div class="verdict-card">
                   <h4>{{ city1()!.name }}</h4>
@@ -139,9 +147,17 @@ type PracticalInfo = CityDetails['practicalInfo'];
                       <span class="verdict-tag">{{ getTagLabel(tag) }}</span>
                     }
                   </div>
-                  <p class="verdict-best">Perfetta per: <strong>{{ getIdealTraveler(city1()!) }}</strong></p>
+                  <div class="verdict-best">
+                    <span class="verdict-label">Perfetta per:</span>
+                    <span class="verdict-value">{{ getIdealTraveler(city1()!) }}</span>
+                  </div>
                 </div>
-                <div class="verdict-vs">VS</div>
+                <div class="verdict-vs">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                  <span>VS</span>
+                </div>
                 <div class="verdict-card">
                   <h4>{{ city2()!.name }}</h4>
                   <p class="verdict-tagline">{{ city2()!.tagline }}</p>
@@ -150,7 +166,10 @@ type PracticalInfo = CityDetails['practicalInfo'];
                       <span class="verdict-tag">{{ getTagLabel(tag) }}</span>
                     }
                   </div>
-                  <p class="verdict-best">Perfetta per: <strong>{{ getIdealTraveler(city2()!) }}</strong></p>
+                  <div class="verdict-best">
+                    <span class="verdict-label">Perfetta per:</span>
+                    <span class="verdict-value">{{ getIdealTraveler(city2()!) }}</span>
+                  </div>
                 </div>
               </div>
               <div class="verdict-summary">
@@ -532,100 +551,154 @@ type PracticalInfo = CityDetails['practicalInfo'];
     // Verdict Section
     .verdict-section {
       padding: var(--space-8);
-      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-      color: white;
+      background: var(--color-off-white);
+      border-top: 1px solid var(--color-gray-100);
 
-      h3 {
-        text-align: center;
-        color: white;
+      .verdict-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-3);
         margin-bottom: var(--space-6);
-        font-size: var(--text-xl);
+
+        svg {
+          stroke: var(--color-accent);
+        }
+
+        h3 {
+          color: var(--color-primary);
+          margin: 0;
+          font-size: var(--text-xl);
+          font-weight: 700;
+        }
       }
     }
 
     .verdict-grid {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-      gap: var(--space-4);
+      gap: var(--space-6);
       align-items: start;
+      margin-bottom: var(--space-6);
 
       @media (max-width: 768px) {
         grid-template-columns: 1fr;
+        gap: var(--space-4);
       }
     }
 
     .verdict-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: var(--space-5);
+      background: var(--color-white);
+      padding: var(--space-6);
       border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--color-gray-100);
+      transition: all var(--transition-base);
+
+      &:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
 
       h4 {
-        color: white;
-        font-size: var(--text-lg);
+        color: var(--color-primary);
+        font-size: var(--text-xl);
+        font-weight: 700;
         margin: 0 0 var(--space-2) 0;
       }
     }
 
     .verdict-tagline {
       font-size: var(--text-sm);
-      opacity: 0.85;
-      margin-bottom: var(--space-3);
+      color: var(--color-gray-600);
+      margin-bottom: var(--space-4);
       font-style: italic;
+      line-height: 1.5;
     }
 
     .verdict-tags {
       display: flex;
       flex-wrap: wrap;
       gap: var(--space-2);
-      margin-bottom: var(--space-3);
+      margin-bottom: var(--space-4);
     }
 
     .verdict-tag {
-      padding: var(--space-1) var(--space-2);
-      background: rgba(255, 255, 255, 0.2);
+      padding: var(--space-1) var(--space-3);
+      background: var(--color-cream);
       border-radius: var(--border-radius-full);
       font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--color-gray-700);
     }
 
     .verdict-best {
-      font-size: var(--text-sm);
-      opacity: 0.9;
-      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-gray-100);
 
-      strong {
-        color: var(--color-highlight);
+      .verdict-label {
+        font-size: var(--text-xs);
+        color: var(--color-gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .verdict-value {
+        font-size: var(--text-base);
+        font-weight: 600;
+        color: var(--color-accent);
       }
     }
 
     .verdict-vs {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
-      background: var(--color-accent);
-      border-radius: 50%;
+      gap: var(--space-1);
+      padding: var(--space-3);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
+      color: white;
+      border-radius: var(--border-radius-lg);
       font-weight: 700;
-      font-size: var(--text-sm);
+      font-size: var(--text-xs);
       align-self: center;
+      min-width: 64px;
+      box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2);
+
+      svg {
+        stroke: white;
+      }
+
+      span {
+        letter-spacing: 0.05em;
+      }
 
       @media (max-width: 768px) {
+        flex-direction: row;
+        min-width: auto;
+        padding: var(--space-2) var(--space-4);
         margin: var(--space-2) auto;
       }
     }
 
     .verdict-summary {
       margin-top: var(--space-6);
-      padding: var(--space-4);
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: var(--border-radius-md);
+      padding: var(--space-5);
+      background: var(--color-white);
+      border-radius: var(--border-radius-lg);
       text-align: center;
+      border-left: 4px solid var(--color-accent);
+      box-shadow: var(--shadow-sm);
 
       p {
         margin: 0;
         font-size: var(--text-base);
-        line-height: 1.6;
+        line-height: 1.7;
+        color: var(--color-gray-700);
       }
     }
 
