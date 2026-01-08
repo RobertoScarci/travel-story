@@ -177,11 +177,10 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 <p class="section-subtitle">Basato sui tuoi interessi e le tue esplorazioni</p>
               </div>
             </div>
-            <div class="city-grid featured">
+            <div class="city-grid">
               @for (city of recommendedCities(); track city.id; let i = $index) {
                 <app-city-card 
                   [city]="city" 
-                  [featured]="i === 0"
                   [recommendation]="getRecommendationReason(city)"
                   class="animate-fade-in-up"
                   [style.animation-delay.ms]="i * 100"/>
@@ -1314,23 +1313,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: var(--space-6);
 
-      &.featured {
-        grid-template-columns: repeat(3, 1fr);
-
-        app-city-card:first-child {
-          grid-column: 1 / -1;
-
-          @media (min-width: 992px) {
-            grid-column: 1 / 2;
-            grid-row: 1 / 3;
-          }
-        }
-
-        @media (max-width: 768px) {
-          grid-template-columns: 1fr;
-        }
-      }
-
       &.horizontal {
         display: flex;
         overflow-x: auto;
@@ -1377,9 +1359,21 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
     // ===== PERSONALIZED SECTION =====
     .personalized-section {
-      background: linear-gradient(180deg, #faf9f7 0%, #f5f4f2 100%);
-      border-top: 1px solid rgba(0, 0, 0, 0.04);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      background: var(--color-white);
+      padding: var(--space-12) 0;
+      
+      @media (max-width: 768px) {
+        padding: var(--space-8) 0;
+      }
+      
+      .city-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: var(--space-4);
+        
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+      }
     }
 
     // ===== RECENT SECTION =====
