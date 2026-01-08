@@ -20,41 +20,56 @@ type PracticalInfo = CityDetails['practicalInfo'];
   imports: [CommonModule, RouterModule, FormsModule],
   template: `
     <main class="compare-page">
-      <!-- Header -->
-      <header class="page-header">
-        <div class="container">
-          <h1>Confronta Destinazioni</h1>
-          <p>Metti a confronto le tue mete preferite</p>
-        </div>
-      </header>
-
       <div class="container">
+        <!-- Header -->
+        <header class="page-header">
+          <h1>Confronta Destinazioni</h1>
+          <p class="subtitle">Metti a confronto le tue mete preferite</p>
+        </header>
+
         <!-- City Selectors -->
-        <div class="selectors">
-          <div class="selector">
-            <label>Prima città</label>
-            <select 
-              [ngModel]="city1Id()" 
-              (ngModelChange)="city1Id.set($event); updateComparison()">
-              <option value="">Seleziona una città</option>
-              @for (city of allCities(); track city.id) {
-                <option [value]="city.id">{{ city.name }}, {{ city.country }}</option>
-              }
-            </select>
-          </div>
+        <div class="selectors-card">
+          <div class="selectors">
+            <div class="selector">
+              <label>Prima città</label>
+              <div class="select-wrapper">
+                <select 
+                  [ngModel]="city1Id()" 
+                  (ngModelChange)="city1Id.set($event); updateComparison()">
+                  <option value="">Seleziona una città</option>
+                  @for (city of allCities(); track city.id) {
+                    <option [value]="city.id">{{ city.name }}, {{ city.country }}</option>
+                  }
+                </select>
+                <svg class="select-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </div>
+            </div>
 
-          <div class="vs-badge">VS</div>
+            <div class="vs-badge">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              <span>VS</span>
+            </div>
 
-          <div class="selector">
-            <label>Seconda città</label>
-            <select 
-              [ngModel]="city2Id()" 
-              (ngModelChange)="city2Id.set($event); updateComparison()">
-              <option value="">Seleziona una città</option>
-              @for (city of allCities(); track city.id) {
-                <option [value]="city.id">{{ city.name }}, {{ city.country }}</option>
-              }
-            </select>
+            <div class="selector">
+              <label>Seconda città</label>
+              <div class="select-wrapper">
+                <select 
+                  [ngModel]="city2Id()" 
+                  (ngModelChange)="city2Id.set($event); updateComparison()">
+                  <option value="">Seleziona una città</option>
+                  @for (city of allCities(); track city.id) {
+                    <option [value]="city.id">{{ city.name }}, {{ city.country }}</option>
+                  }
+                </select>
+                <svg class="select-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -155,7 +170,12 @@ type PracticalInfo = CityDetails['practicalInfo'];
           </div>
         } @else {
           <div class="empty-state">
-            <span class="empty-icon">⚖️</span>
+            <div class="empty-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-gray-300)" stroke-width="1.5">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+            </div>
             <h3>Seleziona due città da confrontare</h3>
             <p>Scegli le destinazioni usando i menu sopra per vedere il confronto dettagliato.</p>
           </div>
@@ -183,53 +203,56 @@ type PracticalInfo = CityDetails['practicalInfo'];
       min-height: 100vh;
       padding-top: var(--header-height);
       padding-bottom: var(--space-16);
+      background: var(--color-off-white);
     }
 
     .page-header {
-      padding: var(--space-12) 0;
-      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-      color: white;
-      text-align: center;
+      padding: var(--space-8) 0 var(--space-6);
+      text-align: left;
 
       h1 {
-        font-size: clamp(2.5rem, 6vw + 1rem, 5rem);
-        font-weight: 900;
-        line-height: 0.9;
-        letter-spacing: -0.05em;
-        background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 50%, rgba(248, 181, 0, 0.9) 100%);
+        font-size: clamp(2rem, 4vw, 2.5rem);
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        background-size: 200% 200%;
-        animation: gradientShift 3s ease infinite;
-        position: relative;
-        display: inline-block;
-        text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
-        margin-bottom: var(--space-2);
+        margin: 0 0 var(--space-2) 0;
+        letter-spacing: -0.02em;
       }
 
-      p {
-        opacity: 0.9;
+      .subtitle {
+        color: var(--color-gray-500);
+        font-size: var(--text-base);
+        margin: 0;
       }
     }
 
-    // Selectors
+    // Selectors Card
+    .selectors-card {
+      background: var(--color-white);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--space-8);
+    }
+
     .selectors {
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: var(--space-6);
-      padding: var(--space-8) 0;
+      gap: var(--space-4);
 
       @media (max-width: 768px) {
         flex-direction: column;
         align-items: stretch;
+        gap: var(--space-4);
       }
     }
 
     .selector {
       flex: 1;
-      max-width: 300px;
+      max-width: 320px;
 
       @media (max-width: 768px) {
         max-width: none;
@@ -238,42 +261,77 @@ type PracticalInfo = CityDetails['practicalInfo'];
       label {
         display: block;
         font-size: var(--text-sm);
-        font-weight: 500;
-        color: var(--color-gray-500);
+        font-weight: 600;
+        color: var(--color-gray-600);
         margin-bottom: var(--space-2);
       }
 
-      select {
-        width: 100%;
-        padding: var(--space-4);
-        font-family: var(--font-body);
-        font-size: var(--text-base);
-        border: 2px solid var(--color-gray-200);
-        border-radius: var(--border-radius-md);
-        background: white;
-        cursor: pointer;
+      .select-wrapper {
+        position: relative;
 
-        &:focus {
-          outline: none;
-          border-color: var(--color-accent);
+        select {
+          width: 100%;
+          padding: var(--space-4) var(--space-12) var(--space-4) var(--space-4);
+          font-family: var(--font-body);
+          font-size: var(--text-base);
+          border: 1.5px solid var(--color-gray-200);
+          border-radius: var(--border-radius-md);
+          background: white;
+          cursor: pointer;
+          appearance: none;
+          transition: all var(--transition-fast);
+
+          &:hover {
+            border-color: var(--color-gray-300);
+          }
+
+          &:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+          }
+        }
+
+        .select-icon {
+          position: absolute;
+          right: var(--space-3);
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
+          color: var(--color-gray-400);
         }
       }
     }
 
     .vs-badge {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
-      background: var(--color-accent);
+      gap: var(--space-1);
+      padding: var(--space-3);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
       color: white;
-      border-radius: 50%;
+      border-radius: var(--border-radius-lg);
       font-weight: 700;
       font-size: var(--text-sm);
+      min-width: 64px;
+      box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2);
+
+      svg {
+        stroke: white;
+      }
+
+      span {
+        font-size: var(--text-xs);
+        letter-spacing: 0.05em;
+      }
 
       @media (max-width: 768px) {
         align-self: center;
+        flex-direction: row;
+        min-width: auto;
+        padding: var(--space-2) var(--space-4);
       }
     }
 
@@ -589,19 +647,27 @@ type PracticalInfo = CityDetails['practicalInfo'];
       padding: var(--space-16);
       background: var(--color-white);
       border-radius: var(--border-radius-xl);
+      box-shadow: var(--shadow-sm);
 
       .empty-icon {
-        font-size: 4rem;
-        display: block;
+        display: flex;
+        justify-content: center;
         margin-bottom: var(--space-4);
+        
+        svg {
+          stroke: var(--color-gray-300);
+        }
       }
 
       h3 {
         margin-bottom: var(--space-2);
+        color: var(--color-primary);
+        font-size: var(--text-xl);
       }
 
       p {
         color: var(--color-gray-500);
+        font-size: var(--text-base);
       }
     }
 
@@ -2104,3 +2170,4 @@ export class CompareComponent {
     this.city2Id.set(city2);
   }
 }
+
