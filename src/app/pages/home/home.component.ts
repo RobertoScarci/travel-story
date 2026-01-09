@@ -299,7 +299,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
               @for (city of budgetCities(); track city.id; let i = $index) {
                 <app-city-card 
                   [city]="city"
-                  class="animate-fade-in-up"
+                  class="animate-slide-in"
                   [style.animation-delay.ms]="i * 50"/>
               }
             </div>
@@ -1253,41 +1253,47 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
     // ===== BUDGET SECTION =====
     .budget-section {
-      background: var(--color-primary);
-      color: var(--color-white);
-    }
-
-    .budget-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: var(--space-12);
-      align-items: center;
-
-      @media (max-width: 992px) {
-        grid-template-columns: 1fr;
-        gap: var(--space-8);
-      }
-    }
-
-    .budget-content {
-      h2 {
-        color: var(--color-white);
-        margin-bottom: var(--space-4);
-      }
-
-      p {
-        color: var(--color-gray-300);
-        margin-bottom: var(--space-6);
-      }
+      background: var(--color-off-white);
     }
 
     .budget-cities {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
       gap: var(--space-4);
-
-      @media (max-width: 576px) {
-        grid-template-columns: 1fr;
+      margin: 0 calc(-1 * var(--space-6));
+      padding: 0 var(--space-6) var(--space-4);
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-gray-300) var(--color-gray-100);
+      
+      // Custom scrollbar for webkit browsers
+      &::-webkit-scrollbar {
+        height: 8px;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: var(--color-gray-100);
+        border-radius: var(--border-radius-full);
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: var(--color-gray-300);
+        border-radius: var(--border-radius-full);
+        transition: background var(--transition-fast);
+        
+        &:hover {
+          background: var(--color-gray-400);
+        }
+      }
+      
+      app-city-card {
+        flex: 0 0 320px;
+        scroll-snap-align: start;
+        
+        @media (max-width: 768px) {
+          flex: 0 0 280px;
+        }
       }
     }
 
