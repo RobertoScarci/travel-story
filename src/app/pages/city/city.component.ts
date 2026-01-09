@@ -3117,9 +3117,6 @@ export class CityComponent implements OnInit, OnDestroy {
       this.navStuck.set(window.scrollY > 600);
     };
     window.addEventListener('scroll', this.scrollListener);
-    
-    // Setup intersection observer for automatic section detection
-    this.setupSectionObserver();
   }
 
   ngOnDestroy(): void {
