@@ -3156,6 +3156,11 @@ export class CityComponent implements OnInit, OnDestroy {
       
       // Load travel videos
       this.loadTravelVideos(details.name);
+      
+      // Setup section observer after content is loaded
+      setTimeout(() => {
+        this.setupSectionObserver();
+      }, 100);
       }
       
       this.loading.set(false);
