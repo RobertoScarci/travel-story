@@ -233,7 +233,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 <h2>Le mete del momento</h2>
                 <p class="section-subtitle">Le destinazioni più amate dai viaggiatori</p>
               </div>
-              <a routerLink="/trending" class="section-link">
+              <a routerLink="/destinations" class="section-link">
                 Vedi tutte →
               </a>
             </div>
@@ -1253,7 +1253,19 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
     // ===== BUDGET SECTION =====
     .budget-section {
-      background: var(--color-off-white);
+      background: linear-gradient(135deg, rgba(248, 181, 0, 0.05) 0%, rgba(233, 69, 96, 0.03) 100%);
+      position: relative;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(180deg, rgba(248, 181, 0, 0.08) 0%, transparent 50%);
+        pointer-events: none;
+      }
     }
 
     .budget-cities {
