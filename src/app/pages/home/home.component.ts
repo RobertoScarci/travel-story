@@ -280,9 +280,9 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       @if (!searchQuery()) {
         <section class="section budget-section">
           <div class="container">
-            <div class="budget-wrapper">
-              <div class="budget-content">
-                <span class="section-badge light">
+            <div class="section-header">
+              <div class="section-title-group">
+                <span class="section-badge">
                   <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="12" y1="1" x2="12" y2="23"/>
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
@@ -290,19 +290,18 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                   Viaggia di più, spendi meno
                 </span>
                 <h2>Viaggi low-cost</h2>
-                <p>Destinazioni incredibili che non svuotano il portafoglio. Esperienze autentiche, prezzi accessibili.</p>
-                <a routerLink="/budget" class="btn btn-primary btn-lg">
-                  Esplora le offerte
-                </a>
               </div>
-              <div class="budget-cities">
-                @for (city of budgetCities(); track city.id; let i = $index) {
-                  <app-city-card 
-                    [city]="city"
-                    class="animate-fade-in-up"
-                    [style.animation-delay.ms]="i * 100"/>
-                }
-              </div>
+              <a routerLink="/budget" class="section-link">
+                Vedi tutte →
+              </a>
+            </div>
+            <div class="budget-cities">
+              @for (city of budgetCities(); track city.id; let i = $index) {
+                <app-city-card 
+                  [city]="city"
+                  class="animate-fade-in-up"
+                  [style.animation-delay.ms]="i * 50"/>
+              }
             </div>
           </div>
         </section>
@@ -1504,7 +1503,7 @@ export class HomeComponent implements OnInit {
     });
     this.hiddenGemsInfo.set(hiddenGemsMap);
     
-    this.budgetCities.set(this.cityService.getBudgetFriendlyCities(4));
+    this.budgetCities.set(this.cityService.getBudgetFriendlyCities(8));
     
     // Load personalized content
     if (this.personalization.shouldShowPersonalizedSection()) {
