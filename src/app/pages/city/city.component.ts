@@ -3095,6 +3095,7 @@ export class CityComponent implements OnInit, OnDestroy {
   private scrollListener: (() => void) | null = null;
   private trackingInterval: ReturnType<typeof setInterval> | null = null;
   private sanitizer = inject(DomSanitizer);
+  private intersectionObserver: IntersectionObserver | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -3116,6 +3117,9 @@ export class CityComponent implements OnInit, OnDestroy {
       this.navStuck.set(window.scrollY > 600);
     };
     window.addEventListener('scroll', this.scrollListener);
+    
+    // Setup intersection observer for automatic section detection
+    this.setupSectionObserver();
   }
 
   ngOnDestroy(): void {
@@ -3124,6 +3128,9 @@ export class CityComponent implements OnInit, OnDestroy {
     }
     if (this.trackingInterval) {
       clearInterval(this.trackingInterval);
+    }
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
     }
   }
 
@@ -3297,6 +3304,54 @@ export class CityComponent implements OnInit, OnDestroy {
   setActiveSection(sectionId: string): void {
     this.activeSection.set(sectionId);
     this.scrollToSection(sectionId);
+  }
+
+  private setupSectionObserver(): void {
+    // Wait for content to be rendered
+    setTimeout(() => {
+      const sections = [
+        { id: 'overview', element: document.getElementById('overview') },
+        ...(this.details()?.sections.map(s => ({
+          id: s.id,
+          element: document.getElementById(s.id)
+        })) || []),
+        { id: 'practical', element: document.getElementById('practical') }
+      ].filter(s => s.element !== null);
+
+      if (sections.length === 0) return;
+
+      // Create intersection observer
+      this.intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          // Find the section that is most visible in the viewport
+          let maxIntersection = 0;
+          let activeId = this.activeSection();
+
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio > maxIntersection) {
+              maxIntersection = entry.intersectionRatio;
+              activeId = entry.target.id;
+            }
+          });
+
+          // Only update if we found a better match and it's different from current
+          if (maxIntersection > 0 && activeId !== this.activeSection()) {
+            this.activeSection.set(activeId);
+          }
+        },
+        {
+          rootMargin: '-20% 0px -60% 0px', // Trigger when section is in upper 40% of viewport
+          threshold: [0, 0.1, 0.3, 0.5, 0.7, 1.0]
+        }
+      );
+
+      // Observe all sections
+      sections.forEach(section => {
+        if (section.element) {
+          this.intersectionObserver?.observe(section.element);
+        }
+      });
+    }, 500);
   }
 
   scrollToSection(sectionId: string): void {
