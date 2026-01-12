@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { UnsplashService } from './api/unsplash.service';
 import { CityService } from './city.service';
+import { DatabaseService } from './database.service';
 import { City } from '../models/city.model';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 /**
  * CityImagePopulatorService
@@ -12,6 +14,7 @@ import { firstValueFrom } from 'rxjs';
  * - Riempire thumbnailImage mancanti
  * - Riempire heroImage mancanti
  * - Aggiornare immagini esistenti con versioni più recenti
+ * - Salvare automaticamente nel database
  */
 @Injectable({
   providedIn: 'root'
@@ -19,21 +22,37 @@ import { firstValueFrom } from 'rxjs';
 export class CityImagePopulatorService {
   private unsplashService = inject(UnsplashService);
   private cityService = inject(CityService);
+  private databaseService = inject(DatabaseService);
 
   /**
    * Verifica se un'immagine è valida (non è un placeholder o URL vuoto)
    */
   private isValidImageUrl(url: string | undefined): boolean {
-    if (!url) return false;
+    if (!url || url.trim() === '') return false;
+    
     // Controlla se è un placeholder o URL generico
     const placeholderPatterns = [
       'placeholder',
       'default',
       'missing',
       'no-image',
-      'empty'
+      'empty',
+      'data:image', // base64 placeholder
+      'via.placeholder.com'
     ];
-    return !placeholderPatterns.some(pattern => url.toLowerCase().includes(pattern));
+    
+    const urlLower = url.toLowerCase();
+    if (placeholderPatterns.some(pattern => urlLower.includes(pattern))) {
+      return false;
+    }
+    
+    // Deve essere un URL valido
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -60,9 +79,9 @@ export class CityImagePopulatorService {
   }
 
   /**
-   * Popola le immagini mancanti per una singola città
+   * Popola le immagini mancanti per una singola città e salva nel database
    */
-  async populateCityImages(city: City): Promise<{ updated: boolean; thumbnailUrl?: string; heroUrl?: string; error?: string }> {
+  async populateCityImages(city: City, saveToDatabase: boolean = true): Promise<{ updated: boolean; thumbnailUrl?: string; heroUrl?: string; error?: string }> {
     const needsThumbnail = !this.isValidImageUrl(city.thumbnailImage);
     const needsHero = !this.isValidImageUrl(city.heroImage);
 
@@ -74,27 +93,74 @@ export class CityImagePopulatorService {
       // Cerca foto per la città
       const query = `${city.name} ${city.country} city travel`;
       const photos = await firstValueFrom(
-        this.unsplashService.searchPhotos(query, 3, 1)
+        this.unsplashService.searchPhotos(query, 3, 1).pipe(
+          catchError(() => of([]))
+        )
       );
 
       if (photos.length === 0) {
-        return { updated: false, error: 'No photos found' };
+        // Fallback: usa immagine generica
+        const fallbackImage = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80';
+        const result = {
+          updated: true,
+          thumbnailUrl: needsThumbnail ? fallbackImage : city.thumbnailImage,
+          heroUrl: needsHero ? fallbackImage : city.heroImage
+        };
+        
+        if (saveToDatabase && result.updated) {
+          await this.updateCityImages(city, result.thumbnailUrl || city.thumbnailImage, result.heroUrl || city.heroImage);
+        }
+        
+        return result;
       }
 
       const bestPhoto = photos[0];
-      const thumbnailUrl = this.buildThumbnailUrl(bestPhoto);
-      const heroUrl = this.buildHeroUrl(bestPhoto);
+      const thumbnailUrl = needsThumbnail ? this.buildThumbnailUrl(bestPhoto) : city.thumbnailImage;
+      const heroUrl = needsHero ? this.buildHeroUrl(bestPhoto) : city.heroImage;
 
-      return {
+      const result = {
         updated: true,
         thumbnailUrl: needsThumbnail ? thumbnailUrl : undefined,
         heroUrl: needsHero ? heroUrl : undefined
       };
+      
+      // Salva nel database se richiesto
+      if (saveToDatabase && result.updated) {
+        await this.updateCityImages(city, thumbnailUrl, heroUrl);
+      }
+      
+      return result;
     } catch (error) {
       return {
         updated: false,
         error: error instanceof Error ? error.message : 'Failed to fetch photos'
       };
+    }
+  }
+
+  /**
+   * Aggiorna le immagini di una città nel database e nel servizio
+   */
+  private async updateCityImages(city: City, thumbnailUrl: string, heroUrl: string): Promise<void> {
+    const updatedCity: City = {
+      ...city,
+      thumbnailImage: thumbnailUrl,
+      heroImage: heroUrl
+    };
+    
+    // Salva nel database
+    await this.databaseService.saveCity(updatedCity);
+    
+    // Aggiorna nel servizio (se disponibile)
+    try {
+      const currentCities = this.cityService.getAllCities();
+      const cityIndex = currentCities.findIndex(c => c.id === city.id);
+      if (cityIndex >= 0) {
+        currentCities[cityIndex] = updatedCity;
+        // Il signal viene aggiornato dal CityService stesso
+      }
+    } catch (error) {
+      // Ignora errori se il servizio non è ancora inizializzato
     }
   }
 
