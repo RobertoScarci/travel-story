@@ -1,12 +1,15 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { City, CityDetails, CitySection, SectionItem, ViralContent, FlightDeal, HiddenGemInfo, HiddenGemReason } from '../models/city.model';
 import { DatabaseService } from './database.service';
+import { CitySeederService } from './city-seeder.service';
+import { CityImagePopulatorService } from './city-image-populator.service';
 
 /**
  * CityService - Data provider for city information
  * 
  * Now uses DatabaseService for persistent storage.
- * Falls back to mock data if database is empty.
+ * Automatically seeds database with new cities if empty.
+ * Automatically populates missing images for all cities.
  * 
  * All data structures mirror expected API responses for seamless transition.
  */
@@ -15,6 +18,8 @@ import { DatabaseService } from './database.service';
 })
 export class CityService {
   private databaseService = inject(DatabaseService);
+  private citySeeder = inject(CitySeederService);
+  private imagePopulator = inject(CityImagePopulatorService);
   private citiesSignal = signal<City[]>([]);
   readonly cities = this.citiesSignal.asReadonly();
   private initialized = false;
@@ -24,22 +29,158 @@ export class CityService {
   }
 
   /**
-   * Initialize service - load cities from database or use mock data
+   * Initialize service - load cities from database, seed if empty, populate images
    */
   private async initialize(): Promise<void> {
     await this.databaseService.initialize();
     
-    const cities = await this.databaseService.getAllCities();
+    let cities = await this.databaseService.getAllCities();
     
-    if (cities.length > 0) {
-      // Database has cities, use them
-      this.citiesSignal.set(cities);
-      this.initialized = true;
-    } else {
-      // Database is empty, use mock data as fallback
+    if (cities.length === 0) {
+      // Database is empty: load mock data first, then seed new cities
+      console.log('Database vuoto, inizializzazione...');
+      
+      // Load mock data and save to database
       this.initializeMockData();
-      this.initialized = true;
+      const mockCities = this.citiesSignal();
+      await this.databaseService.saveCities(mockCities);
+      
+      // Now seed new cities (they will be merged with existing ones in database)
+      console.log('Seeding nuove città...');
+      await this.seedNewCities();
+      
+      // Reload all cities (mock + seeded)
+      cities = await this.databaseService.getAllCities();
+      this.citiesSignal.set(cities);
+    } else {
+      // Load existing cities from database
+      this.citiesSignal.set(cities);
+      
+      // Check if we need to add new seeded cities (incrementally)
+      this.addMissingSeededCities(cities);
     }
+    
+    // Populate missing images for all cities (in background, don't block)
+    this.populateMissingImagesInBackground(cities);
+    
+    this.initialized = true;
+  }
+
+  /**
+   * Add seeded cities that are not yet in the database
+   */
+  private async addMissingSeededCities(existingCities: City[]): Promise<void> {
+    const existingIds = new Set(existingCities.map(c => c.id));
+    const citiesToSeed = this.citySeeder.getCitiesToSeed();
+    
+    const missingCities = citiesToSeed.filter(cityInfo => {
+      const id = this.generateCityId(cityInfo.name);
+      return !existingIds.has(id);
+    });
+    
+    if (missingCities.length > 0) {
+      console.log(`Trovate ${missingCities.length} nuove città da aggiungere...`);
+      // Seed only missing cities in background
+      setTimeout(async () => {
+        for (const cityInfo of missingCities) {
+          try {
+            const city = await this.citySeeder.seedCity(cityInfo);
+            if (city) {
+              const currentCities = this.citiesSignal();
+              this.citiesSignal.set([...currentCities, city]);
+            }
+            await new Promise(resolve => setTimeout(resolve, 200));
+          } catch (error) {
+            console.warn(`Errore seeding ${cityInfo.name}:`, error);
+          }
+        }
+        console.log(`Aggiunte ${missingCities.length} nuove città`);
+      }, 5000); // Wait 5 seconds after initialization
+    }
+  }
+
+  /**
+   * Generate city ID (same logic as CitySeederService)
+   */
+  private generateCityId(name: string): string {
+    return name.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+  }
+
+  /**
+   * Seed new cities from CitySeederService and save to database
+   */
+  private async seedNewCities(): Promise<void> {
+    try {
+      console.log('Inizio seeding di nuove città...');
+      const result = await this.citySeeder.seedAllCities((cityName, current, total) => {
+        if (current % 10 === 0) {
+          console.log(`Seeding: ${cityName} (${current}/${total})`);
+        }
+      });
+      console.log(`Seeding completato: ${result.success} successi, ${result.failed} falliti`);
+    } catch (error) {
+      console.error('Errore durante il seeding:', error);
+    }
+  }
+
+  /**
+   * Populate missing images for all cities in background
+   */
+  private async populateMissingImagesInBackground(cities: City[]): Promise<void> {
+    // Run in background, don't block initialization
+    setTimeout(async () => {
+      console.log('Popolamento immagini mancanti in background...');
+      let updatedCount = 0;
+      
+      for (const city of cities) {
+        try {
+          // Check if images are missing or invalid
+          const hasValidThumbnail = city.thumbnailImage && 
+            !city.thumbnailImage.toLowerCase().includes('placeholder') &&
+            !city.thumbnailImage.toLowerCase().includes('default') &&
+            city.thumbnailImage.trim() !== '';
+          const hasValidHero = city.heroImage && 
+            !city.heroImage.toLowerCase().includes('placeholder') &&
+            !city.heroImage.toLowerCase().includes('default') &&
+            city.heroImage.trim() !== '';
+          
+          if (!hasValidThumbnail || !hasValidHero) {
+            const result = await this.imagePopulator.populateCityImages(city, true);
+            
+            if (result.updated) {
+              // Reload from database to get updated city
+              const updatedCity = await this.databaseService.getCity(city.id);
+              if (updatedCity) {
+                // Update signal
+                const currentCities = this.citiesSignal();
+                const cityIndex = currentCities.findIndex(c => c.id === city.id);
+                if (cityIndex >= 0) {
+                  currentCities[cityIndex] = updatedCity;
+                  this.citiesSignal.set([...currentCities]);
+                }
+              }
+              
+              updatedCount++;
+            }
+            
+            // Small delay to avoid rate limiting
+            await new Promise(resolve => setTimeout(resolve, 300));
+          }
+        } catch (error) {
+          console.warn(`Errore popolamento immagini per ${city.name}:`, error);
+        }
+      }
+      
+      if (updatedCount > 0) {
+        console.log(`Immagini aggiornate per ${updatedCount} città`);
+      } else {
+        console.log('Tutte le città hanno già immagini valide');
+      }
+    }, 2000); // Start after 2 seconds to not block initialization
   }
 
   /**
