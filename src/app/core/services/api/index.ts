@@ -8,6 +8,7 @@ export * from './weather.service';
 export * from './wikipedia.service';
 export * from './country.service';
 export * from './unsplash.service';
+export * from './pexels.service';
 export * from './opentripmap.service';
 export * from './foursquare.service';
 

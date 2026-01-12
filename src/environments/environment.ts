@@ -18,6 +18,7 @@ export const environment = {
   // APIs that require keys
   apiKeys: {
     unsplash: 'NIzWTuESE-e_mJM9X5QxyOAOTSmnaZ2w99gFu7USZwQ',
+    pexels: '', // Get from https://www.pexels.com/api/new/ (200 req/hour free)
     openTripMap: '5ae2e3f221c38a28845f05b63d6d8a9a51588cfc90a375982bed06cd',
     foursquare: 'ZIDAG2JIWWBFJDZU3G4HNSBVQGV43FKJ5KHHAMQIAMEBHYIB',
     geoapify: '', // Get from https://www.geoapify.com/
