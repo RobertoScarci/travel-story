@@ -122,6 +122,45 @@ export class CitySeederService {
     { name: 'Bogotà', country: 'Colombia', continent: 'Sud America', lat: 4.7110, lng: -74.0721 },
     { name: 'Cartagena', country: 'Colombia', continent: 'Sud America', lat: 10.3910, lng: -75.4794 },
     { name: 'Quito', country: 'Ecuador', continent: 'Sud America', lat: -0.1807, lng: -78.4678 },
+    
+    // Città aggiuntive popolari
+    // Europa aggiuntive
+    { name: 'Madrid', country: 'Spagna', continent: 'Europa', lat: 40.4168, lng: -3.7038 },
+    { name: 'Valencia', country: 'Spagna', continent: 'Europa', lat: 39.4699, lng: -0.3763 },
+    { name: 'Porto', country: 'Portogallo', continent: 'Europa', lat: 41.1579, lng: -8.6291 },
+    { name: 'Siviglia', country: 'Spagna', continent: 'Europa', lat: 37.3891, lng: -5.9845 },
+    { name: 'Monaco', country: 'Monaco', continent: 'Europa', lat: 43.7384, lng: 7.4246 },
+    { name: 'Nizza', country: 'Francia', continent: 'Europa', lat: 43.7102, lng: 7.2620 },
+    { name: 'Marsiglia', country: 'Francia', continent: 'Europa', lat: 43.2965, lng: 5.3698 },
+    { name: 'Lione', country: 'Francia', continent: 'Europa', lat: 45.7640, lng: 4.8357 },
+    { name: 'Bruges', country: 'Belgio', continent: 'Europa', lat: 51.2093, lng: 3.2247 },
+    { name: 'Salisburgo', country: 'Austria', continent: 'Europa', lat: 47.8095, lng: 13.0550 },
+    { name: 'Lubiana', country: 'Slovenia', continent: 'Europa', lat: 46.0569, lng: 14.5058 },
+    { name: 'Zagabria', country: 'Croazia', continent: 'Europa', lat: 45.8150, lng: 15.9819 },
+    { name: 'Split', country: 'Croazia', continent: 'Europa', lat: 43.5081, lng: 16.4402 },
+    { name: 'Dubrovnik', country: 'Croazia', continent: 'Europa', lat: 42.6507, lng: 18.0944 },
+    
+    // Asia aggiuntive
+    { name: 'Kyoto', country: 'Giappone', continent: 'Asia', lat: 35.0116, lng: 135.7681 },
+    { name: 'Osaka', country: 'Giappone', continent: 'Asia', lat: 34.6937, lng: 135.5023 },
+    { name: 'Macao', country: 'Cina', continent: 'Asia', lat: 22.1987, lng: 113.5439 },
+    { name: 'Phuket', country: 'Thailandia', continent: 'Asia', lat: 7.8804, lng: 98.3923 },
+    { name: 'Chiang Mai', country: 'Thailandia', continent: 'Asia', lat: 18.7883, lng: 98.9853 },
+    { name: 'Yangon', country: 'Myanmar', continent: 'Asia', lat: 16.8661, lng: 96.1951 },
+    { name: 'Kathmandu', country: 'Nepal', continent: 'Asia', lat: 27.7172, lng: 85.3240 },
+    { name: 'Colombo', country: 'Sri Lanka', continent: 'Asia', lat: 6.9271, lng: 79.8612 },
+    
+    // Nord America aggiuntive
+    { name: 'Boston', country: 'Stati Uniti', continent: 'Nord America', lat: 42.3601, lng: -71.0589 },
+    { name: 'Seattle', country: 'Stati Uniti', continent: 'Nord America', lat: 47.6062, lng: -122.3321 },
+    { name: 'New Orleans', country: 'Stati Uniti', continent: 'Nord America', lat: 29.9511, lng: -90.0715 },
+    { name: 'Washington', country: 'Stati Uniti', continent: 'Nord America', lat: 38.9072, lng: -77.0369 },
+    { name: 'Quebec', country: 'Canada', continent: 'Nord America', lat: 46.8139, lng: -71.2080 },
+    
+    // Sud America aggiuntive
+    { name: 'Cusco', country: 'Perù', continent: 'Sud America', lat: -13.5319, lng: -71.9675 },
+    { name: 'Montevideo', country: 'Uruguay', continent: 'Sud America', lat: -34.9011, lng: -56.1645 },
+    { name: 'La Paz', country: 'Bolivia', continent: 'Sud America', lat: -16.2902, lng: -68.1341 },
   ];
 
   /**
