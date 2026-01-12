@@ -1,5 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { UnsplashService } from './api/unsplash.service';
+import { PexelsService } from './api/pexels.service';
+import { WikipediaService } from './api/wikipedia.service';
 import { CityService } from './city.service';
 import { DatabaseService } from './database.service';
 import { City } from '../models/city.model';
@@ -9,11 +11,16 @@ import { catchError } from 'rxjs/operators';
 /**
  * CityImagePopulatorService
  * 
- * Popola automaticamente le immagini mancanti per le città usando Unsplash API.
+ * Popola automaticamente le immagini mancanti per le città usando multiple fonti.
+ * Strategia multi-source con fallback:
+ * 1. Unsplash (50 req/hour) - prima scelta
+ * 2. Pexels (200 req/hour) - fallback principale
+ * 3. Wikipedia - fallback secondario
+ * 4. Immagine generica - fallback finale
+ * 
  * Utile per:
  * - Riempire thumbnailImage mancanti
  * - Riempire heroImage mancanti
- * - Aggiornare immagini esistenti con versioni più recenti
  * - Salvare automaticamente nel database
  */
 @Injectable({
@@ -21,6 +28,8 @@ import { catchError } from 'rxjs/operators';
 })
 export class CityImagePopulatorService {
   private unsplashService = inject(UnsplashService);
+  private pexelsService = inject(PexelsService);
+  private wikipediaService = inject(WikipediaService);
   private cityService = inject(CityService);
   private databaseService = inject(DatabaseService);
 
@@ -79,7 +88,7 @@ export class CityImagePopulatorService {
   }
 
   /**
-   * Popola le immagini mancanti per una singola città e salva nel database
+   * Popola le immagini mancanti per una singola città usando multi-source con fallback
    */
   async populateCityImages(city: City, saveToDatabase: boolean = true): Promise<{ updated: boolean; thumbnailUrl?: string; heroUrl?: string; error?: string }> {
     const needsThumbnail = !this.isValidImageUrl(city.thumbnailImage);
@@ -89,53 +98,86 @@ export class CityImagePopulatorService {
       return { updated: false };
     }
 
+    const query = `${city.name} ${city.country} city travel`;
+    let thumbnailUrl = city.thumbnailImage;
+    let heroUrl = city.heroImage;
+
+    // Try 1: Unsplash
     try {
-      // Cerca foto per la città
-      const query = `${city.name} ${city.country} city travel`;
-      const photos = await firstValueFrom(
+      const unsplashPhotos = await firstValueFrom(
         this.unsplashService.searchPhotos(query, 3, 1).pipe(
           catchError(() => of([]))
         )
       );
 
-      if (photos.length === 0) {
-        // Fallback: usa immagine generica
-        const fallbackImage = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80';
-        const result = {
-          updated: true,
-          thumbnailUrl: needsThumbnail ? fallbackImage : city.thumbnailImage,
-          heroUrl: needsHero ? fallbackImage : city.heroImage
-        };
+      if (unsplashPhotos.length > 0) {
+        const photo = unsplashPhotos[0];
+        thumbnailUrl = needsThumbnail ? this.buildUnsplashThumbnailUrl(photo) : thumbnailUrl;
+        heroUrl = needsHero ? this.buildUnsplashHeroUrl(photo) : heroUrl;
         
-        if (saveToDatabase && result.updated) {
-          await this.updateCityImages(city, result.thumbnailUrl || city.thumbnailImage, result.heroUrl || city.heroImage);
+        if (saveToDatabase) {
+          await this.updateCityImages(city, thumbnailUrl, heroUrl);
         }
-        
-        return result;
+        return { updated: true, thumbnailUrl: needsThumbnail ? thumbnailUrl : undefined, heroUrl: needsHero ? heroUrl : undefined };
       }
-
-      const bestPhoto = photos[0];
-      const thumbnailUrl = needsThumbnail ? this.buildThumbnailUrl(bestPhoto) : city.thumbnailImage;
-      const heroUrl = needsHero ? this.buildHeroUrl(bestPhoto) : city.heroImage;
-
-      const result = {
-        updated: true,
-        thumbnailUrl: needsThumbnail ? thumbnailUrl : undefined,
-        heroUrl: needsHero ? heroUrl : undefined
-      };
-      
-      // Salva nel database se richiesto
-      if (saveToDatabase && result.updated) {
-        await this.updateCityImages(city, thumbnailUrl, heroUrl);
-      }
-      
-      return result;
     } catch (error) {
-      return {
-        updated: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch photos'
-      };
+      console.debug(`Unsplash failed for ${city.name}, trying Pexels...`);
     }
+
+    // Try 2: Pexels (fallback principale - 200 req/hour)
+    try {
+      const pexelsPhotos = await firstValueFrom(
+        this.pexelsService.searchPhotos(query, 3, 1).pipe(
+          catchError(() => of([]))
+        )
+      );
+
+      if (pexelsPhotos.length > 0) {
+        const photo = pexelsPhotos[0];
+        thumbnailUrl = needsThumbnail ? this.pexelsService.getThumbnailUrl(photo) : thumbnailUrl;
+        heroUrl = needsHero ? this.pexelsService.getHeroUrl(photo) : heroUrl;
+        
+        if (saveToDatabase) {
+          await this.updateCityImages(city, thumbnailUrl, heroUrl);
+        }
+        return { updated: true, thumbnailUrl: needsThumbnail ? thumbnailUrl : undefined, heroUrl: needsHero ? heroUrl : undefined };
+      }
+    } catch (error) {
+      console.debug(`Pexels failed for ${city.name}, trying Wikipedia...`);
+    }
+
+    // Try 3: Wikipedia (fallback secondario)
+    try {
+      const wikiSummary = await firstValueFrom(
+        this.wikipediaService.getCitySummary(city.name, city.country).pipe(
+          catchError(() => of(null))
+        )
+      );
+
+      if (wikiSummary?.originalImage?.url) {
+        const wikiImage = wikiSummary.originalImage.url;
+        thumbnailUrl = needsThumbnail ? wikiImage : thumbnailUrl;
+        heroUrl = needsHero ? wikiImage : heroUrl;
+        
+        if (saveToDatabase) {
+          await this.updateCityImages(city, thumbnailUrl, heroUrl);
+        }
+        return { updated: true, thumbnailUrl: needsThumbnail ? thumbnailUrl : undefined, heroUrl: needsHero ? heroUrl : undefined };
+      }
+    } catch (error) {
+      console.debug(`Wikipedia failed for ${city.name}, using generic fallback...`);
+    }
+
+    // Fallback finale: immagine generica
+    const fallbackImage = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80';
+    thumbnailUrl = needsThumbnail ? fallbackImage : thumbnailUrl;
+    heroUrl = needsHero ? fallbackImage : heroUrl;
+    
+    if (saveToDatabase) {
+      await this.updateCityImages(city, thumbnailUrl, heroUrl);
+    }
+    
+    return { updated: true, thumbnailUrl: needsThumbnail ? thumbnailUrl : undefined, heroUrl: needsHero ? heroUrl : undefined };
   }
 
   /**
@@ -165,16 +207,16 @@ export class CityImagePopulatorService {
   }
 
   /**
-   * Costruisce URL ottimizzato per thumbnail (1200px)
+   * Costruisce URL ottimizzato per thumbnail da Unsplash (1200px)
    */
-  private buildThumbnailUrl(photo: any): string {
+  private buildUnsplashThumbnailUrl(photo: any): string {
     return `${photo.urls.raw}&w=1200&q=80&fit=crop&auto=format`;
   }
 
   /**
-   * Costruisce URL ottimizzato per hero image (1920px)
+   * Costruisce URL ottimizzato per hero image da Unsplash (1920px)
    */
-  private buildHeroUrl(photo: any): string {
+  private buildUnsplashHeroUrl(photo: any): string {
     return `${photo.urls.raw}&w=1920&q=85&fit=crop&auto=format`;
   }
 
