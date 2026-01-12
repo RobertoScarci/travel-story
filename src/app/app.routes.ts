@@ -40,11 +40,6 @@ export const routes: Routes = [
     title: 'Confronta Destinazioni - TravelStory'
   },
   {
-    path: 'admin',
-    loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
-    title: 'Admin Panel - TravelStory'
-  },
-  {
     path: 'propose-city',
     loadComponent: () => import('./pages/propose-city/propose-city-form.component').then(m => m.ProposeCityFormComponent),
     title: 'Proponi una Città - TravelStory'
