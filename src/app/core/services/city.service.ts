@@ -750,18 +750,18 @@ export class CityService {
         { id: '5', title: 'Sentosa Island', description: 'Isola del divertimento con spiagge, Universal Studios e S.E.A. Aquarium.', duration: '1 giorno', priceRange: '€€€', image: 'https://images.unsplash.com/photo-1574227492706-f65b24c3688a?w=1200&q=80' }
       ],
       'seoul': [
-        { id: '1', title: 'Gyeongbokgung Palace', description: 'Il più grande dei Cinque Palazzi Reali, con cambio della guardia coreana.', duration: '3 ore', priceRange: '€' },
-        { id: '2', title: 'Bukchon Hanok Village', description: 'Quartiere di 600 anni con case tradizionali hanok dove vivono ancora residenti.', duration: '2-3 ore' },
-        { id: '3', title: 'N Seoul Tower', description: 'Torre sul monte Namsan con lucchetti dell\'amore e vista notturna spettacolare.', duration: '2 ore', priceRange: '€' },
-        { id: '4', title: 'Dongdaemun Design Plaza', description: 'Architettura futuristica di Zaha Hadid, hub di design e mercati notturni.', duration: '2-3 ore' },
-        { id: '5', title: 'Gangnam', description: 'Il quartiere del K-pop, luxury shopping e locali notturni esclusivi.', duration: '3-4 ore' }
+        { id: '1', title: 'Gyeongbokgung Palace', description: 'Il più grande dei Cinque Palazzi Reali, con cambio della guardia coreana.', duration: '3 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1574879788149-e3207888c51e?w=1200&q=80' },
+        { id: '2', title: 'Bukchon Hanok Village', description: 'Quartiere di 600 anni con case tradizionali hanok dove vivono ancora residenti.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1575178578814-bfed6aa8f6d1?w=1200&q=80' },
+        { id: '3', title: 'N Seoul Tower', description: 'Torre sul monte Namsan con lucchetti dell\'amore e vista notturna spettacolare.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1570544982537-5e48febe7f1f?w=1200&q=80' },
+        { id: '4', title: 'Dongdaemun Design Plaza', description: 'Architettura futuristica di Zaha Hadid, hub di design e mercati notturni.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&q=80' },
+        { id: '5', title: 'Gangnam', description: 'Il quartiere del K-pop, luxury shopping e locali notturni esclusivi.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&q=80' }
       ],
       'hanoi': [
-        { id: '1', title: 'Quartiere Vecchio (36 Streets)', description: 'Labirinto di vie medievali, ognuna dedicata a un mestiere specifico.', duration: '3-4 ore' },
-        { id: '2', title: 'Tempio della Letteratura', description: 'La prima università del Vietnam (1070 d.C.), giardini confuciani sereni.', duration: '1-2 ore', priceRange: '€' },
-        { id: '3', title: 'Mausoleo di Ho Chi Minh', description: 'Il padre della nazione riposa qui: file lunghe ma esperienza toccante.', duration: '2 ore' },
-        { id: '4', title: 'Lago Hoan Kiem', description: 'Il lago della Spada Restituita, cuore romantico della città con la Pagoda.', duration: '1-2 ore' },
-        { id: '5', title: 'Water Puppet Theatre', description: 'Arte tradizionale di marionette sull\'acqua: spettacolo unico al mondo.', duration: '1 ora', priceRange: '€' }
+        { id: '1', title: 'Quartiere Vecchio (36 Streets)', description: 'Labirinto di vie medievali, ognuna dedicata a un mestiere specifico.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1559615736-8c8f4b0e7e0a?w=1200&q=80' },
+        { id: '2', title: 'Tempio della Letteratura', description: 'La prima università del Vietnam (1070 d.C.), giardini confuciani sereni.', duration: '1-2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1200&q=80' },
+        { id: '3', title: 'Mausoleo di Ho Chi Minh', description: 'Il padre della nazione riposa qui: file lunghe ma esperienza toccante.', duration: '2 ore', image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73a92?w=1200&q=80' },
+        { id: '4', title: 'Lago Hoan Kiem', description: 'Il lago della Spada Restituita, cuore romantico della città con la Pagoda.', duration: '1-2 ore', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80' },
+        { id: '5', title: 'Water Puppet Theatre', description: 'Arte tradizionale di marionette sull\'acqua: spettacolo unico al mondo.', duration: '1 ora', priceRange: '€', image: 'https://images.unsplash.com/photo-1583573636246-18cb2246697f?w=1200&q=80' }
       ],
       'dubai': [
         { id: '1', title: 'Burj Khalifa', description: 'L\'edificio più alto del mondo (828m): la vista dal 148° piano toglie il fiato.', duration: '2-3 ore', priceRange: '€€€', image: 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80' },
@@ -812,39 +812,39 @@ export class CityService {
         { id: '6', title: 'Jordaan', description: 'Quartiere bohémien con gallerie, vintage shop, café e bruin cafe storici.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1576924542622-772e0a02a6b2?w=1200&q=80' }
       ],
       'prague': [
-        { id: '1', title: 'Ponte Carlo', description: '30 statue barocche sorvegliano il ponte gotico più romantico d\'Europa. Vai all\'alba.', duration: '1-2 ore' },
-        { id: '2', title: 'Orologio Astronomico', description: 'Ogni ora dal 1410 le figurine si animano: l\'orologio funzionante più antico del mondo.', duration: '30 min' },
-        { id: '3', title: 'Castello di Praga', description: 'Il più grande castello antico del mondo: Cattedrale di San Vito, Vicolo d\'Oro.', duration: '4-5 ore', priceRange: '€€' },
-        { id: '4', title: 'Quartiere Ebraico', description: 'Sinagoghe storiche, il vecchio cimitero con 12.000 lapidi accatastate.', duration: '2-3 ore', priceRange: '€' },
-        { id: '5', title: 'Piazza della Città Vecchia', description: 'Cuore gotico di Praga: chiese, palazzi, mercatini di Natale indimenticabili.', duration: '1-2 ore' }
+        { id: '1', title: 'Ponte Carlo', description: '30 statue barocche sorvegliano il ponte gotico più romantico d\'Europa. Vai all\'alba.', duration: '1-2 ore', image: 'https://images.unsplash.com/photo-1541849546-216549ae216d?w=1200&q=80' },
+        { id: '2', title: 'Orologio Astronomico', description: 'Ogni ora dal 1410 le figurine si animano: l\'orologio funzionante più antico del mondo.', duration: '30 min', image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73a92?w=1200&q=80' },
+        { id: '3', title: 'Castello di Praga', description: 'Il più grande castello antico del mondo: Cattedrale di San Vito, Vicolo d\'Oro.', duration: '4-5 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1541855951501-f3b53f73f8ec?w=1200&q=80' },
+        { id: '4', title: 'Quartiere Ebraico', description: 'Sinagoghe storiche, il vecchio cimitero con 12.000 lapidi accatastate.', duration: '2-3 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&q=80' },
+        { id: '5', title: 'Piazza della Città Vecchia', description: 'Cuore gotico di Praga: chiese, palazzi, mercatini di Natale indimenticabili.', duration: '1-2 ore', image: 'https://images.unsplash.com/photo-1541849546-216549ae216d?w=1200&q=80' }
       ],
       'vienna': [
-        { id: '1', title: 'Palazzo di Schönbrunn', description: 'La Versailles asburgica: 1441 stanze, giardini imperiali, zoo più antico del mondo.', duration: '4-5 ore', priceRange: '€€' },
-        { id: '2', title: 'Opera di Vienna', description: 'Una delle opere più prestigiose: biglietti in piedi a 4€, dress code rigoroso.', duration: '3 ore', priceRange: '€-€€€€' },
-        { id: '3', title: 'Cattedrale di Santo Stefano', description: 'Il Duomo gotico con il tetto a mosaico di 230.000 tegole colorate.', duration: '1-2 ore' },
-        { id: '4', title: 'Museo di Storia dell\'Arte', description: 'Bruegel, Vermeer, Raffaello in un edificio che è esso stesso un\'opera d\'arte.', duration: '3-4 ore', priceRange: '€€' },
-        { id: '5', title: 'Naschmarkt', description: 'Mercato dal 1780: spezie, olive, formaggi, vini e brunch leggendari.', duration: '2 ore' }
+        { id: '1', title: 'Palazzo di Schönbrunn', description: 'La Versailles asburgica: 1441 stanze, giardini imperiali, zoo più antico del mondo.', duration: '4-5 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1575818109795-46300558fec6?w=1200&q=80' },
+        { id: '2', title: 'Opera di Vienna', description: 'Una delle opere più prestigiose: biglietti in piedi a 4€, dress code rigoroso.', duration: '3 ore', priceRange: '€-€€€€', image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&q=80' },
+        { id: '3', title: 'Cattedrale di Santo Stefano', description: 'Il Duomo gotico con il tetto a mosaico di 230.000 tegole colorate.', duration: '1-2 ore', image: 'https://images.unsplash.com/photo-1575818109795-46300558fec6?w=1200&q=80' },
+        { id: '4', title: 'Museo di Storia dell\'Arte', description: 'Bruegel, Vermeer, Raffaello in un edificio che è esso stesso un\'opera d\'arte.', duration: '3-4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&q=80' },
+        { id: '5', title: 'Naschmarkt', description: 'Mercato dal 1780: spezie, olive, formaggi, vini e brunch leggendari.', duration: '2 ore', image: 'https://images.unsplash.com/photo-1581338834647-b0fb40704e21?w=1200&q=80' }
       ],
       'reykjavik': [
-        { id: '1', title: 'Hallgrímskirkja', description: 'Chiesa luterana che sembra un razzo: design ispirato alle colonne basaltiche islandesi.', duration: '1 ora', priceRange: '€' },
-        { id: '2', title: 'Blue Lagoon', description: 'Spa geotermica nell\'acqua lattiginosa azzurra a 38°C tra i campi di lava.', duration: '3-4 ore', priceRange: '€€€' },
-        { id: '3', title: 'Golden Circle', description: 'Tour classico: Þingvellir (placche tettoniche), Geysir, cascata Gullfoss.', duration: '8 ore' },
-        { id: '4', title: 'Aurora Boreale', description: 'Da settembre a marzo: caccia alle luci del nord lontano dalla città.', duration: '4-5 ore', priceRange: '€€' },
-        { id: '5', title: 'Harpa Concert Hall', description: 'Architettura contemporanea: facciata di 10.000 pannelli di vetro colorato.', duration: '1 ora' }
+        { id: '1', title: 'Hallgrímskirkja', description: 'Chiesa luterana che sembra un razzo: design ispirato alle colonne basaltiche islandesi.', duration: '1 ora', priceRange: '€', image: 'https://images.unsplash.com/photo-1535449084-0d5a35fa8e1b?w=1200&q=80' },
+        { id: '2', title: 'Blue Lagoon', description: 'Spa geotermica nell\'acqua lattiginosa azzurra a 38°C tra i campi di lava.', duration: '3-4 ore', priceRange: '€€€', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80' },
+        { id: '3', title: 'Golden Circle', description: 'Tour classico: Þingvellir (placche tettoniche), Geysir, cascata Gullfoss.', duration: '8 ore', image: 'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=1200&q=80' },
+        { id: '4', title: 'Aurora Boreale', description: 'Da settembre a marzo: caccia alle luci del nord lontano dalla città.', duration: '4-5 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=1200&q=80' },
+        { id: '5', title: 'Harpa Concert Hall', description: 'Architettura contemporanea: facciata di 10.000 pannelli di vetro colorato.', duration: '1 ora', image: 'https://images.unsplash.com/photo-1519974719765-e6559eac2579?w=1200&q=80' }
       ],
       'athens': [
-        { id: '1', title: 'Acropoli', description: 'Il Partenone domina la città da 2500 anni: simbolo della civiltà occidentale.', duration: '3-4 ore', priceRange: '€€' },
-        { id: '2', title: 'Museo dell\'Acropoli', description: 'I tesori del Partenone (quelli non portati via da Lord Elgin) in un museo moderno.', duration: '2-3 ore', priceRange: '€' },
-        { id: '3', title: 'Plaka', description: 'Il quartiere più antico: taverne, bouzouki, negozi di sandali e gatti ovunque.', duration: '3-4 ore' },
-        { id: '4', title: 'Agorà Antica', description: 'La piazza dove nacque la democrazia: filosofi, mercanti e politici qui dibattevano.', duration: '2 ore', priceRange: '€' },
-        { id: '5', title: 'Monastiraki', description: 'Il mercato delle pulci di Atene: antichità, vintage e souvlaki per strada.', duration: '2-3 ore' }
+        { id: '1', title: 'Acropoli', description: 'Il Partenone domina la città da 2500 anni: simbolo della civiltà occidentale.', duration: '3-4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73a92?w=1200&q=80' },
+        { id: '2', title: 'Museo dell\'Acropoli', description: 'I tesori del Partenone (quelli non portati via da Lord Elgin) in un museo moderno.', duration: '2-3 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73a92?w=1200&q=80' },
+        { id: '3', title: 'Plaka', description: 'Il quartiere più antico: taverne, bouzouki, negozi di sandali e gatti ovunque.', duration: '3-4 ore', image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1200&q=80' },
+        { id: '4', title: 'Agorà Antica', description: 'La piazza dove nacque la democrazia: filosofi, mercanti e politici qui dibattevano.', duration: '2 ore', priceRange: '€', image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1200&q=80' },
+        { id: '5', title: 'Monastiraki', description: 'Il mercato delle pulci di Atene: antichità, vintage e souvlaki per strada.', duration: '2-3 ore', image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1200&q=80' }
       ],
       'florence': [
-        { id: '1', title: 'Galleria degli Uffizi', description: 'Botticelli, Leonardo, Michelangelo, Caravaggio: il Rinascimento in un edificio.', duration: '4-5 ore', priceRange: '€€' },
-        { id: '2', title: 'Duomo di Firenze', description: 'La cupola di Brunelleschi: 463 gradini per la vista più bella della città.', duration: '2-3 ore', priceRange: '€€' },
-        { id: '3', title: 'Galleria dell\'Accademia', description: 'Il David di Michelangelo: 5 metri di perfezione marmorea che toglie il fiato.', duration: '2 ore', priceRange: '€€' },
-        { id: '4', title: 'Ponte Vecchio', description: 'Il ponte medievale con le botteghe degli orafi: romantico al tramonto.', duration: '1 ora' },
-        { id: '5', title: 'Palazzo Pitti e Giardino di Boboli', description: 'La reggia dei Medici con giardini all\'italiana che dominano la città.', duration: '3-4 ore', priceRange: '€€' }
+        { id: '1', title: 'Galleria degli Uffizi', description: 'Botticelli, Leonardo, Michelangelo, Caravaggio: il Rinascimento in un edificio.', duration: '4-5 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&q=80' },
+        { id: '2', title: 'Duomo di Firenze', description: 'La cupola di Brunelleschi: 463 gradini per la vista più bella della città.', duration: '2-3 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73a92?w=1200&q=80' },
+        { id: '3', title: 'Galleria dell\'Accademia', description: 'Il David di Michelangelo: 5 metri di perfezione marmorea che toglie il fiato.', duration: '2 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&q=80' },
+        { id: '4', title: 'Ponte Vecchio', description: 'Il ponte medievale con le botteghe degli orafi: romantico al tramonto.', duration: '1 ora', image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73a92?w=1200&q=80' },
+        { id: '5', title: 'Palazzo Pitti e Giardino di Boboli', description: 'La reggia dei Medici con giardini all\'italiana che dominano la città.', duration: '3-4 ore', priceRange: '€€', image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&q=80' }
       ],
       'santorini': [
         { id: '1', title: 'Oia al tramonto', description: 'Il tramonto più fotografato del mondo: cupole blu, case bianche, sole che si tuffa.', duration: '2-3 ore' },
@@ -1015,49 +1015,49 @@ export class CityService {
         { id: 'e5', title: 'Tempura Kondo', description: '2 stelle Michelin: la tempura leggera come aria, croccante come vetro.', priceRange: '€€€€', location: 'Ginza', image: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=1200&q=80' }
       ],
       'kyoto': [
-        { id: 'e1', title: 'Kaiseki tradizionale', description: 'La cucina dei monaci zen: estetica, stagionalità, ingredienti locali.', priceRange: '€€€-€€€€', location: 'Gion' },
-        { id: 'e2', title: 'Nishiki Market', description: 'La cucina di Kyoto: 400 anni di bancarelle con cibi da assaggiare.', priceRange: '€', location: 'Centro' },
-        { id: 'e3', title: 'Matcha e wagashi', description: 'Cerimonia del tè con dolci tradizionali: esperienza meditativa.', priceRange: '€€', location: 'Gion' },
-        { id: 'e4', title: 'Tofu di Nanzenji', description: 'Tofu artigianale cucinato in mille modi: specialità kyotoita.', priceRange: '€€', location: 'Nanzenji' }
+        { id: 'e1', title: 'Kaiseki tradizionale', description: 'La cucina dei monaci zen: estetica, stagionalità, ingredienti locali.', priceRange: '€€€-€€€€', location: 'Gion', image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=1200&q=80' },
+        { id: 'e2', title: 'Nishiki Market', description: 'La cucina di Kyoto: 400 anni di bancarelle con cibi da assaggiare.', priceRange: '€', location: 'Centro', image: 'https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=1200&q=80' },
+        { id: 'e3', title: 'Matcha e wagashi', description: 'Cerimonia del tè con dolci tradizionali: esperienza meditativa.', priceRange: '€€', location: 'Gion', image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=1200&q=80' },
+        { id: 'e4', title: 'Tofu di Nanzenji', description: 'Tofu artigianale cucinato in mille modi: specialità kyotoita.', priceRange: '€€', location: 'Nanzenji', image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=1200&q=80' }
       ],
       'bali': [
-        { id: 'e1', title: 'Warung locale', description: 'Nasi goreng, mie goreng, satay a pochi euro: la vera cucina balinese.', priceRange: '€', location: 'Ovunque' },
-        { id: 'e2', title: 'Babi Guling (maialino arrosto)', description: 'Il piatto balinese per eccellenza: ibu Oka a Ubud è leggendaria.', priceRange: '€', location: 'Ubud' },
-        { id: 'e3', title: 'Smoothie bowl a Canggu', description: 'Capitale mondiale dell\'healthy food: acai, pitaya, granola homemade.', priceRange: '€', location: 'Canggu' },
-        { id: 'e4', title: 'Bebek betutu', description: 'Anatra ripiena di spezie, cotta per ore avvolta in foglie di banano.', priceRange: '€€', location: 'Ubud' }
+        { id: 'e1', title: 'Warung locale', description: 'Nasi goreng, mie goreng, satay a pochi euro: la vera cucina balinese.', priceRange: '€', location: 'Ovunque', image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&q=80' },
+        { id: 'e2', title: 'Babi Guling (maialino arrosto)', description: 'Il piatto balinese per eccellenza: ibu Oka a Ubud è leggendaria.', priceRange: '€', location: 'Ubud', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e3', title: 'Smoothie bowl a Canggu', description: 'Capitale mondiale dell\'healthy food: acai, pitaya, granola homemade.', priceRange: '€', location: 'Canggu', image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=1200&q=80' },
+        { id: 'e4', title: 'Bebek betutu', description: 'Anatra ripiena di spezie, cotta per ore avvolta in foglie di banano.', priceRange: '€€', location: 'Ubud', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' }
       ],
       'bangkok': [
-        { id: 'e1', title: 'Pad Thai di Thip Samai', description: 'La leggenda del pad thai: code di 1 ora, ne vale ogni minuto.', priceRange: '€', location: 'Old Town' },
-        { id: 'e2', title: 'Street food a Yaowarat (Chinatown)', description: 'Il paradiso notturno: dim sum, granchi al pepe, frutti di mare fumanti.', priceRange: '€', location: 'Chinatown' },
-        { id: 'e3', title: 'Jay Fai (1 stella Michelin)', description: 'Nonna con occhialoni che cucina il miglior crab omelette del mondo.', priceRange: '€€€', location: 'Old Town' },
-        { id: 'e4', title: 'Som Tam (insalata di papaya)', description: 'Piccante, acido, dolce, salato: il perfetto equilibrio thai.', priceRange: '€', location: 'Ovunque' },
-        { id: 'e5', title: 'Rooftop bar con vista', description: 'Cocktail a 60 piani: Lebua (Hangover 2), Banyan Tree, Octave.', priceRange: '€€€', location: 'Silom/Sathorn' }
+        { id: 'e1', title: 'Pad Thai di Thip Samai', description: 'La leggenda del pad thai: code di 1 ora, ne vale ogni minuto.', priceRange: '€', location: 'Old Town', image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=1200&q=80' },
+        { id: 'e2', title: 'Street food a Yaowarat (Chinatown)', description: 'Il paradiso notturno: dim sum, granchi al pepe, frutti di mare fumanti.', priceRange: '€', location: 'Chinatown', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' },
+        { id: 'e3', title: 'Jay Fai (1 stella Michelin)', description: 'Nonna con occhialoni che cucina il miglior crab omelette del mondo.', priceRange: '€€€', location: 'Old Town', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e4', title: 'Som Tam (insalata di papaya)', description: 'Piccante, acido, dolce, salato: il perfetto equilibrio thai.', priceRange: '€', location: 'Ovunque', image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=1200&q=80' },
+        { id: 'e5', title: 'Rooftop bar con vista', description: 'Cocktail a 60 piani: Lebua (Hangover 2), Banyan Tree, Octave.', priceRange: '€€€', location: 'Silom/Sathorn', image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1200&q=80' }
       ],
       'singapore': [
-        { id: 'e1', title: 'Hawker Chan (1 stella Michelin)', description: 'Il cibo di strada più economico stellato: soya chicken rice a 3€.', priceRange: '€', location: 'Chinatown Complex' },
-        { id: 'e2', title: 'Chili Crab a Jumbo', description: 'Il piatto nazionale: granchio in salsa chili dolce-piccante. Mantou per intingere!', priceRange: '€€€', location: 'Clarke Quay' },
-        { id: 'e3', title: 'Lau Pa Sat Hawker Center', description: 'Centro food vittoriano: satay street si accende la sera.', priceRange: '€', location: 'CBD' },
-        { id: 'e4', title: 'Din Tai Fung', description: 'I migliori xiaolongbao del mondo: 18 pieghe, brodo perfetto.', priceRange: '€€', location: 'Vari' },
-        { id: 'e5', title: 'Indian food a Little India', description: 'Banana leaf rice, roti prata, fish head curry: India autentica.', priceRange: '€', location: 'Little India' }
+        { id: 'e1', title: 'Hawker Chan (1 stella Michelin)', description: 'Il cibo di strada più economico stellato: soya chicken rice a 3€.', priceRange: '€', location: 'Chinatown Complex', image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&q=80' },
+        { id: 'e2', title: 'Chili Crab a Jumbo', description: 'Il piatto nazionale: granchio in salsa chili dolce-piccante. Mantou per intingere!', priceRange: '€€€', location: 'Clarke Quay', image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=1200&q=80' },
+        { id: 'e3', title: 'Lau Pa Sat Hawker Center', description: 'Centro food vittoriano: satay street si accende la sera.', priceRange: '€', location: 'CBD', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' },
+        { id: 'e4', title: 'Din Tai Fung', description: 'I migliori xiaolongbao del mondo: 18 pieghe, brodo perfetto.', priceRange: '€€', location: 'Vari', image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=1200&q=80' },
+        { id: 'e5', title: 'Indian food a Little India', description: 'Banana leaf rice, roti prata, fish head curry: India autentica.', priceRange: '€', location: 'Little India', image: 'https://images.unsplash.com/photo-1583573636246-18cb2246697f?w=1200&q=80' }
       ],
       'seoul': [
-        { id: 'e1', title: 'Korean BBQ a Mapo', description: 'Griglia sul tavolo, soju che scorre, ssam wrap con kimchi.', priceRange: '€€', location: 'Mapo-gu' },
-        { id: 'e2', title: 'Myeongdong street food', description: 'Tornado potato, tteokbokki, hotteok: food walk infinito.', priceRange: '€', location: 'Myeongdong' },
-        { id: 'e3', title: 'Jjimdak a Andong', description: 'Pollo brasato con noodles di vetro: comfort food coreano.', priceRange: '€', location: 'Vari' },
-        { id: 'e4', title: 'Fried Chicken & Beer', description: 'Chimaek (chicken + maekju): rituale notturno coreano imperdibile.', priceRange: '€', location: 'Hongdae' },
-        { id: 'e5', title: 'Temple food', description: 'Cucina vegetariana buddista: 1000 anni di sapienza in ogni piatto.', priceRange: '€€', location: 'Insadong' }
+        { id: 'e1', title: 'Korean BBQ a Mapo', description: 'Griglia sul tavolo, soju che scorre, ssam wrap con kimchi.', priceRange: '€€', location: 'Mapo-gu', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e2', title: 'Myeongdong street food', description: 'Tornado potato, tteokbokki, hotteok: food walk infinito.', priceRange: '€', location: 'Myeongdong', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' },
+        { id: 'e3', title: 'Jjimdak a Andong', description: 'Pollo brasato con noodles di vetro: comfort food coreano.', priceRange: '€', location: 'Vari', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e4', title: 'Fried Chicken & Beer', description: 'Chimaek (chicken + maekju): rituale notturno coreano imperdibile.', priceRange: '€', location: 'Hongdae', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e5', title: 'Temple food', description: 'Cucina vegetariana buddista: 1000 anni di sapienza in ogni piatto.', priceRange: '€€', location: 'Insadong', image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=1200&q=80' }
       ],
       'hanoi': [
-        { id: 'e1', title: 'Phở a Phở Thìn', description: 'La zuppa nazionale: brodo di 12 ore, manzo tenero, erbe fresche.', priceRange: '€', location: 'Old Quarter' },
-        { id: 'e2', title: 'Bún Chả', description: 'Il piatto che Obama mangiò con Bourdain: maiale grigliato, noodles, erbe.', priceRange: '€', location: 'Bun Cha Huong Lien' },
-        { id: 'e3', title: 'Egg coffee (Cà Phê Trứng)', description: 'Caffè con crema di uovo: invenzione hanoiana degli anni \'40.', priceRange: '€', location: 'Giang Café' },
-        { id: 'e4', title: 'Bánh mì', description: 'La baguette vietnamita: fusione perfetta Francia-Vietnam.', priceRange: '€', location: 'Ovunque' }
+        { id: 'e1', title: 'Phở a Phở Thìn', description: 'La zuppa nazionale: brodo di 12 ore, manzo tenero, erbe fresche.', priceRange: '€', location: 'Old Quarter', image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=1200&q=80' },
+        { id: 'e2', title: 'Bún Chả', description: 'Il piatto che Obama mangiò con Bourdain: maiale grigliato, noodles, erbe.', priceRange: '€', location: 'Bun Cha Huong Lien', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e3', title: 'Egg coffee (Cà Phê Trứng)', description: 'Caffè con crema di uovo: invenzione hanoiana degli anni \'40.', priceRange: '€', location: 'Giang Café', image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1200&q=80' },
+        { id: 'e4', title: 'Bánh mì', description: 'La baguette vietnamita: fusione perfetta Francia-Vietnam.', priceRange: '€', location: 'Ovunque', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=1200&q=80' }
       ],
       'dubai': [
-        { id: 'e1', title: 'Al Fanar', description: 'Cucina emiratina autentica: machboos, harees, luqaimat.', priceRange: '€€', location: 'Festival City' },
-        { id: 'e2', title: 'Brunch del venerdì', description: 'Tradizione di Dubai: all-you-can-eat gourmet con champagne.', priceRange: '€€€€', location: 'Hotel 5 stelle' },
-        { id: 'e3', title: 'Ravi Restaurant', description: 'Pakistani economico: curry di capra, biryani, naan. Cult dal 1978.', priceRange: '€', location: 'Satwa' },
-        { id: 'e4', title: 'At.mosphere', description: 'Ristorante al 122° piano del Burj Khalifa: mangia sopra le nuvole.', priceRange: '€€€€', location: 'Burj Khalifa' }
+        { id: 'e1', title: 'Al Fanar', description: 'Cucina emiratina autentica: machboos, harees, luqaimat.', priceRange: '€€', location: 'Festival City', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e2', title: 'Brunch del venerdì', description: 'Tradizione di Dubai: all-you-can-eat gourmet con champagne.', priceRange: '€€€€', location: 'Hotel 5 stelle', image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=1200&q=80' },
+        { id: 'e3', title: 'Ravi Restaurant', description: 'Pakistani economico: curry di capra, biryani, naan. Cult dal 1978.', priceRange: '€', location: 'Satwa', image: 'https://images.unsplash.com/photo-1583573636246-18cb2246697f?w=1200&q=80' },
+        { id: 'e4', title: 'At.mosphere', description: 'Ristorante al 122° piano del Burj Khalifa: mangia sopra le nuvole.', priceRange: '€€€€', location: 'Burj Khalifa', image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1200&q=80' }
       ],
       // ===== EUROPA =====
       'lisbon': [
@@ -1087,40 +1087,40 @@ export class CityService {
         { id: 'e5', title: 'Aperitivo a Trastevere', description: 'Spritz al tramonto sulle piazzette: Freni e Frizioni, Ma Che Siete Venuti a Fà.', priceRange: '€', location: 'Trastevere', image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=1200&q=80' }
       ],
       'amsterdam': [
-        { id: 'e1', title: 'Stroopwafel fresco', description: 'Al mercato Albert Cuyp: waffle caldo con sciroppo che cola.', priceRange: '€', location: 'De Pijp' },
-        { id: 'e2', title: 'Rijsttafel indonesiana', description: 'Eredità coloniale: 20+ piatti indonesiani in un pasto. Blauw è top.', priceRange: '€€', location: 'De Pijp' },
-        { id: 'e3', title: 'Haring crudo', description: 'Aringa marinata con cipolla e cetriolini: street food olandese iconico.', priceRange: '€', location: 'Ovunque' },
-        { id: 'e4', title: 'Foodhallen', description: 'Ex deposito tram ora food court trendy: bitterballen, pulled pork, poké.', priceRange: '€€', location: 'Oud-West' }
+        { id: 'e1', title: 'Stroopwafel fresco', description: 'Al mercato Albert Cuyp: waffle caldo con sciroppo che cola.', priceRange: '€', location: 'De Pijp', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=1200&q=80' },
+        { id: 'e2', title: 'Rijsttafel indonesiana', description: 'Eredità coloniale: 20+ piatti indonesiani in un pasto. Blauw è top.', priceRange: '€€', location: 'De Pijp', image: 'https://images.unsplash.com/photo-1583573636246-18cb2246697f?w=1200&q=80' },
+        { id: 'e3', title: 'Haring crudo', description: 'Aringa marinata con cipolla e cetriolini: street food olandese iconico.', priceRange: '€', location: 'Ovunque', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' },
+        { id: 'e4', title: 'Foodhallen', description: 'Ex deposito tram ora food court trendy: bitterballen, pulled pork, poké.', priceRange: '€€', location: 'Oud-West', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' }
       ],
       'prague': [
-        { id: 'e1', title: 'Svíčková na smetaně', description: 'Manzo marinato con salsa alla panna, knedlíky e mirtilli.', priceRange: '€', location: 'Lokal' },
-        { id: 'e2', title: 'Trdelník', description: 'Dolce a camino caramellato: tourist trap ma irresistibile con gelato.', priceRange: '€', location: 'Ovunque' },
-        { id: 'e3', title: 'Birra ceca nei pivnice', description: 'Pilsner Urquell, Budvar alla spina: la migliore birra del mondo a 2€.', priceRange: '€', location: 'U Zlatého Tygra' },
-        { id: 'e4', title: 'Smažený sýr', description: 'Formaggio fritto con maionese e patatine: guilty pleasure praghese.', priceRange: '€', location: 'Ovunque' }
+        { id: 'e1', title: 'Svíčková na smetaně', description: 'Manzo marinato con salsa alla panna, knedlíky e mirtilli.', priceRange: '€', location: 'Lokal', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e2', title: 'Trdelník', description: 'Dolce a camino caramellato: tourist trap ma irresistibile con gelato.', priceRange: '€', location: 'Ovunque', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=1200&q=80' },
+        { id: 'e3', title: 'Birra ceca nei pivnice', description: 'Pilsner Urquell, Budvar alla spina: la migliore birra del mondo a 2€.', priceRange: '€', location: 'U Zlatého Tygra', image: 'https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=1200&q=80' },
+        { id: 'e4', title: 'Smažený sýr', description: 'Formaggio fritto con maionese e patatine: guilty pleasure praghese.', priceRange: '€', location: 'Ovunque', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' }
       ],
       'vienna': [
-        { id: 'e1', title: 'Sachertorte al Hotel Sacher', description: 'La torta al cioccolato originale dal 1832: umida, non troppo dolce.', priceRange: '€€', location: 'Centro' },
-        { id: 'e2', title: 'Wiener Schnitzel', description: 'Cotoletta di vitello battuta sottile, fritta nel burro: Figlmüller fa 30cm!', priceRange: '€€', location: 'Centro' },
-        { id: 'e3', title: 'Kaffeehäuser', description: 'Café Central, Sperl: ordina un Melange, leggi il giornale per ore.', priceRange: '€€', location: 'Centro' },
-        { id: 'e4', title: 'Naschmarkt', description: 'Mercato dal 1780: spezie, olive, hummus, brunch internazionale.', priceRange: '€-€€', location: 'Naschmarkt' }
+        { id: 'e1', title: 'Sachertorte al Hotel Sacher', description: 'La torta al cioccolato originale dal 1832: umida, non troppo dolce.', priceRange: '€€', location: 'Centro', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=1200&q=80' },
+        { id: 'e2', title: 'Wiener Schnitzel', description: 'Cotoletta di vitello battuta sottile, fritta nel burro: Figlmüller fa 30cm!', priceRange: '€€', location: 'Centro', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e3', title: 'Kaffeehäuser', description: 'Café Central, Sperl: ordina un Melange, leggi il giornale per ore.', priceRange: '€€', location: 'Centro', image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1200&q=80' },
+        { id: 'e4', title: 'Naschmarkt', description: 'Mercato dal 1780: spezie, olive, hummus, brunch internazionale.', priceRange: '€-€€', location: 'Naschmarkt', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' }
       ],
       'reykjavik': [
-        { id: 'e1', title: 'Hot dog da Bæjarins Beztu', description: 'Il miglior hot dog del mondo (parola di Clinton): agnello, remoulade, cipolla.', priceRange: '€', location: 'Centro' },
-        { id: 'e2', title: 'Pesce del giorno', description: 'Merluzzo, salmone, balena: pescato freschissimo, preparazione semplice.', priceRange: '€€-€€€', location: 'Porto' },
-        { id: 'e3', title: 'Þorramatur (cibo tradizionale)', description: 'Squalo fermentato (hákarl), testa di pecora: per i coraggiosi!', priceRange: '€€', location: 'Ristoranti tradizionali' },
-        { id: 'e4', title: 'Skyr', description: 'Yogurt islandese proteico: colazione nazionale, anche in gelato.', priceRange: '€', location: 'Ovunque' }
+        { id: 'e1', title: 'Hot dog da Bæjarins Beztu', description: 'Il miglior hot dog del mondo (parola di Clinton): agnello, remoulade, cipolla.', priceRange: '€', location: 'Centro', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' },
+        { id: 'e2', title: 'Pesce del giorno', description: 'Merluzzo, salmone, balena: pescato freschissimo, preparazione semplice.', priceRange: '€€-€€€', location: 'Porto', image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=1200&q=80' },
+        { id: 'e3', title: 'Þorramatur (cibo tradizionale)', description: 'Squalo fermentato (hákarl), testa di pecora: per i coraggiosi!', priceRange: '€€', location: 'Ristoranti tradizionali', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e4', title: 'Skyr', description: 'Yogurt islandese proteico: colazione nazionale, anche in gelato.', priceRange: '€', location: 'Ovunque', image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=1200&q=80' }
       ],
       'athens': [
-        { id: 'e1', title: 'Souvlaki da O Kostas', description: 'Il miglior souvlaki di Atene: pita, tzatziki, pomodoro, cipolla. 2€.', priceRange: '€', location: 'Syntagma' },
-        { id: 'e2', title: 'Taverna a Plaka', description: 'Moussaka, gemista, dolmades con retsina: cucina della nonna.', priceRange: '€', location: 'Plaka' },
-        { id: 'e3', title: 'Frutti di mare al Pireo', description: 'Polpo grigliato, sardine, calamari: vista mare, ouzo che scorre.', priceRange: '€€', location: 'Mikrolimano' },
-        { id: 'e4', title: 'Loukoumades', description: 'Frittelle al miele: le ciambelle greche calde servite con cannella.', priceRange: '€', location: 'Monastiraki' }
+        { id: 'e1', title: 'Souvlaki da O Kostas', description: 'Il miglior souvlaki di Atene: pita, tzatziki, pomodoro, cipolla. 2€.', priceRange: '€', location: 'Syntagma', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' },
+        { id: 'e2', title: 'Taverna a Plaka', description: 'Moussaka, gemista, dolmades con retsina: cucina della nonna.', priceRange: '€', location: 'Plaka', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e3', title: 'Frutti di mare al Pireo', description: 'Polpo grigliato, sardine, calamari: vista mare, ouzo che scorre.', priceRange: '€€', location: 'Mikrolimano', image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=1200&q=80' },
+        { id: 'e4', title: 'Loukoumades', description: 'Frittelle al miele: le ciambelle greche calde servite con cannella.', priceRange: '€', location: 'Monastiraki', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=1200&q=80' }
       ],
       'florence': [
-        { id: 'e1', title: 'Bistecca alla Fiorentina', description: '1.2 kg di Chianina al sangue: esperienza carnivora definitiva.', priceRange: '€€€', location: 'Trattoria Mario' },
-        { id: 'e2', title: 'Panino con il lampredotto', description: 'Trippa bollita nel panino: street food fiorentino DOC.', priceRange: '€', location: 'Mercato Centrale' },
-        { id: 'e3', title: 'Mercato Centrale', description: 'Piano terra: prodotti freschi. Piano alto: food court gourmet.', priceRange: '€-€€', location: 'San Lorenzo' },
-        { id: 'e4', title: 'Gelato da Vivoli', description: 'Dal 1929: crema, nocciola, stracciatella. I fiorentini vengono qui.', priceRange: '€', location: 'Santa Croce' }
+        { id: 'e1', title: 'Bistecca alla Fiorentina', description: '1.2 kg di Chianina al sangue: esperienza carnivora definitiva.', priceRange: '€€€', location: 'Trattoria Mario', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80' },
+        { id: 'e2', title: 'Panino con il lampredotto', description: 'Trippa bollita nel panino: street food fiorentino DOC.', priceRange: '€', location: 'Mercato Centrale', image: 'https://images.unsplash.com/photo-1595295333158-4742f73f8e85?w=1200&q=80' },
+        { id: 'e3', title: 'Mercato Centrale', description: 'Piano terra: prodotti freschi. Piano alto: food court gourmet.', priceRange: '€-€€', location: 'San Lorenzo', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80' },
+        { id: 'e4', title: 'Gelato da Vivoli', description: 'Dal 1929: crema, nocciola, stracciatella. I fiorentini vengono qui.', priceRange: '€', location: 'Santa Croce', image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?w=1200&q=80' }
       ],
       'santorini': [
         { id: 'e1', title: 'Fava santorini', description: 'Purea di legumi locali con cipolla caramellata e capperi: specialità unica.', priceRange: '€', location: 'Ovunque' },
@@ -1421,22 +1421,22 @@ export class CityService {
       'tokyo': [
         { id: 'i1', title: 'Tokyo Tower', description: 'Ispirata alla Torre Eiffel ma 13 metri più alta, la Tokyo Tower (333m) domina lo skyline dal 1958. Di notte si illumina di arancione o bianco a seconda della stagione.', image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=1200&q=80' },
         { id: 'i2', title: 'Incrocio di Shibuya', description: 'L\'incrocio più fotografato del mondo: quando il semaforo diventa verde, fino a 3000 persone attraversano contemporaneamente da tutte le direzioni. Guardalo dall\'alto allo Starbucks.', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1200&q=80' },
-        { id: 'i3', title: 'Statua di Hachiko', description: 'Hachiko, il cane che aspettò il padrone defunto alla stazione di Shibuya per 9 anni, è diventato simbolo di lealtà. La sua statua è il punto d\'incontro più famoso di Tokyo.' }
+        { id: 'i3', title: 'Statua di Hachiko', description: 'Hachiko, il cane che aspettò il padrone defunto alla stazione di Shibuya per 9 anni, è diventato simbolo di lealtà. La sua statua è il punto d\'incontro più famoso di Tokyo.', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1200&q=80' }
       ],
       'paris': [
         { id: 'i1', title: 'Torre Eiffel', description: 'La Dame de Fer fu costruita per l\'Expo 1889. Pesa 7.300 tonnellate e viene ridipinta ogni 7 anni con 60 tonnellate di vernice. Di notte scintilla per 5 minuti ogni ora.', image: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=1200&q=80' },
-        { id: 'i2', title: 'Arco di Trionfo', description: 'Napoleone lo commissionò nel 1806 per celebrare le vittorie militari. Sotto l\'arco arde la fiamma eterna del Milite Ignoto. La vista sui Champs-Élysées è indimenticabile.' },
-        { id: 'i3', title: 'Sacré-Cœur', description: 'La basilica bianca su Montmartre fu costruita dopo la sconfitta di Sedan (1870) come "espiazione". Il suo campanile ospita la Savoyarde, una delle campane più grandi del mondo.' }
+        { id: 'i2', title: 'Arco di Trionfo', description: 'Napoleone lo commissionò nel 1806 per celebrare le vittorie militari. Sotto l\'arco arde la fiamma eterna del Milite Ignoto. La vista sui Champs-Élysées è indimenticabile.', image: 'https://images.unsplash.com/photo-1509439581779-6298f75bf6e5?w=1200&q=80' },
+        { id: 'i3', title: 'Sacré-Cœur', description: 'La basilica bianca su Montmartre fu costruita dopo la sconfitta di Sedan (1870) come "espiazione". Il suo campanile ospita la Savoyarde, una delle campane più grandi del mondo.', image: 'https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=1200&q=80' }
       ],
       'rome': [
         { id: 'i1', title: 'Colosseo', description: 'L\'Anfiteatro Flavio poteva ospitare 50.000 spettatori per i giochi dei gladiatori. Costruito in soli 8 anni (72-80 d.C.), usava un sistema di carrucole per far apparire animali dal sottosuolo.', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1200&q=80' },
-        { id: 'i2', title: 'Fontana di Trevi', description: 'Ogni giorno vengono lanciati circa 3000€ nella fontana. I soldi vengono raccolti ogni notte e donati alla Caritas. La tradizione dice che chi lancia una moneta tornerà a Roma.' },
-        { id: 'i3', title: 'Cupola di San Pietro', description: 'Progettata da Michelangelo, la cupola di San Pietro è la più grande del mondo (42m di diametro). Salire i 551 gradini regala una vista su tutta Roma.' }
+        { id: 'i2', title: 'Fontana di Trevi', description: 'Ogni giorno vengono lanciati circa 3000€ nella fontana. I soldi vengono raccolti ogni notte e donati alla Caritas. La tradizione dice che chi lancia una moneta tornerà a Roma.', image: 'https://images.unsplash.com/photo-1525874684015-58379d421a52?w=1200&q=80' },
+        { id: 'i3', title: 'Cupola di San Pietro', description: 'Progettata da Michelangelo, la cupola di San Pietro è la più grande del mondo (42m di diametro). Salire i 551 gradini regala una vista su tutta Roma.', image: 'https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=1200&q=80' }
       ],
       'barcelona': [
         { id: 'i1', title: 'Sagrada Familia', description: 'Gaudí lavorò alla basilica per 43 anni, sapendo che non l\'avrebbe vista finita. Iniziata nel 1882, sarà completata nel 2026, centenario della sua morte. Le torri arriveranno a 172.5 metri.', image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=1200&q=80' },
-        { id: 'i2', title: 'Park Güell', description: 'Nato come città-giardino per 60 famiglie ricche, fu un flop commerciale. Oggi è il parco più visitato di Spagna: il drago di mosaico (El Drac) è il simbolo di Barcellona.' },
-        { id: 'i3', title: 'Casa Batlló', description: 'La "Casa delle Ossa" ha una facciata ondulata che ricorda il mare, con balconi a forma di teschio e un tetto a scaglie di drago. È il capolavoro domestico di Gaudí.' }
+        { id: 'i2', title: 'Park Güell', description: 'Nato come città-giardino per 60 famiglie ricche, fu un flop commerciale. Oggi è il parco più visitato di Spagna: il drago di mosaico (El Drac) è il simbolo di Barcellona.', image: 'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=1200&q=80' },
+        { id: 'i3', title: 'Casa Batlló', description: 'La "Casa delle Ossa" ha una facciata ondulata che ricorda il mare, con balconi a forma di teschio e un tetto a scaglie di drago. È il capolavoro domestico di Gaudí.', image: 'https://images.unsplash.com/photo-1564221710304-0b37c8b9d729?w=1200&q=80' }
       ],
       'amsterdam': [
         { id: 'i1', title: 'Canali (Grachtengordel)', description: 'I 165 canali di Amsterdam formano 90 isole collegate da 1281 ponti. Costruiti nel XVII secolo per drenare le paludi e trasportare merci, sono Patrimonio UNESCO dal 2010.', image: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=1200&q=80' },
