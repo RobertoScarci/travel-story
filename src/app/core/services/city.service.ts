@@ -1,11 +1,12 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { City, CityDetails, CitySection, SectionItem, ViralContent, FlightDeal, HiddenGemInfo, HiddenGemReason } from '../models/city.model';
+import { DatabaseService } from './database.service';
 
 /**
  * CityService - Data provider for city information
  * 
- * Backend-ready: Currently uses mock data
- * Future: Replace methods with HTTP calls to REST API
+ * Now uses DatabaseService for persistent storage.
+ * Falls back to mock data if database is empty.
  * 
  * All data structures mirror expected API responses for seamless transition.
  */
@@ -13,11 +14,40 @@ import { City, CityDetails, CitySection, SectionItem, ViralContent, FlightDeal, 
   providedIn: 'root'
 })
 export class CityService {
+  private databaseService = inject(DatabaseService);
   private citiesSignal = signal<City[]>([]);
   readonly cities = this.citiesSignal.asReadonly();
+  private initialized = false;
 
   constructor() {
-    this.initializeMockData();
+    this.initialize();
+  }
+
+  /**
+   * Initialize service - load cities from database or use mock data
+   */
+  private async initialize(): Promise<void> {
+    await this.databaseService.initialize();
+    
+    const cities = await this.databaseService.getAllCities();
+    
+    if (cities.length > 0) {
+      // Database has cities, use them
+      this.citiesSignal.set(cities);
+      this.initialized = true;
+    } else {
+      // Database is empty, use mock data as fallback
+      this.initializeMockData();
+      this.initialized = true;
+    }
+  }
+
+  /**
+   * Refresh cities from database
+   */
+  async refreshCities(): Promise<void> {
+    const cities = await this.databaseService.getAllCities();
+    this.citiesSignal.set(cities);
   }
 
   /**
