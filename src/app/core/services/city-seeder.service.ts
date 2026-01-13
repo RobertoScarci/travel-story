@@ -404,10 +404,13 @@ export class CitySeederService {
     const popularCities = ['parigi', 'roma', 'londra', 'tokyo', 'new york', 'barcellona'];
     const normalizedName = cityName.toLowerCase();
     
+    let rating: number;
     if (popularCities.some(c => normalizedName.includes(c))) {
-      return 4.5 + Math.random() * 0.3; // 4.5 - 4.8
+      rating = 4.5 + Math.random() * 0.3; // 4.5 - 4.8
+    } else {
+      rating = 4.0 + Math.random() * 0.8; // 4.0 - 4.8
     }
-    return 4.0 + Math.random() * 0.8; // 4.0 - 4.8
+    return Math.round(rating * 10) / 10; // Arrotonda a 1 decimale
   }
 
   /**
