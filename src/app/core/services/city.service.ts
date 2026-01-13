@@ -57,11 +57,19 @@ export class CityService {
       this.citiesSignal.set(cities);
       
       // Check if we need to add new seeded cities (incrementally)
-      this.addMissingSeededCities(cities);
+      await this.addMissingSeededCities(cities);
+      
+      // Reload cities after seeding
+      cities = await this.databaseService.getAllCities();
+      this.citiesSignal.set(cities);
     }
     
-    // Populate missing images for all cities (in background, don't block)
-    this.populateMissingImagesInBackground(cities);
+    // Populate ALL missing images synchronously for all cities
+    await this.populateAllMissingImages(cities);
+    
+    // Final reload to get all updated images
+    cities = await this.databaseService.getAllCities();
+    this.citiesSignal.set(cities);
     
     this.initialized = true;
   }
@@ -80,22 +88,20 @@ export class CityService {
     
     if (missingCities.length > 0) {
       console.log(`Trovate ${missingCities.length} nuove città da aggiungere...`);
-      // Seed only missing cities in background
-      setTimeout(async () => {
-        for (const cityInfo of missingCities) {
-          try {
-            const city = await this.citySeeder.seedCity(cityInfo);
-            if (city) {
-              const currentCities = this.citiesSignal();
-              this.citiesSignal.set([...currentCities, city]);
-            }
-            await new Promise(resolve => setTimeout(resolve, 200));
-          } catch (error) {
-            console.warn(`Errore seeding ${cityInfo.name}:`, error);
+      for (const cityInfo of missingCities) {
+        try {
+          const city = await this.citySeeder.seedCity(cityInfo);
+          if (city) {
+            await this.databaseService.saveCity(city);
+            const currentCities = this.citiesSignal();
+            this.citiesSignal.set([...currentCities, city]);
           }
+          await new Promise(resolve => setTimeout(resolve, 200)); // Rate limiting
+        } catch (error) {
+          console.warn(`Errore seeding ${cityInfo.name}:`, error);
         }
-        console.log(`Aggiunte ${missingCities.length} nuove città`);
-      }, 5000); // Wait 5 seconds after initialization
+      }
+      console.log(`Aggiunte ${missingCities.length} nuove città`);
     }
   }
 
@@ -128,59 +134,46 @@ export class CityService {
   }
 
   /**
-   * Populate missing images for all cities in background
+   * Populate ALL missing images for all cities synchronously
    */
-  private async populateMissingImagesInBackground(cities: City[]): Promise<void> {
-    // Run in background, don't block initialization
-    setTimeout(async () => {
-      console.log('Popolamento immagini mancanti in background...');
-      let updatedCount = 0;
-      
-      for (const city of cities) {
-        try {
-          // Check if images are missing or invalid
-          const hasValidThumbnail = city.thumbnailImage && 
-            !city.thumbnailImage.toLowerCase().includes('placeholder') &&
-            !city.thumbnailImage.toLowerCase().includes('default') &&
-            city.thumbnailImage.trim() !== '';
-          const hasValidHero = city.heroImage && 
-            !city.heroImage.toLowerCase().includes('placeholder') &&
-            !city.heroImage.toLowerCase().includes('default') &&
-            city.heroImage.trim() !== '';
+  private async populateAllMissingImages(cities: City[]): Promise<void> {
+    console.log(`Popolamento immagini per ${cities.length} città...`);
+    let updatedCount = 0;
+    
+    for (const city of cities) {
+      try {
+        // Check if images are missing, invalid, or duplicate placeholders
+        const hasValidThumbnail = city.thumbnailImage && 
+          !city.thumbnailImage.toLowerCase().includes('placeholder') &&
+          !city.thumbnailImage.toLowerCase().includes('default') &&
+          city.thumbnailImage.trim() !== '';
+        const hasValidHero = city.heroImage && 
+          !city.heroImage.toLowerCase().includes('placeholder') &&
+          !city.heroImage.toLowerCase().includes('default') &&
+          city.heroImage.trim() !== '';
+        
+        // Also check for placeholder images that might be duplicates
+        const isPlaceholder = city.thumbnailImage?.includes('1488646953014-85cb44e25828') || 
+                              city.thumbnailImage?.includes('1544025162-d76694265947');
+        
+        if (!hasValidThumbnail || !hasValidHero || isPlaceholder) {
+          const result = await this.imagePopulator.populateCityImages(city, true);
           
-          if (!hasValidThumbnail || !hasValidHero) {
-            const result = await this.imagePopulator.populateCityImages(city, true);
-            
-            if (result.updated) {
-              // Reload from database to get updated city
-              const updatedCity = await this.databaseService.getCity(city.id);
-              if (updatedCity) {
-                // Update signal
-                const currentCities = this.citiesSignal();
-                const cityIndex = currentCities.findIndex(c => c.id === city.id);
-                if (cityIndex >= 0) {
-                  currentCities[cityIndex] = updatedCity;
-                  this.citiesSignal.set([...currentCities]);
-                }
-              }
-              
-              updatedCount++;
-            }
-            
-            // Small delay to avoid rate limiting
-            await new Promise(resolve => setTimeout(resolve, 300));
+          if (result.updated) {
+            updatedCount++;
           }
-        } catch (error) {
-          console.warn(`Errore popolamento immagini per ${city.name}:`, error);
+          await new Promise(resolve => setTimeout(resolve, 300)); // Rate limiting
         }
+      } catch (error) {
+        console.warn(`Errore popolamento immagini per ${city.name}:`, error);
       }
-      
-      if (updatedCount > 0) {
-        console.log(`Immagini aggiornate per ${updatedCount} città`);
-      } else {
-        console.log('Tutte le città hanno già immagini valide');
-      }
-    }, 2000); // Start after 2 seconds to not block initialization
+    }
+    
+    if (updatedCount > 0) {
+      console.log(`Immagini aggiornate per ${updatedCount} città`);
+    } else {
+      console.log('Tutte le città hanno già immagini valide');
+    }
   }
 
   /**
