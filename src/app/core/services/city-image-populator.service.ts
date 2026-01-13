@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, Injector } from '@angular/core';
 import { UnsplashService } from './api/unsplash.service';
 import { PexelsService } from './api/pexels.service';
 import { WikipediaService } from './api/wikipedia.service';
@@ -27,11 +27,16 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class CityImagePopulatorService {
+  private injector = inject(Injector);
   private unsplashService = inject(UnsplashService);
   private pexelsService = inject(PexelsService);
   private wikipediaService = inject(WikipediaService);
-  private cityService = inject(CityService);
   private databaseService = inject(DatabaseService);
+  
+  // Lazy injection to break circular dependency
+  private get cityService(): CityService {
+    return this.injector.get(CityService);
+  }
 
   /**
    * Verifica se un'immagine è valida (non è un placeholder o URL vuoto)
@@ -241,8 +246,8 @@ export class CityImagePopulatorService {
 
       const bestPhoto = photos[0];
       return {
-        thumbnailUrl: this.buildThumbnailUrl(bestPhoto),
-        heroUrl: this.buildHeroUrl(bestPhoto)
+        thumbnailUrl: this.buildUnsplashThumbnailUrl(bestPhoto),
+        heroUrl: this.buildUnsplashHeroUrl(bestPhoto)
       };
     } catch (error) {
       return {
