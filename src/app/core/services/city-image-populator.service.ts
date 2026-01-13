@@ -173,10 +173,22 @@ export class CityImagePopulatorService {
       console.debug(`Wikipedia failed for ${city.name}, using generic fallback...`);
     }
 
-    // Fallback finale: immagine generica
-    const fallbackImage = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80';
+    // Fallback finale: usa placeholder unico basato sul nome della città per evitare duplicati
+    const cityHash = this.simpleHash(city.name + city.country);
+    const placeholderVariations = [
+      '1488646953014-85cb44e25828', // Travel map
+      '1506905925346-21bda4d32df4', // Mountains
+      '1511920170033-f8396924c348', // Beach
+      '1514395462725-fb4566210144', // City skyline
+      '1526392060635-9d6019884377', // Architecture
+      '1533106497176-45ae19e68ba2', // Culture
+      '1543429257-3eb0b65d9c58',    // Historic
+      '1559511260-66a68eee9b9f'     // Nature
+    ];
+    const selectedPlaceholder = placeholderVariations[cityHash % placeholderVariations.length];
+    const fallbackImage = `https://images.unsplash.com/photo-${selectedPlaceholder}?w=1200&q=80`;
     thumbnailUrl = needsThumbnail ? fallbackImage : thumbnailUrl;
-    heroUrl = needsHero ? fallbackImage : heroUrl;
+    heroUrl = needsHero ? fallbackImage.replace('w=1200', 'w=1920') : heroUrl;
     
     if (saveToDatabase) {
       await this.updateCityImages(city, thumbnailUrl, heroUrl);

@@ -135,10 +135,25 @@ export class CityService {
 
   /**
    * Populate ALL missing images for all cities synchronously
+   * FORZA il ri-popolamento se le immagini sono placeholder o duplicate
    */
   private async populateAllMissingImages(cities: City[]): Promise<void> {
     console.log(`Popolamento immagini per ${cities.length} città...`);
     let updatedCount = 0;
+    
+    // Raccogli tutte le immagini usate per rilevare duplicati
+    const imageUsage = new Map<string, string[]>();
+    cities.forEach(city => {
+      [city.thumbnailImage, city.heroImage].forEach(url => {
+        if (url) {
+          const baseUrl = url.split('?')[0];
+          if (!imageUsage.has(baseUrl)) {
+            imageUsage.set(baseUrl, []);
+          }
+          imageUsage.get(baseUrl)!.push(city.id);
+        }
+      });
+    });
     
     for (const city of cities) {
       try {
@@ -152,11 +167,23 @@ export class CityService {
           !city.heroImage.toLowerCase().includes('default') &&
           city.heroImage.trim() !== '';
         
-        // Also check for placeholder images that might be duplicates
-        const isPlaceholder = city.thumbnailImage?.includes('1488646953014-85cb44e25828') || 
-                              city.thumbnailImage?.includes('1544025162-d76694265947');
+        // Check for known placeholder images that are duplicates
+        const knownPlaceholders = [
+          '1488646953014-85cb44e25828',
+          '1544025162-d76694265947'
+        ];
+        const isKnownPlaceholder = knownPlaceholders.some(id => 
+          city.thumbnailImage?.includes(id) || city.heroImage?.includes(id)
+        );
         
-        if (!hasValidThumbnail || !hasValidHero || isPlaceholder) {
+        // Check if this image is used by multiple cities (duplicate)
+        const thumbnailBase = city.thumbnailImage?.split('?')[0];
+        const heroBase = city.heroImage?.split('?')[0];
+        const isDuplicate = (thumbnailBase && (imageUsage.get(thumbnailBase)?.length || 0) > 1) ||
+                           (heroBase && (imageUsage.get(heroBase)?.length || 0) > 1);
+        
+        if (!hasValidThumbnail || !hasValidHero || isKnownPlaceholder || isDuplicate) {
+          console.log(`Aggiornamento immagini per ${city.name}...`);
           const result = await this.imagePopulator.populateCityImages(city, true);
           
           if (result.updated) {
