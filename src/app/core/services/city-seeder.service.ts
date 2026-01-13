@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { City } from '../models/city.model';
 import { DatabaseService } from './database.service';
 import { UnsplashService } from './api/unsplash.service';
+import { PexelsService } from './api/pexels.service';
 import { WikipediaService } from './api/wikipedia.service';
 import { CountryService } from './api/country.service';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
@@ -23,6 +24,7 @@ import { catchError, map } from 'rxjs/operators';
 export class CitySeederService {
   private databaseService = inject(DatabaseService);
   private unsplashService = inject(UnsplashService);
+  private pexelsService = inject(PexelsService);
   private wikipediaService = inject(WikipediaService);
   private countryService = inject(CountryService);
 
@@ -296,15 +298,17 @@ export class CitySeederService {
   }
 
   /**
-   * Ottiene immagini per una città da Unsplash
-   * Garantisce sempre almeno un'immagine (usa fallback se necessario)
+   * Ottiene immagini per una città da Unsplash, con fallback a Pexels
+   * Garantisce sempre immagini uniche per ogni città
    */
   private async fetchCityImages(cityName: string, country: string): Promise<{
     thumbnailImage: string;
     heroImage: string;
   }> {
+    const query = `${cityName} ${country} city travel`;
+    
+    // Try 1: Unsplash
     try {
-      const query = `${cityName} ${country} city travel`;
       const photos = await firstValueFrom(
         this.unsplashService.searchPhotos(query, 3, 1).pipe(
           catchError(() => of([]))
@@ -319,15 +323,61 @@ export class CitySeederService {
         };
       }
     } catch (error) {
-      console.warn(`Could not fetch Unsplash images for ${cityName}:`, error);
+      console.debug(`Unsplash failed for ${cityName}, trying Pexels...`);
     }
 
-    // Fallback: usa un'immagine generica di viaggio
-    const fallbackImage = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80';
+    // Try 2: Pexels
+    try {
+      const pexelsPhotos = await firstValueFrom(
+        this.pexelsService.searchPhotos(query, 1, 1).pipe(
+          catchError(() => of([]))
+        )
+      );
+
+      if (pexelsPhotos.length > 0) {
+        const photo = pexelsPhotos[0];
+        return {
+          thumbnailImage: `${photo.src.original}?w=1200&q=80&fit=crop&auto=format`,
+          heroImage: `${photo.src.original}?w=1920&q=85&fit=crop&auto=format`
+        };
+      }
+    } catch (error) {
+      console.debug(`Pexels failed for ${cityName}`);
+    }
+
+    // Last resort: genera un placeholder unico basato sul nome della città
+    // Questo evita che tutte le città usino la stessa immagine
+    const cityHash = this.simpleHash(cityName + country);
+    const placeholderVariations = [
+      '1488646953014-85cb44e25828', // Travel map
+      '1506905925346-21bda4d32df4', // Mountains
+      '1511920170033-f8396924c348', // Beach
+      '1514395462725-fb4566210144', // City skyline
+      '1526392060635-9d6019884377', // Architecture
+      '1533106497176-45ae19e68ba2', // Culture
+      '1543429257-3eb0b65d9c58',    // Historic
+      '1559511260-66a68eee9b9f'     // Nature
+    ];
+    const selectedPlaceholder = placeholderVariations[cityHash % placeholderVariations.length];
+    const fallbackImage = `https://images.unsplash.com/photo-${selectedPlaceholder}?w=1200&q=80`;
+    
     return {
       thumbnailImage: fallbackImage,
-      heroImage: fallbackImage
+      heroImage: fallbackImage.replace('w=1200', 'w=1920')
     };
+  }
+
+  /**
+   * Genera un hash semplice per selezionare placeholder unici
+   */
+  private simpleHash(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
   }
 
   /**
