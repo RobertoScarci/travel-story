@@ -138,39 +138,48 @@ export class CityService {
   /**
    * Populate ALL missing images for all cities synchronously
    * FORZA il ri-popolamento se le immagini sono placeholder o duplicate
+   * GARANTISCE che ogni città abbia immagini uniche - processo iterativo automatico
    */
   private async populateAllMissingImages(cities: City[]): Promise<void> {
-    console.log(`Popolamento immagini per ${cities.length} città...`);
-    let updatedCount = 0;
+    console.log(`🔍 Analisi immagini per ${cities.length} città...`);
+    let totalUpdatedCount = 0;
+    let iterationCount = 0;
+    const maxIterations = 3; // Massimo 3 iterazioni per risolvere tutti i duplicati
     
-    // Raccogli tutte le immagini usate per rilevare duplicati
-    const imageUsage = new Map<string, string[]>();
-    cities.forEach(city => {
-      [city.thumbnailImage, city.heroImage].forEach(url => {
-        if (url) {
-          const baseUrl = url.split('?')[0];
-          if (!imageUsage.has(baseUrl)) {
-            imageUsage.set(baseUrl, []);
-          }
-          imageUsage.get(baseUrl)!.push(city.id);
-        }
-      });
-    });
-    
-    // Lista di città da aggiornare (con immagini duplicate o placeholder)
-    const citiesToUpdate: City[] = [];
-    
-    for (const city of cities) {
-      // Check if images are missing, invalid, or duplicate placeholders
-      const hasValidThumbnail = city.thumbnailImage && 
-        !city.thumbnailImage.toLowerCase().includes('placeholder') &&
-        !city.thumbnailImage.toLowerCase().includes('default') &&
-        city.thumbnailImage.trim() !== '';
-      const hasValidHero = city.heroImage && 
-        !city.heroImage.toLowerCase().includes('placeholder') &&
-        !city.heroImage.toLowerCase().includes('default') &&
-        city.heroImage.trim() !== '';
+    // Continua finché ci sono duplicati o fino a maxIterations
+    while (iterationCount < maxIterations) {
+      iterationCount++;
+      console.log(`\n🔄 Iterazione ${iterationCount}/${maxIterations} - Rilevamento duplicati...`);
       
+      // Raccogli tutte le immagini usate per rilevare duplicati
+      const imageUsage = new Map<string, string[]>();
+      cities.forEach(city => {
+        [city.thumbnailImage, city.heroImage].forEach(url => {
+          if (url) {
+            // Usa base URL senza parametri per rilevare duplicati
+            const baseUrl = url.split('?')[0].split('&')[0];
+            if (!imageUsage.has(baseUrl)) {
+              imageUsage.set(baseUrl, []);
+            }
+            imageUsage.get(baseUrl)!.push(city.id);
+          }
+        });
+      });
+      
+      // Lista di città da aggiornare (con immagini duplicate o placeholder)
+      const citiesToUpdate: City[] = [];
+      
+      for (const city of cities) {
+        // Check if images are missing, invalid, or duplicate placeholders
+        const hasValidThumbnail = city.thumbnailImage && 
+          !city.thumbnailImage.toLowerCase().includes('placeholder') &&
+          !city.thumbnailImage.toLowerCase().includes('default') &&
+          city.thumbnailImage.trim() !== '';
+        const hasValidHero = city.heroImage && 
+          !city.heroImage.toLowerCase().includes('placeholder') &&
+          !city.heroImage.toLowerCase().includes('default') &&
+          city.heroImage.trim() !== '';
+        
         // Check for known placeholder images that are duplicates
         const knownPlaceholders = [
           '1488646953014-85cb44e25828',
@@ -180,59 +189,66 @@ export class CityService {
           city.thumbnailImage?.includes(id) || city.heroImage?.includes(id)
         );
         
-        // Force update if image is a known duplicate placeholder (even if URL is valid)
-        if (isKnownPlaceholder) {
-          citiesToUpdate.push(city);
-          continue;
-        }
-      
-      // Check if this image is used by multiple cities (duplicate)
-      const thumbnailBase = city.thumbnailImage?.split('?')[0];
-      const heroBase = city.heroImage?.split('?')[0];
-      const thumbnailUsage = thumbnailBase ? (imageUsage.get(thumbnailBase)?.length || 0) : 0;
-      const heroUsage = heroBase ? (imageUsage.get(heroBase)?.length || 0) : 0;
-      const isDuplicate = thumbnailUsage > 1 || heroUsage > 1;
-      
-      // FORZA il ri-popolamento se mancanti, placeholder noti, o duplicate
-      if (!hasValidThumbnail || !hasValidHero || isKnownPlaceholder || isDuplicate) {
-        citiesToUpdate.push(city);
-      }
-    }
-    
-    if (citiesToUpdate.length === 0) {
-      console.log('✅ Tutte le città hanno già immagini valide e uniche');
-      return;
-    }
-    
-    console.log(`🔄 Trovate ${citiesToUpdate.length} città con immagini da aggiornare (duplicate o placeholder)`);
-    console.log(`Città da aggiornare: ${citiesToUpdate.map(c => c.name).join(', ')}`);
-    
-    // Aggiorna tutte le città con immagini duplicate o placeholder
-    for (const city of citiesToUpdate) {
-      try {
-        console.log(`📸 Aggiornamento immagini per ${city.name}...`);
-        // Forza il ri-popolamento anche se l'immagine sembra valida ma è un duplicato
-        const result = await this.imagePopulator.populateCityImages(city, true, true);
+        // Check if this image is used by multiple cities (duplicate)
+        const thumbnailBase = city.thumbnailImage?.split('?')[0]?.split('&')[0];
+        const heroBase = city.heroImage?.split('?')[0]?.split('&')[0];
+        const thumbnailUsage = thumbnailBase ? (imageUsage.get(thumbnailBase)?.length || 0) : 0;
+        const heroUsage = heroBase ? (imageUsage.get(heroBase)?.length || 0) : 0;
+        const isDuplicate = thumbnailUsage > 1 || heroUsage > 1;
         
-        if (result.updated) {
-          updatedCount++;
-          console.log(`  ✅ ${city.name} aggiornata`);
-        } else {
-          console.log(`  ⚠️ ${city.name} non aggiornata (risultato: ${JSON.stringify(result)})`);
+        // FORZA il ri-popolamento se mancanti, placeholder noti, o duplicate
+        if (!hasValidThumbnail || !hasValidHero || isKnownPlaceholder || isDuplicate) {
+          citiesToUpdate.push(city);
         }
-        await new Promise(resolve => setTimeout(resolve, 300)); // Rate limiting
-      } catch (error) {
-        console.warn(`  ❌ Errore popolamento immagini per ${city.name}:`, error);
       }
+      
+      if (citiesToUpdate.length === 0) {
+        console.log('✅ Tutte le città hanno immagini valide e uniche!');
+        break;
+      }
+      
+      console.log(`📊 Trovate ${citiesToUpdate.length} città con immagini duplicate o placeholder`);
+      
+      let iterationUpdatedCount = 0;
+      // Aggiorna tutte le città con immagini duplicate o placeholder
+      for (const city of citiesToUpdate) {
+        try {
+          // Forza il ri-popolamento anche se l'immagine sembra valida ma è un duplicato
+          const result = await this.imagePopulator.populateCityImages(city, true, true);
+          
+          if (result.updated) {
+            iterationUpdatedCount++;
+            totalUpdatedCount++;
+            // Aggiorna immediatamente la città nell'array per la prossima iterazione
+            const cityIndex = cities.findIndex(c => c.id === city.id);
+            if (cityIndex >= 0) {
+              if (result.thumbnailUrl) {
+                cities[cityIndex].thumbnailImage = result.thumbnailUrl;
+              }
+              if (result.heroUrl) {
+                cities[cityIndex].heroImage = result.heroUrl;
+              }
+            }
+          }
+          await new Promise(resolve => setTimeout(resolve, 250)); // Rate limiting
+        } catch (error) {
+          console.warn(`Errore popolamento immagini per ${city.name}:`, error);
+        }
+      }
+      
+      console.log(`  ✅ Aggiornate ${iterationUpdatedCount} città in questa iterazione`);
+      
+      // Ricarica le città dal database dopo ogni iterazione
+      cities = await this.databaseService.getAllCities();
+      this.citiesSignal.set(cities);
     }
     
-    if (updatedCount > 0) {
-      console.log(`✅ Immagini aggiornate per ${updatedCount} città su ${citiesToUpdate.length}`);
-      // Ricarica tutte le città dal database per assicurarsi che siano sincronizzate
+    if (totalUpdatedCount > 0) {
+      console.log(`\n✅ Processo completato: ${totalUpdatedCount} aggiornamenti totali in ${iterationCount} iterazioni`);
+      // Final reload
       await this.refreshCities();
-      console.log('✅ Database aggiornato con nuove immagini');
-    } else {
-      console.log('⚠️ Nessuna immagine è stata aggiornata');
+    } else if (iterationCount >= maxIterations) {
+      console.log(`\n⚠️ Raggiunto limite di iterazioni. Verifica manualmente se persistono duplicati.`);
     }
   }
 
