@@ -64,12 +64,22 @@ export class CityService {
       this.citiesSignal.set(cities);
     }
     
+    // Remove duplicate cities (based on ID) before populating images
+    cities = this.removeDuplicateCities(cities);
+    if (cities.length !== (await this.databaseService.getAllCities()).length) {
+      // Save deduplicated cities back to database
+      await this.databaseService.saveCities(cities);
+      this.citiesSignal.set(cities);
+    }
+    
     // Populate ALL missing images synchronously for all cities
     // This will detect and replace all duplicate/placeholder images
     await this.populateAllMissingImages(cities);
     
     // Final reload to get all updated images
     cities = await this.databaseService.getAllCities();
+    // Remove duplicates again after reload
+    cities = this.removeDuplicateCities(cities);
     this.citiesSignal.set(cities);
     
     console.log('✅ Inizializzazione completata. Città caricate:', cities.length);
