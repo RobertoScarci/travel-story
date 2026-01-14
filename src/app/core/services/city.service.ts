@@ -65,12 +65,14 @@ export class CityService {
     }
     
     // Populate ALL missing images synchronously for all cities
+    // This will detect and replace all duplicate/placeholder images
     await this.populateAllMissingImages(cities);
     
     // Final reload to get all updated images
     cities = await this.databaseService.getAllCities();
     this.citiesSignal.set(cities);
     
+    console.log('✅ Inizializzazione completata. Città caricate:', cities.length);
     this.initialized = true;
   }
 
@@ -197,30 +199,40 @@ export class CityService {
       }
     }
     
-    console.log(`Trovate ${citiesToUpdate.length} città con immagini da aggiornare (duplicate o placeholder)`);
+    if (citiesToUpdate.length === 0) {
+      console.log('✅ Tutte le città hanno già immagini valide e uniche');
+      return;
+    }
+    
+    console.log(`🔄 Trovate ${citiesToUpdate.length} città con immagini da aggiornare (duplicate o placeholder)`);
+    console.log(`Città da aggiornare: ${citiesToUpdate.map(c => c.name).join(', ')}`);
     
     // Aggiorna tutte le città con immagini duplicate o placeholder
     for (const city of citiesToUpdate) {
       try {
-        console.log(`Aggiornamento immagini per ${city.name}...`);
+        console.log(`📸 Aggiornamento immagini per ${city.name}...`);
         // Forza il ri-popolamento anche se l'immagine sembra valida ma è un duplicato
         const result = await this.imagePopulator.populateCityImages(city, true, true);
         
         if (result.updated) {
           updatedCount++;
+          console.log(`  ✅ ${city.name} aggiornata`);
+        } else {
+          console.log(`  ⚠️ ${city.name} non aggiornata (risultato: ${JSON.stringify(result)})`);
         }
         await new Promise(resolve => setTimeout(resolve, 300)); // Rate limiting
       } catch (error) {
-        console.warn(`Errore popolamento immagini per ${city.name}:`, error);
+        console.warn(`  ❌ Errore popolamento immagini per ${city.name}:`, error);
       }
     }
     
     if (updatedCount > 0) {
-      console.log(`✅ Immagini aggiornate per ${updatedCount} città`);
+      console.log(`✅ Immagini aggiornate per ${updatedCount} città su ${citiesToUpdate.length}`);
       // Ricarica tutte le città dal database per assicurarsi che siano sincronizzate
       await this.refreshCities();
+      console.log('✅ Database aggiornato con nuove immagini');
     } else {
-      console.log('✅ Tutte le città hanno già immagini valide e uniche');
+      console.log('⚠️ Nessuna immagine è stata aggiornata');
     }
   }
 
