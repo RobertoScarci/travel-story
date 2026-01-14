@@ -129,6 +129,28 @@ export class CityService {
   }
 
   /**
+   * Remove duplicate cities from array (keeps the first occurrence of each ID)
+   */
+  private removeDuplicateCities(cities: City[]): City[] {
+    const seenIds = new Map<string, City>();
+    const duplicates: string[] = [];
+    
+    for (const city of cities) {
+      if (!seenIds.has(city.id)) {
+        seenIds.set(city.id, city);
+      } else {
+        duplicates.push(city.name);
+      }
+    }
+    
+    if (duplicates.length > 0) {
+      console.log(`⚠️ Rimosse ${duplicates.length} città duplicate: ${duplicates.join(', ')}`);
+    }
+    
+    return Array.from(seenIds.values());
+  }
+
+  /**
    * Seed new cities from CitySeederService and save to database
    */
   private async seedNewCities(): Promise<void> {
