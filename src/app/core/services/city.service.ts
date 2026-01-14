@@ -155,51 +155,76 @@ export class CityService {
       });
     });
     
+    // Lista di città da aggiornare (con immagini duplicate o placeholder)
+    const citiesToUpdate: City[] = [];
+    
     for (const city of cities) {
+      // Check if images are missing, invalid, or duplicate placeholders
+      const hasValidThumbnail = city.thumbnailImage && 
+        !city.thumbnailImage.toLowerCase().includes('placeholder') &&
+        !city.thumbnailImage.toLowerCase().includes('default') &&
+        city.thumbnailImage.trim() !== '';
+      const hasValidHero = city.heroImage && 
+        !city.heroImage.toLowerCase().includes('placeholder') &&
+        !city.heroImage.toLowerCase().includes('default') &&
+        city.heroImage.trim() !== '';
+      
+      // Check for known placeholder images that are duplicates
+      const knownPlaceholders = [
+        '1488646953014-85cb44e25828',
+        '1544025162-d76694265947'
+      ];
+      const isKnownPlaceholder = knownPlaceholders.some(id => 
+        city.thumbnailImage?.includes(id) || city.heroImage?.includes(id)
+      );
+      
+      // Check if this image is used by multiple cities (duplicate)
+      const thumbnailBase = city.thumbnailImage?.split('?')[0];
+      const heroBase = city.heroImage?.split('?')[0];
+      const thumbnailUsage = thumbnailBase ? (imageUsage.get(thumbnailBase)?.length || 0) : 0;
+      const heroUsage = heroBase ? (imageUsage.get(heroBase)?.length || 0) : 0;
+      const isDuplicate = thumbnailUsage > 1 || heroUsage > 1;
+      
+      // FORZA il ri-popolamento se mancanti, placeholder noti, o duplicate
+      if (!hasValidThumbnail || !hasValidHero || isKnownPlaceholder || isDuplicate) {
+        citiesToUpdate.push(city);
+      }
+    }
+    
+    console.log(`Trovate ${citiesToUpdate.length} città con immagini da aggiornare (duplicate o placeholder)`);
+    
+    // Aggiorna tutte le città con immagini duplicate o placeholder
+    for (const city of citiesToUpdate) {
       try {
-        // Check if images are missing, invalid, or duplicate placeholders
-        const hasValidThumbnail = city.thumbnailImage && 
-          !city.thumbnailImage.toLowerCase().includes('placeholder') &&
-          !city.thumbnailImage.toLowerCase().includes('default') &&
-          city.thumbnailImage.trim() !== '';
-        const hasValidHero = city.heroImage && 
-          !city.heroImage.toLowerCase().includes('placeholder') &&
-          !city.heroImage.toLowerCase().includes('default') &&
-          city.heroImage.trim() !== '';
+        console.log(`Aggiornamento immagini per ${city.name}...`);
+        // Forza il ri-popolamento anche se l'immagine sembra valida ma è un duplicato
+        const result = await this.imagePopulator.populateCityImages(city, true);
         
-        // Check for known placeholder images that are duplicates
-        const knownPlaceholders = [
-          '1488646953014-85cb44e25828',
-          '1544025162-d76694265947'
-        ];
-        const isKnownPlaceholder = knownPlaceholders.some(id => 
-          city.thumbnailImage?.includes(id) || city.heroImage?.includes(id)
-        );
-        
-        // Check if this image is used by multiple cities (duplicate)
-        const thumbnailBase = city.thumbnailImage?.split('?')[0];
-        const heroBase = city.heroImage?.split('?')[0];
-        const isDuplicate = (thumbnailBase && (imageUsage.get(thumbnailBase)?.length || 0) > 1) ||
-                           (heroBase && (imageUsage.get(heroBase)?.length || 0) > 1);
-        
-        if (!hasValidThumbnail || !hasValidHero || isKnownPlaceholder || isDuplicate) {
-          console.log(`Aggiornamento immagini per ${city.name}...`);
-          const result = await this.imagePopulator.populateCityImages(city, true);
-          
-          if (result.updated) {
-            updatedCount++;
+        if (result.updated) {
+          updatedCount++;
+          // Aggiorna anche il signal per riflettere le modifiche
+          const currentCities = this.citiesSignal();
+          const cityIndex = currentCities.findIndex(c => c.id === city.id);
+          if (cityIndex >= 0) {
+            const updatedCity = await this.databaseService.getCity(city.id);
+            if (updatedCity) {
+              currentCities[cityIndex] = updatedCity;
+              this.citiesSignal.set([...currentCities]);
+            }
           }
-          await new Promise(resolve => setTimeout(resolve, 300)); // Rate limiting
         }
+        await new Promise(resolve => setTimeout(resolve, 300)); // Rate limiting
       } catch (error) {
         console.warn(`Errore popolamento immagini per ${city.name}:`, error);
       }
     }
     
     if (updatedCount > 0) {
-      console.log(`Immagini aggiornate per ${updatedCount} città`);
+      console.log(`✅ Immagini aggiornate per ${updatedCount} città`);
+      // Ricarica tutte le città dal database per assicurarsi che siano sincronizzate
+      await this.refreshCities();
     } else {
-      console.log('Tutte le città hanno già immagini valide');
+      console.log('✅ Tutte le città hanno già immagini valide e uniche');
     }
   }
 
