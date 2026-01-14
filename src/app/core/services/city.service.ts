@@ -169,14 +169,20 @@ export class CityService {
         !city.heroImage.toLowerCase().includes('default') &&
         city.heroImage.trim() !== '';
       
-      // Check for known placeholder images that are duplicates
-      const knownPlaceholders = [
-        '1488646953014-85cb44e25828',
-        '1544025162-d76694265947'
-      ];
-      const isKnownPlaceholder = knownPlaceholders.some(id => 
-        city.thumbnailImage?.includes(id) || city.heroImage?.includes(id)
-      );
+        // Check for known placeholder images that are duplicates
+        const knownPlaceholders = [
+          '1488646953014-85cb44e25828',
+          '1544025162-d76694265947'
+        ];
+        const isKnownPlaceholder = knownPlaceholders.some(id => 
+          city.thumbnailImage?.includes(id) || city.heroImage?.includes(id)
+        );
+        
+        // Force update if image is a known duplicate placeholder (even if URL is valid)
+        if (isKnownPlaceholder) {
+          citiesToUpdate.push(city);
+          continue;
+        }
       
       // Check if this image is used by multiple cities (duplicate)
       const thumbnailBase = city.thumbnailImage?.split('?')[0];

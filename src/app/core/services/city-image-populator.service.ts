@@ -96,8 +96,9 @@ export class CityImagePopulatorService {
    * Popola le immagini mancanti per una singola città usando multi-source con fallback
    */
   async populateCityImages(city: City, saveToDatabase: boolean = true, forceUpdate: boolean = false): Promise<{ updated: boolean; thumbnailUrl?: string; heroUrl?: string; error?: string }> {
-    const needsThumbnail = forceUpdate || !this.isValidImageUrl(city.thumbnailImage);
-    const needsHero = forceUpdate || !this.isValidImageUrl(city.heroImage);
+    // Check if image is valid AND not a known duplicate placeholder
+    const needsThumbnail = forceUpdate || !this.isValidImageUrl(city.thumbnailImage) || this.isKnownDuplicatePlaceholder(city.thumbnailImage);
+    const needsHero = forceUpdate || !this.isValidImageUrl(city.heroImage) || this.isKnownDuplicatePlaceholder(city.heroImage);
 
     if (!needsThumbnail && !needsHero) {
       return { updated: false };
@@ -174,7 +175,9 @@ export class CityImagePopulatorService {
     }
 
     // Fallback finale: usa placeholder unico basato sul nome della città per evitare duplicati
-    const cityHash = this.simpleHash(city.name + city.country);
+    // Usa un hash più complesso includendo anche un seed basato sulla posizione nella lista
+    const cityHash = this.simpleHash(city.name + city.country + city.id);
+    // Espandiamo la lista di placeholder per ridurre collisioni
     const placeholderVariations = [
       '1488646953014-85cb44e25828', // Travel map
       '1506905925346-21bda4d32df4', // Mountains
@@ -183,10 +186,22 @@ export class CityImagePopulatorService {
       '1526392060635-9d6019884377', // Architecture
       '1533106497176-45ae19e68ba2', // Culture
       '1543429257-3eb0b65d9c58',    // Historic
-      '1559511260-66a68eee9b9f'     // Nature
+      '1559511260-66a68eee9b9f',    // Nature
+      '1469474388157-4917a93874a3', // City lights
+      '1519681393784-d120267933ba', // Urban landscape
+      '1506905925346-21bda4d32df4', // Mountains (different)
+      '1493663288411-6ac843ae2b93', // Travel adventure
+      '1501785888522-5bde5f763a06', // Mountain city
+      '1496564203459-31d85babe0d8', // Cityscape
+      '1493809842364-78817add7ffb', // Urban exploration
+      '1501594907352-04e1a5d93a6b', // Travel destination
+      '1490645935967-10de6ba17061', // Beautiful city
+      '1488646953014-85cb44e25828'  // Repeat for more variation
     ];
     const selectedPlaceholder = placeholderVariations[cityHash % placeholderVariations.length];
-    const fallbackImage = `https://images.unsplash.com/photo-${selectedPlaceholder}?w=1200&q=80`;
+    // Aggiungi anche un seed unico per ogni città per assicurare unicità
+    const uniqueSeed = cityHash % 1000;
+    const fallbackImage = `https://images.unsplash.com/photo-${selectedPlaceholder}?w=1200&q=80&sig=${uniqueSeed}`;
     thumbnailUrl = needsThumbnail ? fallbackImage : thumbnailUrl;
     heroUrl = needsHero ? fallbackImage.replace('w=1200', 'w=1920') : heroUrl;
     
@@ -208,6 +223,18 @@ export class CityImagePopulatorService {
       hash = hash & hash; // Convert to 32bit integer
     }
     return Math.abs(hash);
+  }
+
+  /**
+   * Check if an image URL is a known duplicate placeholder
+   */
+  private isKnownDuplicatePlaceholder(url: string | undefined): boolean {
+    if (!url) return false;
+    const knownPlaceholders = [
+      '1488646953014-85cb44e25828', // Travel map (generic)
+      '1544025162-d76694265947'      // Travel items on map (the one we see in the image)
+    ];
+    return knownPlaceholders.some(id => url.includes(id));
   }
 
   /**
