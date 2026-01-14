@@ -198,20 +198,10 @@ export class CityService {
       try {
         console.log(`Aggiornamento immagini per ${city.name}...`);
         // Forza il ri-popolamento anche se l'immagine sembra valida ma è un duplicato
-        const result = await this.imagePopulator.populateCityImages(city, true);
+        const result = await this.imagePopulator.populateCityImages(city, true, true);
         
         if (result.updated) {
           updatedCount++;
-          // Aggiorna anche il signal per riflettere le modifiche
-          const currentCities = this.citiesSignal();
-          const cityIndex = currentCities.findIndex(c => c.id === city.id);
-          if (cityIndex >= 0) {
-            const updatedCity = await this.databaseService.getCity(city.id);
-            if (updatedCity) {
-              currentCities[cityIndex] = updatedCity;
-              this.citiesSignal.set([...currentCities]);
-            }
-          }
         }
         await new Promise(resolve => setTimeout(resolve, 300)); // Rate limiting
       } catch (error) {

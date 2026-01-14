@@ -95,9 +95,9 @@ export class CityImagePopulatorService {
   /**
    * Popola le immagini mancanti per una singola città usando multi-source con fallback
    */
-  async populateCityImages(city: City, saveToDatabase: boolean = true): Promise<{ updated: boolean; thumbnailUrl?: string; heroUrl?: string; error?: string }> {
-    const needsThumbnail = !this.isValidImageUrl(city.thumbnailImage);
-    const needsHero = !this.isValidImageUrl(city.heroImage);
+  async populateCityImages(city: City, saveToDatabase: boolean = true, forceUpdate: boolean = false): Promise<{ updated: boolean; thumbnailUrl?: string; heroUrl?: string; error?: string }> {
+    const needsThumbnail = forceUpdate || !this.isValidImageUrl(city.thumbnailImage);
+    const needsHero = forceUpdate || !this.isValidImageUrl(city.heroImage);
 
     if (!needsThumbnail && !needsHero) {
       return { updated: false };
