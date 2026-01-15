@@ -104,7 +104,7 @@ export class CityImagePopulatorService {
       return { updated: false };
     }
 
-    const query = `${city.name} ${city.country} city travel`;
+      const query = `${city.name} ${city.country} city travel`;
     let thumbnailUrl = city.thumbnailImage;
     let heroUrl = city.heroImage;
 
@@ -128,7 +128,7 @@ export class CityImagePopulatorService {
       }
     } catch (error) {
       console.debug(`Unsplash failed for ${city.name}, trying Pexels...`);
-    }
+      }
 
     // Try 2: Pexels (fallback principale - 200 req/hour)
     try {

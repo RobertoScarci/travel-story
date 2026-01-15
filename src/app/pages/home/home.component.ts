@@ -279,27 +279,44 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       <!-- Budget Friendly -->
       @if (!searchQuery()) {
         <section class="section budget-section">
+          <div class="budget-background-decoration"></div>
           <div class="container">
-            <div class="section-header">
-              <div class="section-title-group">
-                <span class="section-badge">
-                  <svg class="badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="1" x2="12" y2="23"/>
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                  </svg>
-                  Viaggia di più, spendi meno
-                </span>
-                <h2>Viaggi low-cost</h2>
+            <div class="budget-header-wrapper">
+              <div class="budget-highlight-banner">
+                <div class="budget-banner-content">
+                  <div class="budget-icon-sparkle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  </div>
+                  <div class="budget-banner-text">
+                    <span class="budget-banner-label">💰 Offerta speciale</span>
+                    <span class="budget-banner-message">Risparmia fino al 60% sui tuoi viaggi!</span>
+                  </div>
+                </div>
               </div>
-              <a routerLink="/budget" class="section-link">
-                Vedi tutte →
-              </a>
+              <div class="section-header budget-header">
+                <div class="section-title-group budget-title-group">
+                  <span class="section-badge budget-badge">
+                    <svg class="badge-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <line x1="12" y1="1" x2="12" y2="23"/>
+                      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    Viaggia di più, spendi meno
+                  </span>
+                  <h2 class="budget-title">Viaggi low-cost</h2>
+                  <p class="budget-subtitle">Scopri destinazioni incredibili senza spendere una fortuna</p>
+                </div>
+                <a routerLink="/budget" class="section-link budget-link">
+                  Vedi tutte →
+                </a>
+              </div>
             </div>
             <div class="budget-cities">
               @for (city of budgetCities(); track city.id; let i = $index) {
                 <app-city-card 
                   [city]="city"
-                  class="animate-slide-in"
+                  class="animate-slide-in budget-city-card"
                   [style.animation-delay.ms]="i * 50"/>
               }
             </div>
@@ -1253,18 +1270,281 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
     // ===== BUDGET SECTION =====
     .budget-section {
-      background: linear-gradient(135deg, rgba(248, 181, 0, 0.05) 0%, rgba(233, 69, 96, 0.03) 100%);
       position: relative;
+      background: linear-gradient(
+        135deg,
+        #fff9e6 0%,
+        #ffe8cc 25%,
+        #ffd9b3 50%,
+        #ffecd1 75%,
+        #fff4e6 100%
+      );
+      background-size: 300% 300%;
+      animation: budgetGradientShift 8s ease infinite;
+      overflow: hidden;
+      padding: var(--space-16) 0;
+      
+      @keyframes budgetGradientShift {
+        0%, 100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
       
       &::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(180deg, rgba(248, 181, 0, 0.08) 0%, transparent 50%);
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(248, 181, 0, 0.15) 0%,
+          rgba(255, 193, 7, 0.1) 30%,
+          transparent 70%
+        );
+        animation: budgetPulse 6s ease-in-out infinite;
         pointer-events: none;
+      }
+      
+      @keyframes budgetPulse {
+        0%, 100% {
+          transform: scale(1) rotate(0deg);
+          opacity: 0.6;
+        }
+        50% {
+          transform: scale(1.2) rotate(180deg);
+          opacity: 0.8;
+        }
+      }
+    }
+    
+    .budget-background-decoration {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+      
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.3;
+      }
+      
+      &::before {
+        width: 400px;
+        height: 400px;
+        background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+        top: -100px;
+        right: -100px;
+        animation: floatDecoration1 10s ease-in-out infinite;
+      }
+      
+      &::after {
+        width: 300px;
+        height: 300px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+        bottom: -50px;
+        left: -50px;
+        animation: floatDecoration2 12s ease-in-out infinite;
+      }
+      
+      @keyframes floatDecoration1 {
+        0%, 100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(-30px, 30px) scale(1.1);
+        }
+      }
+      
+      @keyframes floatDecoration2 {
+        0%, 100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(40px, -40px) scale(1.15);
+        }
+      }
+    }
+
+    .budget-header-wrapper {
+      position: relative;
+      z-index: 1;
+      margin-bottom: var(--space-8);
+    }
+    
+    .budget-highlight-banner {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 50%, #ff8c00 100%);
+      background-size: 200% 200%;
+      animation: budgetBannerGradient 4s ease infinite;
+      border-radius: var(--border-radius-xl);
+      padding: var(--space-4) var(--space-6);
+      margin-bottom: var(--space-6);
+      box-shadow: 
+        0 8px 32px rgba(255, 107, 107, 0.3),
+        0 0 0 3px rgba(255, 215, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transform: translateY(0);
+      transition: all var(--transition-base);
+      
+      @keyframes budgetBannerGradient {
+        0%, 100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+          0 12px 40px rgba(255, 107, 107, 0.4),
+          0 0 0 4px rgba(255, 215, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      }
+    }
+    
+    .budget-banner-content {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    
+    .budget-icon-sparkle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 50%;
+      color: white;
+      animation: budgetSparkleRotate 3s ease-in-out infinite;
+      flex-shrink: 0;
+      
+      @keyframes budgetSparkleRotate {
+        0%, 100% {
+          transform: rotate(0deg) scale(1);
+        }
+        50% {
+          transform: rotate(180deg) scale(1.1);
+        }
+      }
+      
+      svg {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      }
+    }
+    
+    .budget-banner-text {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      flex: 1;
+    }
+    
+    .budget-banner-label {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .budget-banner-message {
+      font-size: var(--text-lg);
+      font-weight: 800;
+      color: white;
+      text-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.2);
+    }
+    
+    .budget-header {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .budget-title-group {
+      .budget-badge {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+        color: white;
+        padding: var(--space-2) var(--space-4);
+        border-radius: var(--border-radius-full);
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        animation: budgetBadgePulse 2s ease-in-out infinite;
+        
+        @keyframes budgetBadgePulse {
+          0%, 100% {
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+          }
+          50% {
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+          }
+        }
+        
+        svg {
+          stroke: white;
+        }
+      }
+      
+      .budget-title {
+        background: linear-gradient(135deg, #e63946 0%, #f77f00 50%, #fcbf49 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 200%;
+        animation: budgetTitleGradient 3s ease infinite;
+        font-weight: 900;
+        font-size: clamp(2rem, 5vw, 3rem);
+        margin: var(--space-2) 0 var(--space-1) 0;
+        text-shadow: 0 4px 12px rgba(230, 57, 70, 0.2);
+        
+        @keyframes budgetTitleGradient {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+      }
+      
+      .budget-subtitle {
+        color: #8b4513;
+        font-size: var(--text-base);
+        font-weight: 500;
+        margin: 0;
+      }
+    }
+    
+    .budget-link {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+      color: white;
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--border-radius-full);
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(255, 107, 107, 0.4);
+      transition: all var(--transition-base);
+      white-space: nowrap;
+      
+      &:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 8px 24px rgba(255, 107, 107, 0.5);
+        background: linear-gradient(135deg, #ff5252 0%, #ffc107 100%);
+        text-decoration: none;
       }
     }
 
@@ -1275,33 +1555,57 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       -webkit-overflow-scrolling: touch;
       gap: var(--space-4);
       margin: 0 calc(-1 * var(--space-6));
-      padding: 0 var(--space-6) var(--space-4);
+      padding: var(--space-6) var(--space-6);
       scrollbar-width: thin;
-      scrollbar-color: var(--color-gray-300) var(--color-gray-100);
+      scrollbar-color: #ffd93d var(--color-gray-200);
+      position: relative;
+      z-index: 1;
       
       // Custom scrollbar for webkit browsers
       &::-webkit-scrollbar {
-        height: 8px;
+        height: 10px;
       }
       
       &::-webkit-scrollbar-track {
-        background: var(--color-gray-100);
+        background: rgba(255, 217, 61, 0.2);
         border-radius: var(--border-radius-full);
       }
       
       &::-webkit-scrollbar-thumb {
-        background: var(--color-gray-300);
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
         border-radius: var(--border-radius-full);
         transition: background var(--transition-fast);
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
         
         &:hover {
-          background: var(--color-gray-400);
+          background: linear-gradient(135deg, #ff5252 0%, #ffc107 100%);
         }
       }
       
-      app-city-card {
+      app-city-card.budget-city-card {
         flex: 0 0 320px;
         scroll-snap-align: start;
+        position: relative;
+        transition: all var(--transition-base);
+        
+        &::before {
+          content: '';
+          position: absolute;
+          inset: -4px;
+          background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 50%, #ff8c00 100%);
+          border-radius: var(--border-radius-xl);
+          z-index: -1;
+          opacity: 0;
+          transition: opacity var(--transition-base);
+        }
+        
+        &:hover {
+          transform: translateY(-8px) scale(1.02);
+          
+          &::before {
+            opacity: 0.3;
+          }
+        }
         
         @media (max-width: 768px) {
           flex: 0 0 280px;

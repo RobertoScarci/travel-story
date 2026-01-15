@@ -41,7 +41,7 @@ export class CityService {
       console.log('Database vuoto, inizializzazione...');
       
       // Load mock data and save to database
-      this.initializeMockData();
+    this.initializeMockData();
       const mockCities = this.citiesSignal();
       await this.databaseService.saveCities(mockCities);
       
