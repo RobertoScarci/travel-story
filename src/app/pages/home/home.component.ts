@@ -278,8 +278,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       <!-- Budget Friendly -->
       @if (!searchQuery()) {
-        <section class="section budget-section">
+        <section class="section budget-section" (mousemove)="onBudgetMouseMove($event)">
           <div class="budget-background-decoration"></div>
+          <div class="budget-cursor-effect" 
+               [style.left.px]="cursorPosition().x" 
+               [style.top.px]="cursorPosition().y"></div>
           <div class="container">
             <div class="budget-header-wrapper">
               <div class="budget-highlight-banner">
@@ -1273,14 +1276,14 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       position: relative;
       background: linear-gradient(
         135deg,
-        #fff9e6 0%,
-        #ffe8cc 25%,
-        #ffd9b3 50%,
-        #ffecd1 75%,
-        #fff4e6 100%
+        var(--color-off-white) 0%,
+        var(--color-cream) 25%,
+        #faf8f3 50%,
+        var(--color-cream) 75%,
+        var(--color-off-white) 100%
       );
       background-size: 300% 300%;
-      animation: budgetGradientShift 8s ease infinite;
+      animation: budgetGradientShift 12s ease infinite;
       overflow: hidden;
       padding: var(--space-16) 0;
       
@@ -1290,34 +1293,6 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         }
         50% {
           background-position: 100% 50%;
-        }
-      }
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(
-          circle,
-          rgba(248, 181, 0, 0.15) 0%,
-          rgba(255, 193, 7, 0.1) 30%,
-          transparent 70%
-        );
-        animation: budgetPulse 6s ease-in-out infinite;
-        pointer-events: none;
-      }
-      
-      @keyframes budgetPulse {
-        0%, 100% {
-          transform: scale(1) rotate(0deg);
-          opacity: 0.6;
-        }
-        50% {
-          transform: scale(1.2) rotate(180deg);
-          opacity: 0.8;
         }
       }
     }
@@ -1334,26 +1309,26 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         content: '';
         position: absolute;
         border-radius: 50%;
-        filter: blur(60px);
-        opacity: 0.3;
+        filter: blur(80px);
+        opacity: 0.08;
       }
       
       &::before {
         width: 400px;
         height: 400px;
-        background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+        background: rgba(233, 69, 96, 0.15);
         top: -100px;
         right: -100px;
-        animation: floatDecoration1 10s ease-in-out infinite;
+        animation: floatDecoration1 15s ease-in-out infinite;
       }
       
       &::after {
         width: 300px;
         height: 300px;
-        background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+        background: rgba(248, 181, 0, 0.12);
         bottom: -50px;
         left: -50px;
-        animation: floatDecoration2 12s ease-in-out infinite;
+        animation: floatDecoration2 18s ease-in-out infinite;
       }
       
       @keyframes floatDecoration1 {
@@ -1374,6 +1349,24 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         }
       }
     }
+    
+    .budget-cursor-effect {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(
+        circle,
+        rgba(233, 69, 96, 0.12) 0%,
+        rgba(248, 181, 0, 0.08) 40%,
+        transparent 70%
+      );
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+      z-index: 0;
+      filter: blur(40px);
+    }
 
     .budget-header-wrapper {
       position: relative;
@@ -1382,16 +1375,17 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
     
     .budget-highlight-banner {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 50%, #ff8c00 100%);
+      background: linear-gradient(135deg, rgba(233, 69, 96, 0.15) 0%, rgba(248, 181, 0, 0.12) 50%, rgba(233, 69, 96, 0.1) 100%);
       background-size: 200% 200%;
-      animation: budgetBannerGradient 4s ease infinite;
+      animation: budgetBannerGradient 6s ease infinite;
       border-radius: var(--border-radius-xl);
       padding: var(--space-4) var(--space-6);
       margin-bottom: var(--space-6);
       box-shadow: 
-        0 8px 32px rgba(255, 107, 107, 0.3),
-        0 0 0 3px rgba(255, 215, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        0 4px 20px rgba(233, 69, 96, 0.15),
+        0 0 0 2px rgba(248, 181, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(233, 69, 96, 0.1);
       transform: translateY(0);
       transition: all var(--transition-base);
       
@@ -1407,9 +1401,9 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       &:hover {
         transform: translateY(-2px);
         box-shadow: 
-          0 12px 40px rgba(255, 107, 107, 0.4),
-          0 0 0 4px rgba(255, 215, 0, 0.5),
-          inset 0 1px 0 rgba(255, 255, 255, 0.4);
+          0 8px 28px rgba(233, 69, 96, 0.2),
+          0 0 0 3px rgba(248, 181, 0, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
       }
     }
     
@@ -1425,24 +1419,25 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       justify-content: center;
       width: 48px;
       height: 48px;
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(233, 69, 96, 0.1);
       backdrop-filter: blur(10px);
       border-radius: 50%;
-      color: white;
-      animation: budgetSparkleRotate 3s ease-in-out infinite;
+      color: var(--color-accent);
+      animation: budgetSparkleRotate 4s ease-in-out infinite;
       flex-shrink: 0;
+      border: 1px solid rgba(233, 69, 96, 0.15);
       
       @keyframes budgetSparkleRotate {
         0%, 100% {
           transform: rotate(0deg) scale(1);
         }
         50% {
-          transform: rotate(180deg) scale(1.1);
+          transform: rotate(180deg) scale(1.05);
         }
       }
       
       svg {
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        stroke: var(--color-accent);
       }
     }
     
@@ -1455,20 +1450,16 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     
     .budget-banner-label {
       font-size: var(--text-xs);
-      font-weight: 700;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: rgba(255, 255, 255, 0.95);
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      letter-spacing: 0.12em;
+      color: var(--color-accent);
     }
     
     .budget-banner-message {
-      font-size: var(--text-lg);
-      font-weight: 800;
-      color: white;
-      text-shadow: 
-        0 2px 8px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(255, 255, 255, 0.2);
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--color-primary);
     }
     
     .budget-header {
@@ -1478,39 +1469,34 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     
     .budget-title-group {
       .budget-badge {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
-        color: white;
+        background: linear-gradient(135deg, rgba(233, 69, 96, 0.12) 0%, rgba(248, 181, 0, 0.1) 100%);
+        color: var(--color-accent);
         padding: var(--space-2) var(--space-4);
         border-radius: var(--border-radius-full);
-        font-weight: 700;
-        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-        animation: budgetBadgePulse 2s ease-in-out infinite;
+        font-weight: 600;
+        border: 1px solid rgba(233, 69, 96, 0.15);
+        box-shadow: 0 2px 8px rgba(233, 69, 96, 0.1);
+        transition: all var(--transition-base);
         
-        @keyframes budgetBadgePulse {
-          0%, 100% {
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-          }
-          50% {
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
-          }
+        &:hover {
+          box-shadow: 0 4px 12px rgba(233, 69, 96, 0.15);
         }
         
         svg {
-          stroke: white;
+          stroke: var(--color-accent);
         }
       }
       
       .budget-title {
-        background: linear-gradient(135deg, #e63946 0%, #f77f00 50%, #fcbf49 100%);
+        background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         background-size: 200% 200%;
-        animation: budgetTitleGradient 3s ease infinite;
-        font-weight: 900;
+        animation: budgetTitleGradient 4s ease infinite;
+        font-weight: 800;
         font-size: clamp(2rem, 5vw, 3rem);
         margin: var(--space-2) 0 var(--space-1) 0;
-        text-shadow: 0 4px 12px rgba(230, 57, 70, 0.2);
         
         @keyframes budgetTitleGradient {
           0%, 100% {
@@ -1523,27 +1509,26 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       }
       
       .budget-subtitle {
-        color: #8b4513;
+        color: var(--color-gray-500);
         font-size: var(--text-base);
-        font-weight: 500;
+        font-weight: 400;
         margin: 0;
       }
     }
     
     .budget-link {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
       color: white;
       padding: var(--space-3) var(--space-6);
       border-radius: var(--border-radius-full);
-      font-weight: 700;
-      box-shadow: 0 4px 16px rgba(255, 107, 107, 0.4);
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(233, 69, 96, 0.25);
       transition: all var(--transition-base);
       white-space: nowrap;
       
       &:hover {
         transform: translateY(-2px) scale(1.05);
-        box-shadow: 0 8px 24px rgba(255, 107, 107, 0.5);
-        background: linear-gradient(135deg, #ff5252 0%, #ffc107 100%);
+        box-shadow: 0 6px 20px rgba(233, 69, 96, 0.35);
         text-decoration: none;
       }
     }
@@ -1557,7 +1542,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       margin: 0 calc(-1 * var(--space-6));
       padding: var(--space-6) var(--space-6);
       scrollbar-width: thin;
-      scrollbar-color: #ffd93d var(--color-gray-200);
+      scrollbar-color: rgba(248, 181, 0, 0.3) var(--color-gray-200);
       position: relative;
       z-index: 1;
       
@@ -1572,13 +1557,13 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       }
       
       &::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+        background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-highlight) 100%);
         border-radius: var(--border-radius-full);
         transition: background var(--transition-fast);
-        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+        box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2);
         
         &:hover {
-          background: linear-gradient(135deg, #ff5252 0%, #ffc107 100%);
+          box-shadow: 0 2px 12px rgba(233, 69, 96, 0.3);
         }
       }
       
@@ -1591,8 +1576,8 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         &::before {
           content: '';
           position: absolute;
-          inset: -4px;
-          background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 50%, #ff8c00 100%);
+          inset: -3px;
+          background: linear-gradient(135deg, rgba(233, 69, 96, 0.15) 0%, rgba(248, 181, 0, 0.12) 100%);
           border-radius: var(--border-radius-xl);
           z-index: -1;
           opacity: 0;
@@ -1600,10 +1585,10 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
         }
         
         &:hover {
-          transform: translateY(-8px) scale(1.02);
+          transform: translateY(-6px) scale(1.02);
           
           &::before {
-            opacity: 0.3;
+            opacity: 1;
           }
         }
         
@@ -1781,6 +1766,9 @@ export class HomeComponent implements OnInit {
   // Hero animations
   searchFocused = signal(false);
   greeting = signal(this.personalization.getPersonalizedGreeting());
+  
+  // Budget section cursor effect
+  cursorPosition = signal({ x: -100, y: -100 });
   particles = Array.from({ length: 12 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -1874,6 +1862,15 @@ export class HomeComponent implements OnInit {
 
   getRecommendationReason(city: City): string {
     return this.personalization.getRecommendationReason(city);
+  }
+
+  onBudgetMouseMove(event: MouseEvent): void {
+    const section = event.currentTarget as HTMLElement;
+    const rect = section.getBoundingClientRect();
+    this.cursorPosition.set({
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
+    });
   }
 }
 
