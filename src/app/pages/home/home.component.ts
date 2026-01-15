@@ -1770,8 +1770,6 @@ export class HomeComponent implements OnInit {
   // Budget section cursor effect
   cursorPosition = signal({ x: -100, y: -100 });
   
-  // Budget section cursor effect
-  cursorPosition = signal({ x: -100, y: -100 });
   particles = Array.from({ length: 12 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
