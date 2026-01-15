@@ -991,7 +991,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
 
     .propose-section {
-      background: linear-gradient(180deg, #f8f6f3 0%, #f5f3f0 100%);
+      .propose-card,
+      .container {
+        position: relative;
+        z-index: 1;
+      }
     }
 
     .propose-card {
@@ -1098,6 +1102,8 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       justify-content: space-between;
       margin-bottom: var(--space-8);
       gap: var(--space-4);
+      position: relative;
+      z-index: 1;
 
       @media (max-width: 576px) {
         flex-direction: column;
@@ -1188,6 +1194,8 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: var(--space-6);
+      position: relative;
+      z-index: 1;
 
       &.horizontal {
         display: flex;
@@ -1222,6 +1230,8 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       gap: var(--space-4);
       margin: 0 calc(-1 * var(--space-6));
       padding: 0 var(--space-6) var(--space-4);
+      position: relative;
+      z-index: 1;
 
       &::-webkit-scrollbar {
         display: none;
