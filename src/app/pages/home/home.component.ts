@@ -163,7 +163,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       <!-- Personalized Section (for returning users) -->
       @if (showPersonalized() && !searchQuery()) {
-        <section class="section personalized-section">
+        <section class="section personalized-section section-with-background" (mousemove)="onSectionMouseMove($event, 'personalized')">
+          <div class="section-background-decoration"></div>
+          <div class="section-cursor-effect" 
+               [style.left.px]="cursorPositions()['personalized']?.x || -100" 
+               [style.top.px]="cursorPositions()['personalized']?.y || -100"></div>
           <div class="container">
             <div class="section-header">
               <div class="section-title-group">
@@ -192,7 +196,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       <!-- Recently Viewed (for returning users) -->
       @if (recentCities().length > 0 && !searchQuery()) {
-        <section class="section recent-section">
+        <section class="section recent-section section-with-background" (mousemove)="onSectionMouseMove($event, 'recent')">
+          <div class="section-background-decoration"></div>
+          <div class="section-cursor-effect" 
+               [style.left.px]="cursorPositions()['recent']?.x || -100" 
+               [style.top.px]="cursorPositions()['recent']?.y || -100"></div>
           <div class="container">
             <div class="section-header">
               <div class="section-title-group">
@@ -220,7 +228,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       <!-- Trending Destinations -->
       @if (!searchQuery()) {
-        <section class="section trending-section">
+        <section class="section trending-section section-with-background" (mousemove)="onSectionMouseMove($event, 'trending')">
+          <div class="section-background-decoration"></div>
+          <div class="section-cursor-effect" 
+               [style.left.px]="cursorPositions()['trending']?.x || -100" 
+               [style.top.px]="cursorPositions()['trending']?.y || -100"></div>
           <div class="container">
             <div class="section-header">
               <div class="section-title-group">
@@ -251,7 +263,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       <!-- Propose City Section -->
       @if (!searchQuery()) {
-        <section class="section propose-section">
+        <section class="section propose-section section-with-background" (mousemove)="onSectionMouseMove($event, 'propose')">
+          <div class="section-background-decoration"></div>
+          <div class="section-cursor-effect" 
+               [style.left.px]="cursorPositions()['propose']?.x || -100" 
+               [style.top.px]="cursorPositions()['propose']?.y || -100"></div>
           <div class="container">
             <div class="propose-card">
               <div class="propose-content">
@@ -329,7 +345,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       <!-- CTA Section -->
       @if (!userService.isAuthenticated() && !searchQuery()) {
-        <section class="section cta-section">
+        <section class="section cta-section section-with-background" (mousemove)="onSectionMouseMove($event, 'cta')">
+          <div class="section-background-decoration"></div>
+          <div class="section-cursor-effect" 
+               [style.left.px]="cursorPositions()['cta']?.x || -100" 
+               [style.top.px]="cursorPositions()['cta']?.y || -100"></div>
           <div class="container">
             <div class="cta-card">
               <div class="cta-content">
@@ -372,7 +392,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       <!-- Comparison Teaser -->
       @if (!searchQuery()) {
-        <section class="section compare-section">
+        <section class="section compare-section section-with-background" (mousemove)="onSectionMouseMove($event, 'compare')">
+          <div class="section-background-decoration"></div>
+          <div class="section-cursor-effect" 
+               [style.left.px]="cursorPositions()['compare']?.x || -100" 
+               [style.top.px]="cursorPositions()['compare']?.y || -100"></div>
           <div class="container">
             <div class="compare-card">
               <div class="compare-icon">
@@ -959,7 +983,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     }
 
     .trending-section {
-      background: var(--color-white);
+      .city-grid,
+      .section-header {
+        position: relative;
+        z-index: 1;
+      }
     }
 
     .propose-section {
@@ -1205,9 +1233,104 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       }
     }
 
+    // ===== SECTION BACKGROUND DECORATION (Reusable) =====
+    .section-with-background {
+      position: relative;
+      background: linear-gradient(
+        135deg,
+        var(--color-off-white) 0%,
+        var(--color-cream) 25%,
+        #faf8f3 50%,
+        var(--color-cream) 75%,
+        var(--color-off-white) 100%
+      );
+      background-size: 300% 300%;
+      animation: sectionGradientShift 12s ease infinite;
+      overflow: hidden;
+      
+      @keyframes sectionGradientShift {
+        0%, 100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+    }
+    
+    .section-background-decoration {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+      
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.08;
+      }
+      
+      &::before {
+        width: 400px;
+        height: 400px;
+        background: rgba(233, 69, 96, 0.15);
+        top: -100px;
+        right: -100px;
+        animation: sectionFloatDecoration1 15s ease-in-out infinite;
+      }
+      
+      &::after {
+        width: 300px;
+        height: 300px;
+        background: rgba(248, 181, 0, 0.12);
+        bottom: -50px;
+        left: -50px;
+        animation: sectionFloatDecoration2 18s ease-in-out infinite;
+      }
+      
+      @keyframes sectionFloatDecoration1 {
+        0%, 100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(-30px, 30px) scale(1.1);
+        }
+      }
+      
+      @keyframes sectionFloatDecoration2 {
+        0%, 100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(40px, -40px) scale(1.15);
+        }
+      }
+    }
+    
+    .section-cursor-effect {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(
+        circle,
+        rgba(233, 69, 96, 0.12) 0%,
+        rgba(248, 181, 0, 0.08) 40%,
+        transparent 70%
+      );
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+      z-index: 0;
+      filter: blur(40px);
+    }
+
     // ===== PERSONALIZED SECTION =====
     .personalized-section {
-      background: var(--color-white);
       padding: var(--space-12) 0;
       
       @media (max-width: 768px) {
@@ -1217,19 +1340,28 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       .city-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: var(--space-4);
+        position: relative;
+        z-index: 1;
         
         @media (max-width: 768px) {
           grid-template-columns: 1fr;
         }
       }
+      
+      .section-header,
+      .container {
+        position: relative;
+        z-index: 1;
+      }
     }
 
     // ===== RECENT SECTION =====
     .recent-section {
-      background: var(--color-white);
       border-bottom: 1px solid rgba(0, 0, 0, 0.04);
       
       .scroll-row {
+        position: relative;
+        z-index: 1;
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
@@ -1601,7 +1733,12 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     // ===== CTA SECTION =====
     .cta-section {
       padding: var(--space-16) 0;
-      background: var(--color-off-white);
+      
+      .cta-card,
+      .container {
+        position: relative;
+        z-index: 1;
+      }
     }
 
     .cta-card {
@@ -1704,7 +1841,12 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
     // ===== COMPARE SECTION =====
     .compare-section {
       padding-bottom: var(--space-24);
-      background: linear-gradient(180deg, #f5f4f2 0%, var(--color-off-white) 100%);
+      
+      .compare-card,
+      .container {
+        position: relative;
+        z-index: 1;
+      }
     }
 
     .compare-card {
@@ -1769,6 +1911,16 @@ export class HomeComponent implements OnInit {
   
   // Budget section cursor effect
   cursorPosition = signal({ x: -100, y: -100 });
+  
+  // General sections cursor effects
+  cursorPositions = signal<Record<string, { x: number; y: number }>>({
+    personalized: { x: -100, y: -100 },
+    recent: { x: -100, y: -100 },
+    trending: { x: -100, y: -100 },
+    propose: { x: -100, y: -100 },
+    cta: { x: -100, y: -100 },
+    compare: { x: -100, y: -100 }
+  });
   
   particles = Array.from({ length: 12 }, (_, i) => ({
     id: i,
@@ -1872,6 +2024,17 @@ export class HomeComponent implements OnInit {
       x: event.clientX - rect.left,
       y: event.clientY - rect.top
     });
+  }
+
+  onSectionMouseMove(event: MouseEvent, sectionId: string): void {
+    const section = event.currentTarget as HTMLElement;
+    const rect = section.getBoundingClientRect();
+    const positions = { ...this.cursorPositions() };
+    positions[sectionId] = {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
+    };
+    this.cursorPositions.set(positions);
   }
 }
 
