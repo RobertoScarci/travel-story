@@ -1350,6 +1350,24 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
       }
     }
     
+    .budget-cursor-effect {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(
+        circle,
+        rgba(233, 69, 96, 0.12) 0%,
+        rgba(248, 181, 0, 0.08) 40%,
+        transparent 70%
+      );
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+      z-index: 0;
+      filter: blur(40px);
+    }
+    
     .budget-header-wrapper {
       position: relative;
       z-index: 1;
@@ -1748,6 +1766,9 @@ export class HomeComponent implements OnInit {
   // Hero animations
   searchFocused = signal(false);
   greeting = signal(this.personalization.getPersonalizedGreeting());
+  
+  // Budget section cursor effect
+  cursorPosition = signal({ x: -100, y: -100 });
   
   // Budget section cursor effect
   cursorPosition = signal({ x: -100, y: -100 });
