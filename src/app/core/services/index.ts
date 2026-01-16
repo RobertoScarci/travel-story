@@ -6,6 +6,7 @@ export * from './database.service';
 export * from './city-seeder.service';
 export * from './city-details-image-populator.service';
 export * from './seo.service';
+export * from './social-share.service';
 
 // External API Services
 export * from './api/weather.service';
