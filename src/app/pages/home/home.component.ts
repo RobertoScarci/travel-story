@@ -295,11 +295,11 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       <!-- Budget Friendly -->
       @if (!searchQuery()) {
-        <section class="section budget-section" (mousemove)="onBudgetMouseMove($event)">
-          <div class="budget-background-decoration"></div>
-          <div class="budget-cursor-effect" 
-               [style.left.px]="cursorPosition().x" 
-               [style.top.px]="cursorPosition().y"></div>
+        <section class="section budget-section section-with-background" (mousemove)="onSectionMouseMove($event, 'budget')">
+          <div class="section-background-decoration"></div>
+          <div class="section-cursor-effect" 
+               [style.left.px]="cursorPositions()['budget']?.x || -100" 
+               [style.top.px]="cursorPositions()['budget']?.y || -100"></div>
           <div class="container">
             <div class="budget-header-wrapper">
               <div class="budget-highlight-banner">
@@ -1921,8 +1921,6 @@ export class HomeComponent implements OnInit {
   greeting = signal(this.personalization.getPersonalizedGreeting());
   
   // Budget section cursor effect
-  cursorPosition = signal({ x: -100, y: -100 });
-  
   // General sections cursor effects
   cursorPositions = signal<Record<string, { x: number; y: number }>>({
     personalized: { x: -100, y: -100 },
@@ -1930,7 +1928,8 @@ export class HomeComponent implements OnInit {
     trending: { x: -100, y: -100 },
     propose: { x: -100, y: -100 },
     cta: { x: -100, y: -100 },
-    compare: { x: -100, y: -100 }
+    compare: { x: -100, y: -100 },
+    budget: { x: -100, y: -100 }
   });
   
   particles = Array.from({ length: 12 }, (_, i) => ({
@@ -2030,15 +2029,6 @@ export class HomeComponent implements OnInit {
 
   getRecommendationReason(city: City): string {
     return this.personalization.getRecommendationReason(city);
-  }
-
-  onBudgetMouseMove(event: MouseEvent): void {
-    const section = event.currentTarget as HTMLElement;
-    const rect = section.getBoundingClientRect();
-    this.cursorPosition.set({
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top
-    });
   }
 
   onSectionMouseMove(event: MouseEvent, sectionId: string): void {
