@@ -5,6 +5,7 @@ export * from './personalization.service';
 export * from './database.service';
 export * from './city-seeder.service';
 export * from './city-details-image-populator.service';
+export * from './seo.service';
 
 // External API Services
 export * from './api/weather.service';

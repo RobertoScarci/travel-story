@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CityCardComponent } from '../../shared/components/city-card/city-card.component';
 import { CityService } from '../../core/services/city.service';
+import { SEOService } from '../../core/services/seo.service';
 import { City } from '../../core/models/city.model';
 import { ElementRef } from '@angular/core';
 
@@ -580,15 +581,23 @@ export class DestinationsComponent implements OnInit, OnDestroy {
     { id: 'budget', icon: '💰', label: 'Budget' }
   ];
 
-  constructor(private cityService: CityService) {
+  constructor(
+    private cityService: CityService,
+    private seoService: SEOService
+  ) {
     // Reset pagination when filters change
     effect(() => {
-      this.filteredCities();
+      const cities = this.filteredCities();
       this.resetPagination();
+      // Update SEO with current filter count
+      this.seoService.updateDestinationsPage(cities.length);
     });
   }
 
   ngOnInit(): void {
+    // Set SEO meta tags for destinations page
+    this.seoService.updateDestinationsPage();
+    
     this.allCities.set(this.cityService.getAllCities());
     this.applyFilters();
     this.setupInfiniteScroll();

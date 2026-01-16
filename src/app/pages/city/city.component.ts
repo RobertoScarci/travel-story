@@ -13,6 +13,7 @@ import { CountryService, CountryInfo } from '../../core/services/api/country.ser
 import { UnsplashService, UnsplashPhoto } from '../../core/services/api/unsplash.service';
 import { OpenTripMapService, CategorizedPlace } from '../../core/services/api/opentripmap.service';
 import { FoursquareService, PlaceWithPhotos } from '../../core/services/api/foursquare.service';
+import { SEOService } from '../../core/services/seo.service';
 import { forkJoin } from 'rxjs';
 
 // Interface per i video di viaggio (YouTube)
@@ -3101,7 +3102,8 @@ export class CityComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private cityService: CityService,
     public userService: UserService,
-    private personalization: PersonalizationService
+    private personalization: PersonalizationService,
+    private seoService: SEOService
   ) {}
 
   ngOnInit(): void {
@@ -3129,6 +3131,8 @@ export class CityComponent implements OnInit, OnDestroy {
     if (this.intersectionObserver) {
       this.intersectionObserver.disconnect();
     }
+    // Clean up SEO structured data
+    this.seoService.removeStructuredData();
   }
 
   private loadCity(cityId: string): void {
@@ -3142,6 +3146,10 @@ export class CityComponent implements OnInit, OnDestroy {
       
       if (details) {
         this.city.set(details);
+        
+        // Update SEO meta tags for this city
+        this.seoService.updateCityPage(details);
+        
         this.userService.trackCityVisit(cityId);
         this.similarCities.set(this.personalization.getSimilarCities(cityId, 4));
         

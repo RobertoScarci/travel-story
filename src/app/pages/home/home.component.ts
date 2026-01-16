@@ -6,6 +6,7 @@ import { CityCardComponent } from '../../shared/components/city-card/city-card.c
 import { CityService } from '../../core/services/city.service';
 import { UserService } from '../../core/services/user.service';
 import { PersonalizationService } from '../../core/services/personalization.service';
+import { SEOService } from '../../core/services/seo.service';
 import { City, HiddenGemInfo } from '../../core/models/city.model';
 
 /**
@@ -1952,10 +1953,14 @@ export class HomeComponent implements OnInit {
   constructor(
     private cityService: CityService,
     public userService: UserService,
-    public personalization: PersonalizationService
+    public personalization: PersonalizationService,
+    private seoService: SEOService
   ) {}
 
   ngOnInit(): void {
+    // Set SEO meta tags for home page
+    this.seoService.updateHomePage();
+    
     this.loadCities();
     this.checkPersonalization();
     this.greeting.set(this.personalization.getPersonalizedGreeting());
