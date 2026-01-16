@@ -1,10 +1,11 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, viewChild, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CityCardComponent } from '../../shared/components/city-card/city-card.component';
 import { CityService } from '../../core/services/city.service';
 import { City } from '../../core/models/city.model';
+import { ElementRef } from '@angular/core';
 
 /**
  * DestinationsComponent - Browse all destinations
@@ -24,7 +25,9 @@ import { City } from '../../core/models/city.model';
         <!-- Header -->
         <header class="page-header">
           <h1>Destinazioni</h1>
-          <p class="results-count">{{ filteredCities().length }} destinazioni disponibili</p>
+          <p class="results-count">
+            Mostrando {{ displayedCities().length }} di {{ filteredCities().length }} destinazioni disponibili
+          </p>
         </header>
 
         <!-- Filters Bar -->
@@ -151,13 +154,37 @@ import { City } from '../../core/models/city.model';
             <div 
               class="city-grid"
               [class.list-view]="viewMode() === 'list'">
-              @for (city of filteredCities(); track city.id; let i = $index) {
+              @for (city of displayedCities(); track city.id; let i = $index) {
                 <app-city-card 
                   [city]="city"
                   class="animate-fade-in-up"
                   [style.animation-delay.ms]="i * 50"/>
               }
             </div>
+            
+            <!-- Load More / Infinite Scroll Trigger -->
+            @if (hasMoreCities()) {
+              <div class="load-more-container">
+                @if (loadingMore()) {
+                  <div class="loading-more">
+                    <div class="loader-small"></div>
+                    <span>Caricamento destinazioni...</span>
+                  </div>
+                } @else {
+                  <button class="btn-load-more" (click)="loadMore()">
+                    <span>Carica altre destinazioni</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
+                  </button>
+                }
+                <div class="scroll-trigger" #scrollTrigger></div>
+              </div>
+            } @else if (displayedCities().length < filteredCities().length) {
+              <div class="all-loaded">
+                <p>Hai visualizzato tutte le {{ displayedCities().length }} destinazioni disponibili</p>
+              </div>
+            }
           } @else {
             <div class="no-results">
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-gray-300)" stroke-width="1.5">
@@ -438,17 +465,107 @@ import { City } from '../../core/models/city.model';
         margin-bottom: var(--space-6);
       }
     }
+
+    // Load More
+    .load-more-container {
+      margin-top: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+      position: relative;
+    }
+
+    .loading-more {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      color: var(--color-gray-500);
+      font-size: var(--text-sm);
+    }
+
+    .loader-small {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--color-gray-200);
+      border-top-color: var(--color-accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .btn-load-more {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-white);
+      border: 2px solid var(--color-accent);
+      border-radius: var(--border-radius-full);
+      color: var(--color-accent);
+      font-weight: 600;
+      font-size: var(--text-sm);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      box-shadow: 0 2px 8px rgba(233, 69, 96, 0.1);
+
+      &:hover {
+        background: var(--color-accent);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(233, 69, 96, 0.2);
+
+        svg {
+          transform: translateY(2px);
+        }
+      }
+
+      svg {
+        transition: transform var(--transition-fast);
+      }
+    }
+
+    .all-loaded {
+      margin-top: var(--space-8);
+      text-align: center;
+      padding: var(--space-4);
+      color: var(--color-gray-500);
+      font-size: var(--text-sm);
+    }
+
+    .scroll-trigger {
+      height: 1px;
+      width: 100%;
+      position: absolute;
+      bottom: -200px;
+      pointer-events: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   `]
 })
-export class DestinationsComponent implements OnInit {
+export class DestinationsComponent implements OnInit, OnDestroy {
   // State
   allCities = signal<City[]>([]);
   filteredCities = signal<City[]>([]);
+  displayedCities = signal<City[]>([]);
   selectedContinents = signal<string[]>([]);
   selectedStyles = signal<string[]>([]);
   maxBudget = 5;
   sortBy = 'popular';
   viewMode = signal<'grid' | 'list'>('grid');
+  
+  // Pagination
+  private readonly ITEMS_PER_PAGE = 12;
+  private currentPage = 1;
+  loadingMore = signal(false);
+  
+  // Infinite scroll
+  scrollTrigger = viewChild<ElementRef>('scrollTrigger');
+  private intersectionObserver?: IntersectionObserver;
+  private autoLoadEnabled = true;
 
   continents = ['Europa', 'Asia', 'Nord America', 'Africa'];
   
@@ -463,11 +580,88 @@ export class DestinationsComponent implements OnInit {
     { id: 'budget', icon: '💰', label: 'Budget' }
   ];
 
-  constructor(private cityService: CityService) {}
+  constructor(private cityService: CityService) {
+    // Reset pagination when filters change
+    effect(() => {
+      this.filteredCities();
+      this.resetPagination();
+    });
+  }
 
   ngOnInit(): void {
     this.allCities.set(this.cityService.getAllCities());
     this.applyFilters();
+    this.setupInfiniteScroll();
+  }
+
+  ngOnDestroy(): void {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
+  }
+
+  hasMoreCities(): boolean {
+    return this.displayedCities().length < this.filteredCities().length;
+  }
+
+  setupInfiniteScroll(): void {
+    // Use setTimeout to ensure DOM is ready
+    setTimeout(() => {
+      const trigger = this.scrollTrigger()?.nativeElement;
+      if (!trigger || !('IntersectionObserver' in window)) {
+        return;
+      }
+
+      this.intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && this.autoLoadEnabled && this.hasMoreCities() && !this.loadingMore()) {
+              this.loadMore(true);
+            }
+          });
+        },
+        { rootMargin: '200px' }
+      );
+
+      this.intersectionObserver.observe(trigger);
+    }, 100);
+  }
+
+  resetPagination(): void {
+    this.currentPage = 1;
+    const cities = this.filteredCities();
+    this.displayedCities.set(cities.slice(0, this.ITEMS_PER_PAGE));
+    this.autoLoadEnabled = true;
+    
+    // Re-setup observer if needed
+    setTimeout(() => {
+      if (this.intersectionObserver && this.scrollTrigger()?.nativeElement) {
+        this.intersectionObserver.disconnect();
+        this.setupInfiniteScroll();
+      }
+    }, 100);
+  }
+
+  loadMore(autoLoad: boolean = false): void {
+    if (this.loadingMore() || !this.hasMoreCities()) {
+      return;
+    }
+
+    this.loadingMore.set(true);
+    
+    // Simulate slight delay for better UX
+    setTimeout(() => {
+      this.currentPage++;
+      const cities = this.filteredCities();
+      const endIndex = this.currentPage * this.ITEMS_PER_PAGE;
+      this.displayedCities.set(cities.slice(0, endIndex));
+      this.loadingMore.set(false);
+      
+      // Disable auto-load after manual click
+      if (!autoLoad) {
+        this.autoLoadEnabled = false;
+      }
+    }, autoLoad ? 300 : 500);
   }
 
   toggleContinent(continent: string): void {
