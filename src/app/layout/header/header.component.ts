@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { UserService } from '../../core/services/user.service';
 import { CityService } from '../../core/services/city.service';
 import { City } from '../../core/models/city.model';
+import { OptimizedImageComponent } from '../../shared/components/optimized-image/optimized-image.component';
 
 /**
  * HeaderComponent - Main navigation
@@ -19,7 +20,7 @@ import { City } from '../../core/models/city.model';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, OptimizedImageComponent],
   template: `
     <header class="header" 
       [class.scrolled]="isScrolled()" 
@@ -159,7 +160,12 @@ import { City } from '../../core/models/city.model';
                     class="search-result-item"
                     (click)="closeSearch()">
                     <div class="result-image">
-                      <img [src]="city.thumbnailImage" [alt]="city.name">
+                      <app-optimized-image 
+                        [src]="city.thumbnailImage" 
+                        [alt]="city.name"
+                        [loading]="'lazy'"
+                        [generateSrcset]="true">
+                      </app-optimized-image>
                     </div>
                     <div class="result-info">
                       <span class="result-name">{{ city.name }}</span>
@@ -698,6 +704,12 @@ import { City } from '../../core/models/city.model';
       border-radius: var(--border-radius-sm);
       overflow: hidden;
       flex-shrink: 0;
+
+      app-optimized-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
 
       img {
         width: 100%;
