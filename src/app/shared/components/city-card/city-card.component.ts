@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { City } from '../../../core/models/city.model';
 import { UserService } from '../../../core/services/user.service';
+import { OptimizedImageComponent } from '../optimized-image/optimized-image.component';
 
 /**
  * CityCardComponent - Reusable city preview card
@@ -15,13 +16,18 @@ import { UserService } from '../../../core/services/user.service';
 @Component({
   selector: 'app-city-card',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, OptimizedImageComponent],
   template: `
     <article class="city-card" [class.featured]="featured">
       <a [routerLink]="['/city', city.id]" class="card-link">
         <!-- Image -->
         <div class="card-image">
-          <img [src]="city.thumbnailImage" [alt]="city.name" loading="lazy">
+          <app-optimized-image 
+            [src]="city.thumbnailImage" 
+            [alt]="city.name" 
+            [loading]="'lazy'"
+            [generateSrcset]="true">
+          </app-optimized-image>
           <div class="image-overlay"></div>
           
           <!-- Top bar: Tags on left, Save on right (only if no recommendation) -->
@@ -122,7 +128,8 @@ import { UserService } from '../../../core/services/user.service';
         transform: translateY(-6px);
         box-shadow: var(--shadow-xl);
 
-        .card-image img {
+        .card-image img,
+        .card-image app-optimized-image img {
           transform: scale(1.08);
         }
 
@@ -153,6 +160,12 @@ import { UserService } from '../../../core/services/user.service';
       position: relative;
       aspect-ratio: 3/2;
       overflow: hidden;
+
+      app-optimized-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
 
       img {
         width: 100%;
