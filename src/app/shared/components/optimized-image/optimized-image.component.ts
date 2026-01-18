@@ -29,9 +29,9 @@ import { CommonModule } from '@angular/common';
       
       <!-- Main image -->
       <img 
-        [src]="src()"
-        [srcset]="srcset()"
-        [sizes]="sizes()"
+        [src]="src"
+        [srcset]="computedSrcset() || undefined"
+        [sizes]="computedSizes() || undefined"
         [alt]="alt"
         [loading]="loading"
         [class]="imageClass"
@@ -129,9 +129,37 @@ export class OptimizedImageComponent implements OnInit {
   // Responsive image support
   @Input() srcset?: string;
   @Input() sizes?: string;
+  @Input() generateSrcset = false; // Auto-generate srcset from src
+  @Input() breakpoints = [400, 600, 800, 1200, 1600]; // Default breakpoints for srcset
 
   imageLoaded = signal(false);
   imageError = signal(false);
+  
+  // Compute srcset if auto-generation is enabled
+  computedSrcset = computed(() => {
+    if (this.srcset) {
+      return this.srcset;
+    }
+    
+    if (this.generateSrcset && this.src) {
+      return this.generateSrcsetFromUrl(this.src);
+    }
+    
+    return undefined;
+  });
+  
+  // Compute sizes if not provided
+  computedSizes = computed(() => {
+    if (this.sizes) {
+      return this.sizes;
+    }
+    
+    if (this.generateSrcset) {
+      return '(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw';
+    }
+    
+    return undefined;
+  });
   
   // Generate a simple placeholder blur data URL
   placeholderDataUrl = computed(() => {
@@ -154,6 +182,12 @@ export class OptimizedImageComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    // If generateSrcset is enabled and src is provided, validate it
+    if (this.generateSrcset && this.src && !this.computedSrcset()) {
+      // If srcset generation failed, fall back to regular src
+      console.warn('Failed to generate srcset for image:', this.src);
+    }
+    
     // Preload if eager
     if (this.loading === 'eager' && this.src) {
       const img = new Image();
@@ -171,5 +205,59 @@ export class OptimizedImageComponent implements OnInit {
   onImageError(): void {
     this.imageError.set(true);
     this.imageLoaded.set(false);
+  }
+
+  /**
+   * Generate srcset from image URL
+   * Supports Unsplash and generic URLs
+   */
+  private generateSrcsetFromUrl(url: string): string {
+    if (!url) return '';
+    
+    // Check if it's an Unsplash URL (supports width parameter)
+    if (url.includes('unsplash.com') || url.includes('images.unsplash.com')) {
+      return this.breakpoints
+        .map(width => {
+          // Unsplash URL pattern: https://images.unsplash.com/photo-xxx?w=800
+          // Add or replace w parameter
+          const urlObj = new URL(url);
+          urlObj.searchParams.set('w', width.toString());
+          urlObj.searchParams.set('auto', 'format');
+          urlObj.searchParams.set('fit', 'crop');
+          urlObj.searchParams.set('q', '80'); // Quality
+          return `${urlObj.toString()} ${width}w`;
+        })
+        .join(', ');
+    }
+    
+    // For other URLs, try to add width parameter if URL structure allows
+    // This is a fallback - may not work for all image services
+    try {
+      const urlObj = new URL(url);
+      const hasSizeParam = urlObj.searchParams.has('w') || 
+                          urlObj.searchParams.has('width') ||
+                          urlObj.searchParams.has('size');
+      
+      if (hasSizeParam) {
+        return this.breakpoints
+          .map(width => {
+            const modifiedUrl = new URL(url);
+            if (modifiedUrl.searchParams.has('w')) {
+              modifiedUrl.searchParams.set('w', width.toString());
+            } else if (modifiedUrl.searchParams.has('width')) {
+              modifiedUrl.searchParams.set('width', width.toString());
+            } else if (modifiedUrl.searchParams.has('size')) {
+              modifiedUrl.searchParams.set('size', width.toString());
+            }
+            return `${modifiedUrl.toString()} ${width}w`;
+          })
+          .join(', ');
+      }
+    } catch {
+      // Invalid URL, return empty
+    }
+    
+    // Return empty string if we can't generate srcset
+    return '';
   }
 }
