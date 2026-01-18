@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CityCardComponent } from '../../shared/components/city-card/city-card.component';
 import { CityService } from '../../core/services/city.service';
 import { SEOService } from '../../core/services/seo.service';
+import { FilterPreferencesService } from '../../core/services/filter-preferences.service';
 import { City } from '../../core/models/city.model';
 import { ElementRef } from '@angular/core';
 
@@ -97,7 +98,7 @@ import { ElementRef } from '@angular/core';
                 <button 
                   class="budget-chip"
                   [class.active]="maxBudget >= level"
-                  (click)="maxBudget = level; applyFilters()">
+                  (click)="setMaxBudget(level)">
                   {{ '€'.repeat(level) }}
                 </button>
               }
@@ -114,7 +115,7 @@ import { ElementRef } from '@angular/core';
                 Resetta
               </button>
             }
-            <select [(ngModel)]="sortBy" (change)="applyFilters()" class="sort-select">
+            <select [(ngModel)]="sortBy" (change)="onSortChange()" class="sort-select">
               <option value="popular">Più popolari</option>
               <option value="rating">Meglio valutate</option>
               <option value="budget-low">Prezzo: basso → alto</option>
@@ -124,7 +125,7 @@ import { ElementRef } from '@angular/core';
             <div class="view-toggle">
               <button 
                 [class.active]="viewMode() === 'grid'"
-                (click)="viewMode.set('grid')"
+                (click)="setViewMode('grid')"
                 aria-label="Vista griglia">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <rect x="3" y="3" width="7" height="7"/>
@@ -135,7 +136,7 @@ import { ElementRef } from '@angular/core';
               </button>
               <button 
                 [class.active]="viewMode() === 'list'"
-                (click)="viewMode.set('list')"
+                (click)="setViewMode('list')"
                 aria-label="Vista lista">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <rect x="3" y="4" width="18" height="4"/>
@@ -552,10 +553,12 @@ export class DestinationsComponent implements OnInit, OnDestroy {
   allCities = signal<City[]>([]);
   filteredCities = signal<City[]>([]);
   displayedCities = signal<City[]>([]);
+  
+  // Filter preferences (synced with FilterPreferencesService)
   selectedContinents = signal<string[]>([]);
   selectedStyles = signal<string[]>([]);
   maxBudget = 5;
-  sortBy = 'popular';
+  sortBy: 'popular' | 'rating' | 'budget-low' | 'budget-high' | 'name' = 'popular';
   viewMode = signal<'grid' | 'list'>('grid');
   
   // Pagination
@@ -583,7 +586,8 @@ export class DestinationsComponent implements OnInit, OnDestroy {
 
   constructor(
     private cityService: CityService,
-    private seoService: SEOService
+    private seoService: SEOService,
+    private filterPreferences: FilterPreferencesService
   ) {
     // Reset pagination when filters change
     effect(() => {
@@ -592,6 +596,16 @@ export class DestinationsComponent implements OnInit, OnDestroy {
       // Update SEO with current filter count
       this.seoService.updateDestinationsPage(cities.length);
     });
+
+    // Sync local filter state with preferences service
+    effect(() => {
+      const preferences = this.filterPreferences.filters();
+      this.selectedContinents.set(preferences.selectedContinents);
+      this.selectedStyles.set(preferences.selectedStyles);
+      this.maxBudget = preferences.maxBudget;
+      this.sortBy = preferences.sortBy;
+      this.viewMode.set(preferences.viewMode);
+    });
   }
 
   ngOnInit(): void {
@@ -599,7 +613,13 @@ export class DestinationsComponent implements OnInit, OnDestroy {
     this.seoService.updateDestinationsPage();
     
     this.allCities.set(this.cityService.getAllCities());
-    this.applyFilters();
+    
+    // Load saved filters (will sync via effect)
+    // Apply filters after a small delay to ensure filters are loaded
+    setTimeout(() => {
+      this.applyFilters();
+    }, 0);
+    
     this.setupInfiniteScroll();
   }
 
@@ -675,20 +695,28 @@ export class DestinationsComponent implements OnInit, OnDestroy {
 
   toggleContinent(continent: string): void {
     this.selectedContinents.update(list => {
-      if (list.includes(continent)) {
-        return list.filter(c => c !== continent);
-      }
-      return [...list, continent];
+      const newList = list.includes(continent)
+        ? list.filter(c => c !== continent)
+        : [...list, continent];
+      
+      // Update preferences service
+      this.filterPreferences.updateFilters({ selectedContinents: newList });
+      
+      return newList;
     });
     this.applyFilters();
   }
 
   toggleStyle(style: string): void {
     this.selectedStyles.update(list => {
-      if (list.includes(style)) {
-        return list.filter(s => s !== style);
-      }
-      return [...list, style];
+      const newList = list.includes(style)
+        ? list.filter(s => s !== style)
+        : [...list, style];
+      
+      // Update preferences service
+      this.filterPreferences.updateFilters({ selectedStyles: newList });
+      
+      return newList;
     });
     this.applyFilters();
   }
@@ -735,11 +763,25 @@ export class DestinationsComponent implements OnInit, OnDestroy {
     this.filteredCities.set(cities);
   }
 
+  setMaxBudget(level: number): void {
+    this.maxBudget = level;
+    this.filterPreferences.updateFilters({ maxBudget: level });
+    this.applyFilters();
+  }
+
+  onSortChange(): void {
+    this.filterPreferences.updateFilters({ sortBy: this.sortBy });
+    this.applyFilters();
+  }
+
+  setViewMode(mode: 'grid' | 'list'): void {
+    this.viewMode.set(mode);
+    this.filterPreferences.updateFilters({ viewMode: mode });
+  }
+
   resetFilters(): void {
-    this.selectedContinents.set([]);
-    this.selectedStyles.set([]);
-    this.maxBudget = 5;
-    this.sortBy = 'popular';
+    // Reset through preferences service (which will update local state via effect)
+    this.filterPreferences.resetFilters();
     this.applyFilters();
   }
 }

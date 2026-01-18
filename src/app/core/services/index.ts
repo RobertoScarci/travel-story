@@ -8,6 +8,7 @@ export * from './city-details-image-populator.service';
 export * from './seo.service';
 export * from './social-share.service';
 export * from './search.service';
+export * from './filter-preferences.service';
 
 // External API Services
 export * from './api/weather.service';
