@@ -7,6 +7,7 @@ import { CityService } from '../../core/services/city.service';
 import { UserService } from '../../core/services/user.service';
 import { PersonalizationService } from '../../core/services/personalization.service';
 import { SEOService } from '../../core/services/seo.service';
+import { SearchService, SearchSuggestion } from '../../core/services/search.service';
 import { City, HiddenGemInfo } from '../../core/models/city.model';
 
 /**
@@ -89,8 +90,9 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 class="search-input"
                 [(ngModel)]="searchQuery"
                 (input)="onSearch()"
-                (focus)="searchFocused.set(true)"
-                (blur)="searchFocused.set(false)">
+                (keydown)="onSearchKeyDown($event)"
+                (focus)="searchFocused.set(true); onSearch()"
+                (blur)="searchFocused.set(false); onSearchBlur()">
               @if (searchQuery()) {
                 <button class="search-clear" (click)="clearSearch()">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -99,6 +101,67 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 </button>
               }
             </div>
+
+            <!-- Autocomplete Suggestions -->
+            @if (showSuggestions() && searchSuggestions().length > 0) {
+              <div class="autocomplete-dropdown">
+                @for (suggestion of searchSuggestions(); track suggestion.city.id; let i = $index) {
+                  <button 
+                    class="suggestion-item"
+                    [class.selected]="selectedSuggestionIndex() === i"
+                    (click)="selectSuggestion(suggestion)"
+                    (mouseenter)="selectedSuggestionIndex.set(i)">
+                    <div class="suggestion-icon">
+                      @switch (suggestion.matchType) {
+                        @case ('name') {
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                          </svg>
+                        }
+                        @case ('country') {
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M9 3v18"/>
+                          </svg>
+                        }
+                        @case ('continent') {
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                          </svg>
+                        }
+                        @default {
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 0 1 0 2.828l-7 7a2 2 0 0 1-2.828 0l-7-7A1.994 1.994 0 0 1 3 12V7a4 4 0 0 1 4-4z"/>
+                          </svg>
+                        }
+                      }
+                    </div>
+                    <div class="suggestion-content">
+                      <div class="suggestion-name" [innerHTML]="suggestion.highlightedText || suggestion.city.name"></div>
+                      <div class="suggestion-meta">
+                        <span class="suggestion-country">{{ suggestion.city.country }}</span>
+                        @if (suggestion.matchType !== 'name') {
+                          <span class="suggestion-match-type">
+                            @switch (suggestion.matchType) {
+                              @case ('country') { Paese }
+                              @case ('continent') { Continente }
+                              @case ('tag') { Tag }
+                            }
+                          </span>
+                        }
+                      </div>
+                    </div>
+                    <div class="suggestion-arrow">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                      </svg>
+                    </div>
+                  </button>
+                }
+              </div>
+            }
 
             <!-- Quick Filters -->
             <div class="quick-filters">
@@ -868,6 +931,133 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
 
       &:hover {
         color: var(--color-primary);
+      }
+    }
+
+    // Autocomplete Dropdown
+    .autocomplete-dropdown {
+      position: absolute;
+      top: calc(100% + var(--space-2));
+      left: 0;
+      right: 0;
+      background: var(--color-white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 1000;
+      animation: fadeInUp 0.2s ease;
+      border: 1px solid var(--color-gray-100);
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: var(--color-gray-100);
+        border-radius: var(--border-radius-sm);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--color-gray-300);
+        border-radius: var(--border-radius-sm);
+
+        &:hover {
+          background: var(--color-gray-400);
+        }
+      }
+    }
+
+    .suggestion-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      background: transparent;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border-bottom: 1px solid var(--color-gray-50);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover,
+      &.selected {
+        background: var(--color-cream);
+      }
+
+      &:active {
+        background: var(--color-gray-100);
+      }
+    }
+
+    .suggestion-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--color-gray-50);
+      border-radius: var(--border-radius-md);
+      color: var(--color-accent);
+      flex-shrink: 0;
+
+      svg {
+        stroke: currentColor;
+      }
+    }
+
+    .suggestion-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .suggestion-name {
+      font-weight: 500;
+      color: var(--color-primary);
+      font-size: var(--text-base);
+
+      ::ng-deep strong {
+        color: var(--color-accent);
+        font-weight: 700;
+      }
+    }
+
+    .suggestion-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      color: var(--color-gray-500);
+    }
+
+    .suggestion-match-type {
+      padding: 2px var(--space-2);
+      background: var(--color-gray-100);
+      border-radius: var(--border-radius-sm);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--color-gray-600);
+    }
+
+    .suggestion-arrow {
+      display: flex;
+      align-items: center;
+      color: var(--color-gray-300);
+      flex-shrink: 0;
+      transition: transform var(--transition-fast);
+
+      .suggestion-item:hover &,
+      .suggestion-item.selected & {
+        color: var(--color-accent);
+        transform: translateX(4px);
       }
     }
 
@@ -1904,6 +2094,9 @@ export class HomeComponent implements OnInit {
   searchQuery = signal('');
   activeFilter = signal<string | null>(null);
   searchResults = signal<City[]>([]);
+  searchSuggestions = signal<SearchSuggestion[]>([]);
+  showSuggestions = signal(false);
+  selectedSuggestionIndex = signal(-1);
   
   // City data
   trendingCities = signal<City[]>([]);
@@ -1953,7 +2146,8 @@ export class HomeComponent implements OnInit {
     private cityService: CityService,
     public userService: UserService,
     public personalization: PersonalizationService,
-    private seoService: SEOService
+    private seoService: SEOService,
+    private searchService: SearchService
   ) {}
 
   ngOnInit(): void {
@@ -2003,16 +2197,70 @@ export class HomeComponent implements OnInit {
   onSearch(): void {
     const query = this.searchQuery();
     if (query.length >= 2) {
-      const results = this.cityService.searchCities(query);
+      // Get autocomplete suggestions
+      const suggestions = this.searchService.getSuggestions(query, 5);
+      this.searchSuggestions.set(suggestions);
+      this.showSuggestions.set(true);
+      this.selectedSuggestionIndex.set(-1);
+      
+      // Get full search results
+      const results = this.searchService.search(query);
       this.searchResults.set(results);
     } else {
       this.searchResults.set([]);
+      this.searchSuggestions.set([]);
+      this.showSuggestions.set(false);
     }
   }
 
   clearSearch(): void {
     this.searchQuery.set('');
     this.searchResults.set([]);
+    this.searchSuggestions.set([]);
+    this.showSuggestions.set(false);
+    this.selectedSuggestionIndex.set(-1);
+  }
+
+  selectSuggestion(suggestion: SearchSuggestion): void {
+    this.searchQuery.set(suggestion.city.name);
+    this.showSuggestions.set(false);
+    this.onSearch();
+  }
+
+  onSearchKeyDown(event: KeyboardEvent): void {
+    const suggestions = this.searchSuggestions();
+    
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const currentIndex = this.selectedSuggestionIndex();
+      const nextIndex = currentIndex < suggestions.length - 1 ? currentIndex + 1 : currentIndex;
+      this.selectedSuggestionIndex.set(nextIndex);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const currentIndex = this.selectedSuggestionIndex();
+      const nextIndex = currentIndex > 0 ? currentIndex - 1 : -1;
+      this.selectedSuggestionIndex.set(nextIndex);
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      const currentIndex = this.selectedSuggestionIndex();
+      if (currentIndex >= 0 && currentIndex < suggestions.length) {
+        this.selectSuggestion(suggestions[currentIndex]);
+      } else if (this.searchQuery().length >= 2) {
+        // Perform search if no suggestion selected
+        this.showSuggestions.set(false);
+      }
+    } else if (event.key === 'Escape') {
+      this.showSuggestions.set(false);
+      this.selectedSuggestionIndex.set(-1);
+    }
+  }
+
+  onSearchBlur(): void {
+    // Delay hiding suggestions to allow click events
+    setTimeout(() => {
+      this.showSuggestions.set(false);
+      this.selectedSuggestionIndex.set(-1);
+    }, 200);
   }
 
   setFilter(filterId: string): void {
