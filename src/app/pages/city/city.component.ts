@@ -7,6 +7,7 @@ import { UserService } from '../../core/services/user.service';
 import { PersonalizationService } from '../../core/services/personalization.service';
 import { CityDetails, CitySection, City, CityLiveData } from '../../core/models/city.model';
 import { CityCardComponent } from '../../shared/components/city-card/city-card.component';
+import { OptimizedImageComponent } from '../../shared/components/optimized-image/optimized-image.component';
 import { WeatherService, WeatherData, WeatherForecast } from '../../core/services/api/weather.service';
 import { WikipediaService, WikipediaSummary } from '../../core/services/api/wikipedia.service';
 import { CountryService, CountryInfo } from '../../core/services/api/country.service';
@@ -39,7 +40,7 @@ export interface TravelVideo {
 @Component({
   selector: 'app-city',
   standalone: true,
-  imports: [CommonModule, RouterModule, CityCardComponent],
+  imports: [CommonModule, RouterModule, CityCardComponent, OptimizedImageComponent],
   template: `
     @if (loading()) {
       <div class="loading-state">
@@ -51,10 +52,12 @@ export interface TravelVideo {
         <!-- Hero Section - Emotional Introduction -->
         <section class="hero">
           <div class="hero-image">
-            <img 
+            <app-optimized-image 
               [src]="city()!.thumbnailImage || city()!.heroImage" 
               [alt]="city()!.name"
-              loading="eager">
+              [loading]="'eager'"
+              [generateSrcset]="true">
+            </app-optimized-image>
             <div class="hero-overlay"></div>
           </div>
           
@@ -688,11 +691,12 @@ export interface TravelVideo {
                       (click)="trackSectionExplored(section.id)">
                       @if (item.image) {
                         <div class="item-image">
-                          <img 
+                          <app-optimized-image 
                             [src]="item.image" 
                             [alt]="item.title"
-                            loading="lazy"
-                            (error)="onImageError($event)">
+                            [loading]="'lazy'"
+                            [generateSrcset]="true">
+                          </app-optimized-image>
                         </div>
                       }
                       <div class="item-content">
@@ -1164,10 +1168,12 @@ export interface TravelVideo {
                     target="_blank"
                     rel="noopener"
                     [style.animation-delay.ms]="i * 100">
-                    <img 
+                    <app-optimized-image 
                       [src]="getOptimizedPhotoUrl(photo, i === 0 ? 800 : 400)" 
                       [alt]="photo.altDescription || city()!.name"
-                      loading="lazy">
+                      [loading]="'lazy'"
+                      [generateSrcset]="true">
+                    </app-optimized-image>
                     <div class="gallery-overlay">
                       <span class="gallery-credit">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1214,7 +1220,12 @@ export interface TravelVideo {
                       <div class="foursquare-card" [style.animation-delay.ms]="i * 80">
                         @if (place.mainPhotoUrl) {
                           <div class="foursquare-image">
-                            <img [src]="place.mainPhotoUrl" [alt]="place.name" loading="lazy">
+                            <app-optimized-image 
+                              [src]="place.mainPhotoUrl" 
+                              [alt]="place.name"
+                              [loading]="'lazy'"
+                              [generateSrcset]="true">
+                            </app-optimized-image>
                           </div>
                         } @else {
                           <div class="foursquare-image placeholder">
@@ -1262,7 +1273,12 @@ export interface TravelVideo {
                       <div class="foursquare-card" [style.animation-delay.ms]="i * 80">
                         @if (place.mainPhotoUrl) {
                           <div class="foursquare-image">
-                            <img [src]="place.mainPhotoUrl" [alt]="place.name" loading="lazy">
+                            <app-optimized-image 
+                              [src]="place.mainPhotoUrl" 
+                              [alt]="place.name"
+                              [loading]="'lazy'"
+                              [generateSrcset]="true">
+                            </app-optimized-image>
                           </div>
                         } @else {
                           <div class="foursquare-image placeholder">
@@ -1362,6 +1378,12 @@ export interface TravelVideo {
       position: absolute;
       inset: 0;
       z-index: -1;
+
+      app-optimized-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
 
       img {
         width: 100%;
@@ -2849,6 +2871,12 @@ export interface TravelVideo {
         }
       }
 
+      app-optimized-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
       img {
         width: 100%;
         height: 100%;
@@ -2856,7 +2884,8 @@ export interface TravelVideo {
         transition: transform var(--transition-base);
       }
 
-      &:hover img {
+      &:hover img,
+      &:hover app-optimized-image img {
         transform: scale(1.05);
       }
 
@@ -2968,7 +2997,8 @@ export interface TravelVideo {
         transform: translateY(-4px);
         box-shadow: var(--shadow-lg);
 
-        .foursquare-image img {
+        .foursquare-image img,
+        .foursquare-image app-optimized-image img {
           transform: scale(1.05);
         }
       }
@@ -2977,6 +3007,12 @@ export interface TravelVideo {
     .foursquare-image {
       aspect-ratio: 4/3;
       overflow: hidden;
+
+      app-optimized-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
 
       img {
         width: 100%;
