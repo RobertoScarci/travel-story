@@ -18,10 +18,15 @@ import { toSignal } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
   template: `
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+    
     @if (!isAuthPage()) {
     <app-header />
     }
-    <router-outlet />
+    <main id="main-content">
+      <router-outlet />
+    </main>
     @if (!isAuthPage()) {
     <app-footer />
     }
@@ -35,6 +40,31 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
     router-outlet + * {
       flex: 1;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    /* Skip link - hidden by default, visible on focus */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      z-index: 10000;
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-accent);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 0 0 var(--border-radius-md) 0;
+      transition: top var(--transition-fast);
+      
+      &:focus {
+        top: 0;
+        outline: 3px solid var(--color-highlight);
+        outline-offset: 2px;
+      }
     }
   `]
 })

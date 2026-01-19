@@ -189,6 +189,40 @@ a {
 .text-primary { color: var(--color-primary); }
 .text-muted { color: var(--color-gray-400); }
 
+// ===== ACCESSIBILITY - FOCUS STATES =====
+// Enhanced focus styles for better keyboard navigation visibility
+*:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+// Remove default focus outline and use custom for better visibility
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+// Ensure focus states are visible even with reduced motion
+@media (prefers-reduced-motion: no-preference) {
+  *:focus-visible {
+    transition: outline-offset 0.1s ease;
+  }
+}
+
 // ===== BUTTONS =====
 .btn {
   display: inline-flex;
@@ -205,10 +239,18 @@ a {
   cursor: pointer;
   transition: all var(--transition-base);
   white-space: nowrap;
+  position: relative;
   
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  // Enhanced focus state for buttons
+  &:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.2);
   }
 }
 
