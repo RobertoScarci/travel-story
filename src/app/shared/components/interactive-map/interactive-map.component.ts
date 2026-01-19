@@ -212,7 +212,7 @@ export class InteractiveMapComponent implements OnInit, AfterViewInit, OnDestroy
     if (!this.map || !this.markerGroup) return;
 
     // Clear existing markers
-    this.markerGroup.clear();
+    this.markerGroup.clearLayers();
     this.markers.clear();
 
     // Add markers for filtered cities

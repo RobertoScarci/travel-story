@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CityCardComponent } from '../../shared/components/city-card/city-card.component';
+import { InteractiveMapComponent } from '../../shared/components/interactive-map/interactive-map.component';
 import { CityService } from '../../core/services/city.service';
 import { SEOService } from '../../core/services/seo.service';
 import { FilterPreferencesService } from '../../core/services/filter-preferences.service';
 import { City } from '../../core/models/city.model';
-import { ElementRef } from '@angular/core';
+import { ElementRef, ViewChild } from '@angular/core';
 
 /**
  * DestinationsComponent - Browse all destinations
@@ -20,16 +21,31 @@ import { ElementRef } from '@angular/core';
 @Component({
   selector: 'app-destinations',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, CityCardComponent],
+  imports: [CommonModule, RouterModule, FormsModule, CityCardComponent, InteractiveMapComponent],
   template: `
     <main class="destinations-page">
       <div class="container">
         <!-- Header -->
         <header class="page-header">
-          <h1>Destinazioni</h1>
-          <p class="results-count">
-            Mostrando {{ displayedCities().length }} di {{ filteredCities().length }} destinazioni disponibili
-          </p>
+          <div class="header-content">
+            <div>
+              <h1>Destinazioni</h1>
+              <p class="results-count">
+                Mostrando {{ displayedCities().length }} di {{ filteredCities().length }} destinazioni disponibili
+              </p>
+            </div>
+            <button 
+              class="btn btn-secondary map-toggle"
+              [class.active]="showMap()"
+              (click)="toggleMap()"
+              aria-label="Mostra/Nascondi mappa">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              {{ showMap() ? 'Nascondi mappa' : 'Mostra mappa' }}
+            </button>
+          </div>
         </header>
 
         <!-- Filters Bar -->
@@ -148,8 +164,20 @@ import { ElementRef } from '@angular/core';
           </div>
         </div>
 
+        <!-- Map View -->
+        @if (showMap()) {
+          <div class="map-section">
+            <app-interactive-map
+              [cities]="allCities()"
+              [filteredCities]="filteredCities()"
+              [initialCenter]="[20, 0]"
+              [initialZoom]="2">
+            </app-interactive-map>
+          </div>
+        }
+
         <!-- Results -->
-        <section class="results">
+        <section class="results" [class.hidden]="showMap()">
 
           <!-- City Grid -->
           @if (filteredCities().length > 0) {
@@ -214,6 +242,26 @@ import { ElementRef } from '@angular/core';
     .page-header {
       padding: var(--space-8) 0 var(--space-6);
       text-align: left;
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: var(--space-4);
+        flex-wrap: wrap;
+      }
+
+      .map-toggle {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        white-space: nowrap;
+
+        &.active {
+          background: var(--color-accent);
+          color: white;
+        }
+      }
 
       h1 {
         font-size: clamp(2rem, 4vw, 2.5rem);
@@ -543,6 +591,18 @@ import { ElementRef } from '@angular/core';
       pointer-events: none;
     }
 
+    .map-section {
+      margin: var(--space-6) 0;
+      height: 600px;
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .results.hidden {
+      display: none;
+    }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -553,6 +613,9 @@ export class DestinationsComponent implements OnInit, OnDestroy {
   allCities = signal<City[]>([]);
   filteredCities = signal<City[]>([]);
   displayedCities = signal<City[]>([]);
+  showMap = signal(false);
+  
+  @ViewChild(InteractiveMapComponent) mapComponent?: InteractiveMapComponent;
   
   // Filter preferences (synced with FilterPreferencesService)
   selectedContinents = signal<string[]>([]);
@@ -783,6 +846,10 @@ export class DestinationsComponent implements OnInit, OnDestroy {
     // Reset through preferences service (which will update local state via effect)
     this.filterPreferences.resetFilters();
     this.applyFilters();
+  }
+
+  toggleMap(): void {
+    this.showMap.update(val => !val);
   }
 }
 
