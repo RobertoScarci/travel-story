@@ -38,14 +38,14 @@ import { OptimizedImageComponent } from '../../shared/components/optimized-image
         </a>
 
         <!-- Desktop Navigation -->
-        <nav class="nav-desktop">
-          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <nav class="nav-desktop" aria-label="Navigazione principale">
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" aria-label="Vai alla pagina principale">
             Esplora
           </a>
-          <a routerLink="/destinations" routerLinkActive="active">
+          <a routerLink="/destinations" routerLinkActive="active" aria-label="Vai alle destinazioni">
             Destinazioni
           </a>
-          <a routerLink="/compare" routerLinkActive="active">
+          <a routerLink="/compare" routerLinkActive="active" aria-label="Confronta destinazioni">
             Confronta
           </a>
         </nav>
@@ -63,27 +63,32 @@ import { OptimizedImageComponent } from '../../shared/components/optimized-image
           <!-- User Area -->
           @if (userService.isAuthenticated()) {
             <div class="user-menu">
-              <button class="user-btn" (click)="toggleUserMenu()">
-                <span class="user-avatar">{{ userInitial() }}</span>
+              <button 
+                class="user-btn" 
+                (click)="toggleUserMenu()"
+                [attr.aria-expanded]="userMenuOpen()"
+                [attr.aria-haspopup]="true"
+                aria-label="Menu utente">
+                <span class="user-avatar" aria-hidden="true">{{ userInitial() }}</span>
                 <span class="user-name hide-mobile">{{ userService.userName() }}</span>
               </button>
               @if (userMenuOpen()) {
-                <div class="dropdown">
-                  <a routerLink="/profile" class="dropdown-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <div class="dropdown" role="menu" aria-label="Menu utente">
+                  <a routerLink="/profile" class="dropdown-item" role="menuitem" aria-label="Vai al profilo">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Profilo
                   </a>
-                  <a routerLink="/saved" class="dropdown-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <a routerLink="/saved" class="dropdown-item" role="menuitem" aria-label="Vai alle città salvate">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                     Città Salvate
                   </a>
-                  <a routerLink="/history" class="dropdown-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <a routerLink="/history" class="dropdown-item" role="menuitem" aria-label="Vai alla cronologia">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     Cronologia
                   </a>
-                  <hr>
-                  <button class="dropdown-item" (click)="logout()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  <hr role="separator">
+                  <button class="dropdown-item" (click)="logout()" role="menuitem" aria-label="Esci dall'account">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     Esci
                   </button>
                 </div>
@@ -111,11 +116,11 @@ import { OptimizedImageComponent } from '../../shared/components/optimized-image
 
       <!-- Mobile Menu -->
       @if (mobileMenuOpen()) {
-        <div class="mobile-menu">
-          <nav class="mobile-nav">
-            <a routerLink="/" (click)="closeMobileMenu()">Esplora</a>
-            <a routerLink="/destinations" (click)="closeMobileMenu()">Destinazioni</a>
-            <a routerLink="/compare" (click)="closeMobileMenu()">Confronta</a>
+        <div class="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu mobile">
+          <nav class="mobile-nav" aria-label="Navigazione mobile">
+            <a routerLink="/" (click)="closeMobileMenu()" aria-label="Vai alla pagina principale">Esplora</a>
+            <a routerLink="/destinations" (click)="closeMobileMenu()" aria-label="Vai alle destinazioni">Destinazioni</a>
+            <a routerLink="/compare" (click)="closeMobileMenu()" aria-label="Confronta destinazioni">Confronta</a>
             <hr>
             @if (!userService.isAuthenticated()) {
               <a routerLink="/login" (click)="closeMobileMenu()">Accedi</a>
@@ -137,13 +142,18 @@ import { OptimizedImageComponent } from '../../shared/components/optimized-image
               type="text" 
               placeholder="Cerca una destinazione..."
               class="search-input"
-                [(ngModel)]="searchQuery"
-                (input)="onSearch()"
-                (keyup.escape)="closeSearch()"
-                (keyup.enter)="goToFirstResult()"
-                #searchInput>
+              [(ngModel)]="searchQuery"
+              (input)="onSearch()"
+              (keyup.escape)="closeSearch()"
+              (keyup.enter)="goToFirstResult()"
+              [attr.aria-label]="'Cerca destinazioni'"
+              [attr.aria-expanded]="searchResults().length > 0"
+              [attr.aria-owns]="searchResults().length > 0 ? 'search-results' : null"
+              aria-autocomplete="list"
+              role="combobox"
+              #searchInput>
               @if (searchQuery()) {
-                <button class="search-clear-btn" (click)="clearSearch()">
+                <button class="search-clear-btn" (click)="clearSearch()" aria-label="Pulisci ricerca">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12"/>
                   </svg>
@@ -153,12 +163,14 @@ import { OptimizedImageComponent } from '../../shared/components/optimized-image
             
             <!-- Search Results -->
             @if (searchResults().length > 0) {
-              <div class="search-results">
+              <div class="search-results" id="search-results" role="listbox" aria-label="Risultati ricerca">
                 @for (city of searchResults(); track city.id; let i = $index) {
                   <a 
                     [routerLink]="['/city', city.id]" 
                     class="search-result-item"
-                    (click)="closeSearch()">
+                    (click)="closeSearch()"
+                    role="option"
+                    [attr.aria-label]="'Vai a ' + city.name + ', ' + city.country">
                     <div class="result-image">
                       <app-optimized-image 
                         [src]="city.thumbnailImage" 
@@ -199,8 +211,8 @@ import { OptimizedImageComponent } from '../../shared/components/optimized-image
               </div>
             }
             
-            <button class="search-close" (click)="closeSearch()">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button class="search-close" (click)="closeSearch()" aria-label="Chiudi ricerca">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M18 6L6 18M6 6l12 12"/>
               </svg>
             </button>
