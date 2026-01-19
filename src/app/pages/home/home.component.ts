@@ -85,16 +85,20 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 <path d="M21 21l-4.35-4.35"/>
               </svg>
               <input 
-                type="text" 
+                type="search" 
                 placeholder="Dove vuoi andare?"
                 class="search-input"
                 [(ngModel)]="searchQuery"
                 (input)="onSearch()"
                 (keydown)="onSearchKeyDown($event)"
                 (focus)="searchFocused.set(true); onSearch()"
-                (blur)="searchFocused.set(false); onSearchBlur()">
+                (blur)="searchFocused.set(false); onSearchBlur()"
+                aria-label="Cerca destinazioni"
+                aria-autocomplete="list"
+                [attr.aria-expanded]="autocompleteResults().length > 0 && searchFocused()"
+                role="combobox">
               @if (searchQuery()) {
-                <button class="search-clear" (click)="clearSearch()">
+                <button class="search-clear" (click)="clearSearch()" aria-label="Pulisci ricerca">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12"/>
                   </svg>

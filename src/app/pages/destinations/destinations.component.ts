@@ -49,16 +49,18 @@ import { ElementRef, ViewChild } from '@angular/core';
         </header>
 
         <!-- Filters Bar -->
-        <div class="filters-bar">
+        <div class="filters-bar" role="search" aria-label="Filtra destinazioni">
           <!-- Continents -->
           <div class="filter-group">
-            <span class="filter-label">Continente</span>
-            <div class="filter-chips">
+            <span class="filter-label" id="continent-label">Continente</span>
+            <div class="filter-chips" role="group" aria-labelledby="continent-label">
               @for (continent of continents; track continent) {
                 <button 
                   class="filter-chip"
                   [class.active]="selectedContinents().includes(continent)"
-                  (click)="toggleContinent(continent)">
+                  (click)="toggleContinent(continent)"
+                  [attr.aria-pressed]="selectedContinents().includes(continent)"
+                  [attr.aria-label]="'Filtra per continente: ' + continent">
                   {{ continent }}
                 </button>
               }
@@ -73,7 +75,9 @@ import { ElementRef, ViewChild } from '@angular/core';
                 <button 
                   class="filter-chip"
                   [class.active]="selectedStyles().includes(style.id)"
-                  (click)="toggleStyle(style.id)">
+                  (click)="toggleStyle(style.id)"
+                  [attr.aria-pressed]="selectedStyles().includes(style.id)"
+                  [attr.aria-label]="'Filtra per stile: ' + style.label">
                   @switch (style.id) {
                     @case ('adventure') {
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3l4 8 5-5 5 5V3H8z"/><path d="M2 21l6-6 4 4 4-4 6 6H2z"/></svg>
@@ -114,7 +118,9 @@ import { ElementRef, ViewChild } from '@angular/core';
                 <button 
                   class="budget-chip"
                   [class.active]="maxBudget >= level"
-                  (click)="setMaxBudget(level)">
+                  (click)="setMaxBudget(level)"
+                  [attr.aria-pressed]="maxBudget >= level"
+                  [attr.aria-label]="'Imposta budget massimo: ' + level + ' euro'">
                   {{ '€'.repeat(level) }}
                 </button>
               }
@@ -124,14 +130,14 @@ import { ElementRef, ViewChild } from '@angular/core';
           <!-- Reset & Sort -->
           <div class="filter-actions">
             @if (selectedContinents().length > 0 || selectedStyles().length > 0 || maxBudget < 5) {
-              <button class="btn-reset" (click)="resetFilters()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <button class="btn-reset" (click)="resetFilters()" aria-label="Resetta tutti i filtri">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                 </svg>
                 Resetta
               </button>
             }
-            <select [(ngModel)]="sortBy" (change)="onSortChange()" class="sort-select">
+            <select [(ngModel)]="sortBy" (change)="onSortChange()" class="sort-select" aria-label="Ordina risultati">
               <option value="popular">Più popolari</option>
               <option value="rating">Meglio valutate</option>
               <option value="budget-low">Prezzo: basso → alto</option>
@@ -142,8 +148,9 @@ import { ElementRef, ViewChild } from '@angular/core';
               <button 
                 [class.active]="viewMode() === 'grid'"
                 (click)="setViewMode('grid')"
+                [attr.aria-pressed]="viewMode() === 'grid'"
                 aria-label="Vista griglia">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <rect x="3" y="3" width="7" height="7"/>
                   <rect x="14" y="3" width="7" height="7"/>
                   <rect x="3" y="14" width="7" height="7"/>
@@ -153,8 +160,9 @@ import { ElementRef, ViewChild } from '@angular/core';
               <button 
                 [class.active]="viewMode() === 'list'"
                 (click)="setViewMode('list')"
+                [attr.aria-pressed]="viewMode() === 'list'"
                 aria-label="Vista lista">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <rect x="3" y="4" width="18" height="4"/>
                   <rect x="3" y="10" width="18" height="4"/>
                   <rect x="3" y="16" width="18" height="4"/>
