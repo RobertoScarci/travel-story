@@ -95,7 +95,7 @@ import { City, HiddenGemInfo } from '../../core/models/city.model';
                 (blur)="searchFocused.set(false); onSearchBlur()"
                 aria-label="Cerca destinazioni"
                 aria-autocomplete="list"
-                [attr.aria-expanded]="autocompleteResults().length > 0 && searchFocused()"
+                [attr.aria-expanded]="searchSuggestions().length > 0 && searchFocused()"
                 role="combobox">
               @if (searchQuery()) {
                 <button class="search-clear" (click)="clearSearch()" aria-label="Pulisci ricerca">
